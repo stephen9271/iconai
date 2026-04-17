@@ -347,74 +347,17 @@
 
 <section class="hero">
   <div class="hero-glow"></div>
-  <div class="hero-badge">✦ SVG Icons · DALL-E Scene Illustrations · Infographics</div>
-  <h1>Generate beautiful<br><span>vector illustrations</span></h1>
+  <div class="hero-badge">✦ SVG Icons · Scene Illustrations · Infographics · Icon Sets</div>
+  <h1>Create icons, scenes<br><span>&amp; illustrations</span></h1>
   <p>Describe any scene, icon, or infographic. Get production-ready SVG art — people, objects, environments — instantly.</p>
 </section>
 
-<div class="mode-switcher-wrap">
-  <div class="mode-switcher" id="mode-switcher">
-    <div class="mode-btn active" id="mode-svg" onclick="setMode('svg')">
-      <span class="mode-icon">◻</span>
-      <div class="mode-info">
-        <div class="mode-name">SVG Generator</div>
-        <div class="mode-desc">Icons · Diagrams · Infographics · Scalable forever</div>
-      </div>
-      <div class="mode-badge">Vector</div>
-    </div>
-    <div class="mode-btn" id="mode-image" onclick="setMode('image')">
-      <span class="mode-icon">🖼</span>
-      <div class="mode-info">
-        <div class="mode-name">Image Generator</div>
-        <div class="mode-desc">Scene illustrations · Characters · Canva-quality PNG</div>
-      </div>
-      <div class="mode-badge dalle">GPT Image 1.5</div>
-    </div>
-  </div>
-</div>
+
 
 
 
 <div class="app-container" id="app">
   <aside class="sidebar">
-
-    <!-- AI STATUS PANEL -->
-    <div class="section" id="api-section">
-      <div class="sec-title">AI Status</div>
-      <div style="display:flex;flex-direction:column;gap:6px;" id="ai-status-panel">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);">
-          <div style="display:flex;align-items:center;gap:7px;">
-            <div style="width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);" id="status-claude-dot"></div>
-            <span style="font-size:12px;color:var(--text2);">Claude</span>
-          </div>
-          <span style="font-size:10px;color:var(--text3);" id="status-claude-label">Primary</span>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);">
-          <div style="display:flex;align-items:center;gap:7px;">
-            <div style="width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);" id="status-gemini-dot"></div>
-            <span style="font-size:12px;color:var(--text2);">Gemini</span>
-          </div>
-          <span style="font-size:10px;color:var(--text3);">Fallback 1</span>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);">
-          <div style="display:flex;align-items:center;gap:7px;">
-            <div style="width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);" id="status-openai-dot"></div>
-            <span style="font-size:12px;color:var(--text2);">GPT Image 1.5</span>
-          </div>
-          <span style="font-size:10px;color:var(--text3);">Images</span>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);">
-          <div style="display:flex;align-items:center;gap:7px;">
-            <div style="width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);" id="status-fal-dot"></div>
-            <span style="font-size:12px;color:var(--text2);">Recraft V4</span>
-          </div>
-          <span style="font-size:10px;color:var(--text3);">SVG Export</span>
-        </div>
-      </div>
-      <div class="ai-used-badge" id="ai-used-badge" style="display:none;margin-top:4px;"></div>
-    </div>
-
-    <hr class="divider">
 
     <!-- PROMPT -->
     <div class="section">
@@ -594,6 +537,7 @@
           <button class="action-btn dl" id="btn-png" onclick="downloadPNG()" disabled>↓ PNG</button>
           <button class="action-btn export" id="btn-export" onclick="toggleExportPanel()" disabled>⬡ PPTX</button>
         </div>
+        <div class="ai-used-badge" id="ai-used-badge" style="display:none;"></div>
       </div>
 
       <div class="canvas-area" id="canvas-area">
@@ -724,18 +668,71 @@
 <!-- ═══════════════════════════════════════════════════════════ -->
 <!-- FOOTER                                                       -->
 <!-- ═══════════════════════════════════════════════════════════ -->
-<footer style="border-top:1px solid var(--border);padding:40px;margin-top:20px;">
-  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
-    <div style="display:flex;align-items:center;gap:8px;">
-      <div style="width:24px;height:24px;background:linear-gradient(135deg,var(--accent),var(--pink));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;">✦</div>
-      <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;">IconAI</span>
-      <span style="font-size:12px;color:var(--text3);margin-left:8px;">© 2026 IconAI. All rights reserved.</span>
+<footer style="border-top:1px solid var(--border);padding:40px 40px 20px;margin-top:20px;">
+  <div style="max-width:1200px;margin:0 auto;">
+
+    <!-- AI Status collapsible -->
+    <div style="margin-bottom:24px;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <button onclick="toggleAIStatus()" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--bg3);border:none;cursor:pointer;color:var(--text2);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="display:flex;gap:4px;" id="ai-status-dots">
+            <div style="width:6px;height:6px;border-radius:50%;background:#22d3a0;"></div>
+            <div style="width:6px;height:6px;border-radius:50%;background:#22d3a0;"></div>
+            <div style="width:6px;height:6px;border-radius:50%;background:#22d3a0;"></div>
+          </div>
+          <span style="font-size:12px;font-weight:500;">AI System Status</span>
+          <span style="font-size:11px;color:var(--text3);" id="ai-status-summary">All systems operational</span>
+        </div>
+        <span style="font-size:11px;color:var(--text3);" id="ai-status-toggle-label">▼ Details</span>
+      </button>
+      <div id="ai-status-body" style="display:none;padding:16px 20px;background:var(--bg2);display:none;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);">
+            <div style="display:flex;align-items:center;gap:7px;">
+              <div style="width:7px;height:7px;border-radius:50%;background:#22d3a0;" id="status-claude-dot"></div>
+              <span style="font-size:12px;color:var(--text2);">Claude</span>
+            </div>
+            <span style="font-size:10px;color:var(--text3);">Primary SVG</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);">
+            <div style="display:flex;align-items:center;gap:7px;">
+              <div style="width:7px;height:7px;border-radius:50%;background:#22d3a0;" id="status-gemini-dot"></div>
+              <span style="font-size:12px;color:var(--text2);">Gemini</span>
+            </div>
+            <span style="font-size:10px;color:var(--text3);">Fallback SVG</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);">
+            <div style="display:flex;align-items:center;gap:7px;">
+              <div style="width:7px;height:7px;border-radius:50%;background:#22d3a0;" id="status-openai-dot"></div>
+              <span style="font-size:12px;color:var(--text2);">GPT Image 1.5</span>
+            </div>
+            <span style="font-size:10px;color:var(--text3);">Image generator</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);">
+            <div style="display:flex;align-items:center;gap:7px;">
+              <div style="width:7px;height:7px;border-radius:50%;background:#22d3a0;" id="status-fal-dot"></div>
+              <span style="font-size:12px;color:var(--text2);">Recraft V4</span>
+            </div>
+            <span style="font-size:10px;color:var(--text3);">SVG export (optional)</span>
+          </div>
+        </div>
+        <div id="error-detail-box" style="margin-top:8px;font-size:11px;color:var(--text3);display:none;"></div>
+      </div>
     </div>
-    <nav style="display:flex;gap:24px;flex-wrap:wrap;">
-      <a href="#" onclick="showModal('privacy')" style="font-size:13px;color:var(--text2);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">Privacy Policy</a>
-      <a href="#" onclick="showModal('terms')" style="font-size:13px;color:var(--text2);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">Terms of Service</a>
-      <a href="mailto:hello@iconai.app" style="font-size:13px;color:var(--text2);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">hello@iconai.app</a>
-    </nav>
+
+    <!-- Footer links row -->
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:24px;height:24px;background:linear-gradient(135deg,var(--accent),var(--pink));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;">✦</div>
+        <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;">IconAI</span>
+        <span style="font-size:12px;color:var(--text3);margin-left:8px;">© 2026 IconAI. All rights reserved.</span>
+      </div>
+      <nav style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
+        <a href="#" onclick="showModal('privacy')" style="font-size:13px;color:var(--text2);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">Privacy Policy</a>
+        <a href="#" onclick="showModal('terms')" style="font-size:13px;color:var(--text2);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">Terms of Service</a>
+        <a href="mailto:hello@iconai.app" style="font-size:13px;color:var(--text2);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">hello@iconai.app</a>
+      </nav>
+    </div>
   </div>
 </footer>
 
@@ -1916,25 +1913,15 @@ async function generateImage(prompt) {
   const stylePrompt = DALLE_STYLE_PROMPTS[selectedImgStyle] || DALLE_STYLE_PROMPTS['flat-vector'];
 
   // Use Recraft SVG mode if fal key available and style is flat-vector or icon-related
-  const useRecraft = falKey && (selectedImgStyle === 'flat-vector' || selectedImgStyle === 'line-drawing');
+  // Only try Recraft if explicitly in SVG export mode — skip for regular scenes
+  const useRecraft = false; // Disabled until fal.ai credits added
   const fullPrompt = prompt + '. Style: ' + stylePrompt + '. No text, no labels, no watermarks.';
 
   setLoading(true, 'image');
   try {
     let result;
-    if (useRecraft) {
-      setLoadingSub('Recraft V4 · Native vector…');
-      result = await callRecraft(fullPrompt, 'svg').catch(async (e) => {
-        console.warn('Recraft failed, trying GPT Image:', e.message);
-        setLoadingSub('Falling back to GPT Image 1.5…');
-        return await callGPTImage(fullPrompt, size, hd);
-      });
-    } else if (openaiKey) {
-      setLoadingSub('GPT Image 1.5…');
-      result = await callGPTImage(fullPrompt, size, hd);
-    } else {
-      throw new Error('No image generation key available');
-    }
+    setLoadingSub('GPT Image 1.5…');
+    result = await callGPTImage(fullPrompt, size, hd);
 
     // Handle SVG result from Recraft
     if (result.isSVG) {
@@ -1983,26 +1970,10 @@ async function generateIconSet(prompt) {
   setLoading(true, 'image');
   try {
     let imageUrl;
-    if (falKey) {
-      // Recraft V4 is better for icon sets — cleaner, more consistent
-      setLoadingSub('Recraft V4 · Icon set…');
-      try {
-        const result = await callRecraft(fullPrompt, 'png');
-        imageUrl = result.url;
-        showAIBadge('fal');
-      } catch(e) {
-        console.warn('Recraft failed for icon set, trying GPT Image:', e.message);
-        setLoadingSub('GPT Image 1.5 · Icon set…');
-        const result = await callGPTImage(fullPrompt, layout.size, hd);
-        imageUrl = result.url || result;
-      }
-    } else if (openaiKey) {
-      setLoadingSub('GPT Image 1.5 · Icon set…');
-      const result = await callGPTImage(fullPrompt, layout.size, hd);
-      imageUrl = result.url || result;
-    } else {
-      throw new Error('Add an OpenAI or fal.ai key to generate icon sets');
-    }
+    // Use GPT Image 1.5 for icon sets (reliable, no fal.ai dependency)
+    setLoadingSub('GPT Image 1.5 · Generating icon set…');
+    const result = await callGPTImage(fullPrompt, layout.size, hd);
+    imageUrl = result.url || result;
     showResultImage(imageUrl, prompt);
     document.getElementById('var-btn').disabled = false;
     document.getElementById('var-panel').classList.remove('show');
@@ -2655,6 +2626,15 @@ function cropAndDownloadIcon(col, row, cols, rows, iconNum) {
 // ═══════════════════════════════════════════════════════════
 // MODAL SYSTEM — Privacy Policy & Terms of Service
 // ═══════════════════════════════════════════════════════════
+function toggleAIStatus() {
+  const body = document.getElementById('ai-status-body');
+  const label = document.getElementById('ai-status-toggle-label');
+  if (!body) return;
+  const isHidden = body.style.display === 'none' || !body.style.display;
+  body.style.display = isHidden ? 'block' : 'none';
+  if (label) label.textContent = isHidden ? '▲ Hide' : '▼ Details';
+}
+
 function showModal(name) {
   const el = document.getElementById('modal-' + name);
   if (el) {
