@@ -1,0 +1,2691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IconAI – AI Vector Illustrations & Icons</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+<style>
+  :root {
+    --bg:#0a0a0f;--bg2:#111118;--bg3:#18181f;--border:rgba(255,255,255,0.08);--border-hover:rgba(255,255,255,0.18);
+    --text:#f0eff8;--text2:#9998b0;--text3:#5c5b72;--accent:#7c6ef7;--accent2:#a292ff;--accent-glow:rgba(124,110,247,0.25);
+    --green:#22d3a0;--pink:#f06dba;--amber:#f5a623;--radius:14px;--radius-sm:8px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:0.4;}
+
+  header{display:flex;align-items:center;justify-content:space-between;padding:20px 40px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.88);backdrop-filter:blur(20px);}
+  .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.5px;display:flex;align-items:center;gap:8px;}
+  .logo-mark{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--pink));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+  nav{display:flex;gap:8px;align-items:center;}
+  .nav-link{padding:7px 14px;color:var(--text2);text-decoration:none;font-size:14px;border-radius:var(--radius-sm);transition:all 0.2s;}
+  .nav-link:hover{color:var(--text);background:var(--bg3);}
+  .btn-primary{padding:9px 20px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s;text-decoration:none;display:inline-block;}
+  .btn-primary:hover{background:var(--accent2);transform:translateY(-1px);box-shadow:0 6px 24px var(--accent-glow);}
+
+  .hero{text-align:center;padding:80px 40px 50px;position:relative;}
+  .hero-glow{position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:700px;height:420px;background:radial-gradient(ellipse,rgba(124,110,247,0.14) 0%,transparent 70%);pointer-events:none;}
+  .hero-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:rgba(124,110,247,0.12);border:1px solid rgba(124,110,247,0.3);border-radius:999px;font-size:12px;color:var(--accent2);margin-bottom:20px;}
+  .hero h1{font-family:'Syne',sans-serif;font-size:clamp(36px,5.5vw,68px);font-weight:800;line-height:1.06;letter-spacing:-2px;margin-bottom:16px;}
+  .hero h1 span{background:linear-gradient(135deg,var(--accent2),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .hero p{font-size:17px;color:var(--text2);max-width:520px;margin:0 auto 32px;line-height:1.6;font-weight:300;}
+
+  /* MODE SWITCHER */
+  .mode-switcher-wrap{padding:0 40px;margin-bottom:40px;}
+  .mode-switcher{max-width:680px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .mode-btn{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;cursor:pointer;transition:all 0.22s;display:flex;align-items:center;gap:14px;}
+  .mode-btn:hover{border-color:var(--border-hover);}
+  .mode-btn.active{border-color:var(--accent);background:rgba(124,110,247,0.06);}
+  .mode-btn.active-image{border-color:#22d3a0;background:rgba(34,211,160,0.06);}
+  .mode-icon{font-size:24px;flex-shrink:0;width:36px;text-align:center;}
+  .mode-info{flex:1;}
+  .mode-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;}
+  .mode-desc{font-size:11px;color:var(--text3);line-height:1.4;}
+  .mode-badge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:999px;white-space:nowrap;background:rgba(124,110,247,0.15);border:1px solid rgba(124,110,247,0.3);color:var(--accent2);}
+  .mode-badge.dalle{background:rgba(34,211,160,0.12);border-color:rgba(34,211,160,0.3);color:#22d3a0;}
+
+  /* SVG-only panels */
+  .svg-only{transition:opacity 0.2s;}
+  .svg-only.hidden{opacity:0.3;pointer-events:none;}
+
+  /* IMAGE MODE CONTROLS */
+  .image-controls{display:none;flex-direction:column;gap:10px;}
+  .image-controls.show{display:flex;}
+  .img-style-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+  .img-style-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;cursor:pointer;transition:all 0.18s;}
+  .img-style-card:hover{border-color:var(--border-hover);}
+  .img-style-card.active{background:rgba(34,211,160,0.08);border-color:#22d3a0;}
+  .img-style-card-name{font-size:12px;font-weight:500;color:var(--text);}
+  .img-style-card-desc{font-size:10px;color:var(--text3);margin-top:2px;line-height:1.3;}
+  .img-size-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+  .img-size-btn{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 10px;cursor:pointer;font-size:11px;color:var(--text2);text-align:center;transition:all 0.15s;}
+  .img-size-btn:hover{border-color:var(--border-hover);color:var(--text);}
+  .img-size-btn.active{background:rgba(34,211,160,0.08);border-color:#22d3a0;color:#22d3a0;}
+  .dalle-notice{font-size:11px;color:var(--text3);line-height:1.5;padding:8px 10px;background:rgba(34,211,160,0.04);border-radius:6px;border:1px solid rgba(34,211,160,0.15);}
+
+  /* ICON SET CONTROLS */
+  .output-type-tabs{display:flex;gap:6px;margin-bottom:2px;}
+  .output-type-tab{flex:1;padding:7px 8px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;font-size:11px;color:var(--text2);cursor:pointer;text-align:center;transition:all 0.18s;line-height:1.3;}
+  .output-type-tab:hover{border-color:var(--border-hover);color:var(--text);}
+  .output-type-tab.active{background:rgba(34,211,160,0.08);border-color:#22d3a0;color:#22d3a0;}
+
+  .icon-count-row{display:flex;gap:6px;}
+  .icon-count-btn{flex:1;padding:6px 4px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;font-size:11px;color:var(--text2);cursor:pointer;text-align:center;transition:all 0.15s;}
+  .icon-count-btn:hover{border-color:var(--border-hover);}
+  .icon-count-btn.active{background:rgba(34,211,160,0.08);border-color:#22d3a0;color:#22d3a0;}
+
+  .color-scheme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;}
+  .color-scheme-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:7px 6px;cursor:pointer;transition:all 0.18s;display:flex;flex-direction:column;align-items:center;gap:5px;}
+  .color-scheme-card:hover{border-color:var(--border-hover);}
+  .color-scheme-card.active{border-color:#22d3a0;}
+  .cs-swatches{display:flex;gap:2px;}
+  .cs-dot{width:10px;height:10px;border-radius:2px;}
+  .cs-name{font-size:9px;color:var(--text3);text-align:center;line-height:1.2;}
+
+  .icon-style-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+  .icon-style-btn{padding:7px 8px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;cursor:pointer;transition:all 0.18s;}
+  .icon-style-btn:hover{border-color:var(--border-hover);}
+  .icon-style-btn.active{background:rgba(34,211,160,0.08);border-color:#22d3a0;}
+  .icon-style-btn-name{font-size:11px;font-weight:500;color:var(--text);}
+  .icon-style-btn-desc{font-size:9px;color:var(--text3);margin-top:1px;}
+
+  /* PPTX EXPORT PANEL */
+  .export-panel{display:none;padding:16px 20px;border-top:1px solid var(--border);background:var(--bg3);}
+  .export-panel.show{display:block;}
+  .export-panel-title{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px;}
+  .export-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+  .export-input{background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 10px;width:100%;}
+  .export-input:focus{outline:none;border-color:var(--accent);}
+  .export-input::placeholder{color:var(--text3);}
+  .export-input-full{grid-column:1/-1;}
+  .slide-theme-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+  .slide-theme-btn{padding:5px 11px;background:var(--bg2);border:1px solid var(--border);border-radius:999px;font-size:11px;color:var(--text2);cursor:pointer;transition:all 0.15s;}
+  .slide-theme-btn:hover{border-color:var(--border-hover);}
+  .slide-theme-btn.active{background:rgba(124,110,247,0.12);border-color:var(--accent);color:var(--accent2);}
+  .export-action-row{display:flex;gap:8px;}
+  .export-btn{flex:1;padding:9px 14px;border:none;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s;}
+  .export-btn.pptx{background:linear-gradient(135deg,#7c6ef7,#f06dba);color:#fff;}
+  .export-btn.pptx:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,110,247,0.4);}
+  .export-btn.pptx:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+
+  /* ICON GRID OVERLAY — for clicking individual icons in a set */
+  .icon-grid-overlay{position:absolute;inset:0;z-index:10;display:none;pointer-events:none;}
+  .icon-grid-overlay.show{display:block;pointer-events:all;}
+  .icon-cell{position:absolute;border:2px solid transparent;border-radius:8px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;}
+  .icon-cell:hover{border-color:rgba(124,110,247,0.7);background:rgba(124,110,247,0.08);}
+  .icon-cell-tooltip{position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:10px;color:var(--text2);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 0.15s;}
+  .icon-cell:hover .icon-cell-tooltip{opacity:1;}
+
+  /* EXPORT TOOLBAR BUTTON */
+  .action-btn.export{background:rgba(124,110,247,0.1);border-color:rgba(124,110,247,0.3);color:var(--accent2);}
+  .action-btn.export:hover{background:rgba(124,110,247,0.2);}
+
+  /* IMAGE OUTPUT */
+  #image-output{max-width:100%;max-height:460px;border-radius:8px;z-index:1;filter:drop-shadow(0 12px 40px rgba(0,0,0,0.6));animation:pop 0.35s cubic-bezier(0.34,1.56,0.64,1);display:none;object-fit:contain;}
+
+  /* STYLE SHOWCASE STRIP (keep but rename) */
+  .style-showcase{display:flex;gap:12px;justify-content:center;margin-bottom:48px;flex-wrap:wrap;padding:0 40px;}
+  .showcase-pill{display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:999px;font-size:12px;color:var(--text2);cursor:pointer;transition:all 0.2s;}
+  .showcase-pill:hover,.showcase-pill.active{border-color:var(--accent);color:var(--accent2);background:rgba(124,110,247,0.08);}
+  .showcase-pill .dot{width:8px;height:8px;border-radius:50%;}
+
+  .app-container{max-width:1240px;margin:0 auto;padding:0 40px 80px;display:grid;grid-template-columns:380px 1fr;gap:28px;align-items:start;}
+
+  /* SIDEBAR */
+  .sidebar{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;display:flex;flex-direction:column;gap:18px;position:sticky;top:85px;}
+  .sec-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:1.2px;}
+  .section{display:flex;flex-direction:column;gap:10px;}
+  label{font-size:13px;color:var(--text2);font-weight:500;}
+
+  .prompt-area{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:12px 14px;resize:none;min-height:90px;transition:border-color 0.2s;line-height:1.5;}
+  .prompt-area:focus{outline:none;border-color:var(--accent);}
+  .prompt-area::placeholder{color:var(--text3);}
+
+  /* SCENE STARTERS */
+  .scene-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+  .scene-card{padding:8px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all 0.18s;display:flex;align-items:flex-start;gap:7px;}
+  .scene-card:hover{border-color:var(--border-hover);}
+  .scene-card-emoji{font-size:16px;line-height:1;margin-top:1px;}
+  .scene-card-text{font-size:11px;color:var(--text2);line-height:1.4;}
+
+  /* STYLE SELECTOR */
+  .style-tabs{display:flex;gap:6px;flex-wrap:wrap;}
+  .style-tab{padding:6px 13px;background:var(--bg3);border:1px solid var(--border);border-radius:999px;font-size:12px;color:var(--text2);cursor:pointer;transition:all 0.18s;display:flex;align-items:center;gap:5px;}
+  .style-tab:hover{border-color:var(--border-hover);color:var(--text);}
+  .style-tab.active{background:rgba(124,110,247,0.12);border-color:var(--accent);color:var(--accent2);}
+  .style-tab-dot{width:7px;height:7px;border-radius:50%;}
+
+  /* COLOR PALETTE SELECTOR */
+  .palette-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+  .palette-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px;cursor:pointer;transition:all 0.18s;}
+  .palette-card:hover{border-color:var(--border-hover);}
+  .palette-card.active{border-color:var(--accent);}
+  .palette-swatches{display:flex;gap:3px;margin-bottom:5px;}
+  .palette-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+  .palette-name{font-size:10px;color:var(--text3);}
+
+  /* DETAIL / COMPLEXITY */
+  .slider-row{display:flex;align-items:center;gap:10px;}
+  input[type=range]{flex:1;height:4px;accent-color:var(--accent);}
+  .slider-val{font-size:12px;color:var(--text2);min-width:30px;text-align:right;}
+
+  select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239998b0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
+  select:focus{outline:none;border-color:var(--accent);}
+
+  .api-row{display:flex;gap:8px;}
+  .api-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;transition:border-color 0.2s;}
+  .api-input:focus{outline:none;border-color:var(--accent);}
+  .api-input::placeholder{color:var(--text3);}
+  .api-save-btn{padding:9px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text2);font-size:12px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+  .api-save-btn:hover{border-color:var(--accent);color:var(--accent2);}
+  .api-notice{font-size:11px;color:var(--text3);line-height:1.4;padding:8px 10px;background:rgba(124,110,247,0.05);border-radius:6px;border:1px solid rgba(124,110,247,0.1);}
+
+  .toggle-row{display:flex;align-items:center;justify-content:space-between;}
+  .toggle-label{font-size:13px;color:var(--text2);}
+  .toggle-sub{font-size:11px;color:var(--text3);}
+  .toggle-switch{position:relative;width:38px;height:22px;}
+  .toggle-switch input{opacity:0;width:0;height:0;}
+  .toggle-track{position:absolute;inset:0;background:var(--bg3);border:1px solid var(--border);border-radius:999px;cursor:pointer;transition:all 0.2s;}
+  .toggle-track:before{content:'';position:absolute;width:16px;height:16px;left:2px;top:2px;background:var(--text3);border-radius:50%;transition:all 0.2s;}
+  .toggle-switch input:checked + .toggle-track{background:rgba(124,110,247,0.2);border-color:var(--accent);}
+  .toggle-switch input:checked + .toggle-track:before{transform:translateX(16px);background:var(--accent2);}
+
+  .gen-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),var(--pink));border:none;border-radius:var(--radius-sm);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;letter-spacing:0.3px;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;}
+  .gen-btn:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(124,110,247,0.4);}
+  .gen-btn:active{transform:translateY(0);}
+  .gen-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;box-shadow:none;}
+  .gen-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,0.08),transparent);pointer-events:none;}
+
+  .var-btn{width:100%;padding:10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text2);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s;}
+  .var-btn:hover{border-color:var(--border-hover);color:var(--text);}
+  .var-btn:disabled{opacity:0.4;cursor:not-allowed;}
+
+  /* CANVAS */
+  .canvas-panel{display:flex;flex-direction:column;gap:20px;}
+  .preview-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+  .preview-toolbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);}
+  .preview-toolbar-left{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);}
+  .status-dot{width:7px;height:7px;border-radius:50%;background:var(--text3);transition:all 0.3s;}
+  .status-dot.ready{background:var(--green);box-shadow:0 0 6px var(--green);}
+  .status-dot.loading{background:var(--amber);animation:blink 1s infinite;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0.35}}
+  .preview-actions{display:flex;gap:8px;}
+  .action-btn{padding:6px 13px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text2);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.2s;}
+  .action-btn:hover{border-color:var(--border-hover);color:var(--text);}
+  .action-btn.dl{background:rgba(124,110,247,0.15);border-color:rgba(124,110,247,0.4);color:var(--accent2);}
+  .action-btn.dl:hover{background:rgba(124,110,247,0.25);}
+  .action-btn:disabled{opacity:0.4;cursor:not-allowed;}
+
+  .canvas-area{min-height:460px;display:flex;align-items:center;justify-content:center;padding:32px;position:relative;transition:background 0.3s;}
+  .canvas-bg-dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:28px 28px;}
+
+  .empty-state{text-align:center;z-index:1;display:flex;flex-direction:column;align-items:center;gap:14px;max-width:340px;}
+  .empty-preview{width:180px;height:130px;background:var(--bg3);border:1px dashed var(--border-hover);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:36px;color:var(--text3);}
+  .empty-state h4{font-family:'Syne',sans-serif;font-size:15px;color:var(--text2);}
+  .empty-state p{font-size:13px;color:var(--text3);line-height:1.5;}
+
+  #svg-output{max-width:100%;max-height:440px;z-index:1;filter:drop-shadow(0 12px 40px rgba(0,0,0,0.6));animation:pop 0.35s cubic-bezier(0.34,1.56,0.64,1);display:none;}
+  @keyframes pop{from{opacity:0;transform:scale(0.93)}to{opacity:1;transform:scale(1)}}
+
+  .loading-state{z-index:1;display:none;flex-direction:column;align-items:center;gap:16px;text-align:center;}
+  .spinner-ring{width:52px;height:52px;border:2.5px solid var(--border);border-top-color:var(--accent);border-right-color:var(--pink);border-radius:50%;animation:spin 0.9s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading-label{font-size:14px;color:var(--text2);}
+  .loading-sub{font-size:12px;color:var(--text3);}
+  .loading-progress{width:200px;height:2px;background:var(--border);border-radius:999px;overflow:hidden;}
+  .loading-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--pink));border-radius:999px;width:0%;transition:width 0.8s ease;animation:progress-anim 8s ease-in-out forwards;}
+  @keyframes progress-anim{0%{width:0%}20%{width:25%}50%{width:55%}80%{width:80%}100%{width:92%}}
+
+  .quality-badge{position:absolute;top:12px;right:12px;z-index:2;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:500;display:none;}
+  .quality-badge.show{display:block;}
+  .quality-badge.high{background:rgba(34,211,160,0.12);border:1px solid rgba(34,211,160,0.3);color:var(--green);}
+  .quality-badge.med{background:rgba(245,166,35,0.12);border:1px solid rgba(245,166,35,0.3);color:var(--amber);}
+
+  /* SVG INFO BAR */
+  .svg-info-bar{display:none;align-items:center;justify-content:space-between;padding:8px 20px;border-top:1px solid var(--border);font-size:11px;color:var(--text3);}
+  .svg-info-bar.show{display:flex;}
+
+  .bg-row{display:flex;align-items:center;gap:8px;padding:10px 20px;border-top:1px solid var(--border);}
+  .bg-label{font-size:11px;color:var(--text3);white-space:nowrap;}
+  .bg-dot{width:20px;height:20px;border-radius:50%;cursor:pointer;border:1.5px solid transparent;transition:transform 0.15s;flex-shrink:0;}
+  .bg-dot:hover{transform:scale(1.15);}
+  .bg-dot.active{border-color:#fff;}
+
+  /* VARIATIONS PANEL */
+  .var-panel{display:none;padding:16px 20px;border-top:1px solid var(--border);}
+  .var-panel.show{display:block;}
+  .var-panel-title{font-size:12px;color:var(--text3);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.8px;}
+  .var-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .var-item{background:var(--bg3);border:1px solid var(--border);border-radius:8px;aspect-ratio:4/3;overflow:hidden;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;padding:8px;position:relative;}
+  .var-item:hover{border-color:var(--border-hover);transform:translateY(-2px);}
+  .var-item svg{width:100%;height:100%;}
+  .var-item-label{position:absolute;bottom:5px;left:0;right:0;text-align:center;font-size:10px;color:var(--text3);}
+  .var-spinner{width:22px;height:22px;border:1.5px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;}
+
+  /* GALLERY */
+  .gallery-wrap h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;}
+  .gal-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);aspect-ratio:4/3;overflow:hidden;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;padding:0;position:relative;}
+  .gal-item:hover{border-color:var(--border-hover);transform:translateY(-2px);}
+  .gal-item svg{width:100%;height:100%;}
+  .gal-overlay{position:absolute;inset:0;background:rgba(10,10,15,0.78);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;opacity:0;transition:opacity 0.2s;border-radius:var(--radius-sm);}
+  .gal-item:hover .gal-overlay{opacity:1;}
+  .gal-overlay span{font-size:11px;color:var(--text2);}
+  .gal-style-tag{position:absolute;top:5px;left:5px;font-size:9px;color:var(--text3);background:rgba(0,0,0,0.55);padding:2px 6px;border-radius:4px;}
+
+  .divider{border:none;border-top:1px solid var(--border);}
+  .key-collapse-btn{background:none;border:none;color:var(--text3);font-size:11px;cursor:pointer;padding:2px 6px;border-radius:4px;transition:color 0.2s;}
+  .key-collapse-btn:hover{color:var(--accent2);}
+  .suggestions{display:flex;flex-wrap:wrap;gap:5px;}
+  .suggestion-pill{padding:4px 9px;background:var(--bg3);border:1px solid var(--border);border-radius:999px;font-size:11px;color:var(--text3);cursor:pointer;transition:all 0.15s;}
+  .suggestion-pill:hover{border-color:var(--accent);color:var(--accent2);}
+  .output-type-tab{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 6px;cursor:pointer;transition:all 0.18s;text-align:center;}
+  .output-type-tab:hover{border-color:var(--border-hover);}
+  .output-type-tab.active{background:rgba(124,110,247,0.1);border-color:var(--accent);}
+  .output-type-tab.active-image{background:rgba(34,211,160,0.08);border-color:#22d3a0;}
+  .error-detail{background:rgba(220,50,50,0.08);border:1px solid rgba(220,50,50,0.25);border-radius:6px;padding:10px 12px;font-size:11px;color:#f09090;line-height:1.5;display:none;word-break:break-word;}
+
+  /* PROVIDER TABS */
+  .provider-tabs{display:flex;gap:4px;background:var(--bg3);border-radius:8px;padding:3px;}
+  .provider-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:6px 8px;border-radius:6px;font-size:12px;color:var(--text2);cursor:pointer;transition:all 0.2s;position:relative;}
+  .provider-tab:hover{color:var(--text);}
+  .provider-tab.active{background:var(--bg2);color:var(--text);border:1px solid var(--border);}
+  .provider-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+  .provider-status{font-size:9px;font-weight:600;margin-left:2px;}
+  .provider-status.ok{color:var(--green);}
+  .provider-tab .fal-dot{background:linear-gradient(135deg,#ff6b35,#f7c59f);}
+  .recraft-badge{background:rgba(255,107,53,0.12);border:1px solid rgba(255,107,53,0.3);color:#ff6b35;font-size:10px;font-weight:600;padding:2px 7px;border-radius:999px;display:inline-block;margin-top:3px;}
+  .provider-status.err{color:#f09090;}
+  .provider-status.na{color:var(--text3);}
+  .provider-desc{font-size:11px;color:var(--text3);line-height:1.6;margin-bottom:8px;}
+  .key-link{color:var(--accent2);text-decoration:none;}
+  .key-link:hover{text-decoration:underline;}
+
+  /* FAILOVER CHAIN */
+  .failover-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .failover-label{font-size:11px;color:var(--text3);white-space:nowrap;}
+  .failover-chain{display:flex;align-items:center;gap:4px;}
+  .chain-item{font-size:11px;padding:2px 8px;border-radius:999px;background:var(--bg3);border:1px solid var(--border);color:var(--text3);transition:all 0.2s;}
+  .chain-item.active{background:rgba(124,110,247,0.12);border-color:var(--accent);color:var(--accent2);}
+  .chain-item.using{background:rgba(34,211,160,0.12);border-color:var(--green);color:var(--green);animation:pulse-green 1.5s infinite;}
+  .chain-item.failed{background:rgba(240,80,80,0.08);border-color:rgba(240,80,80,0.3);color:#f09090;text-decoration:line-through;}
+  .chain-item.no-key{opacity:0.35;}
+  .chain-arrow{font-size:11px;color:var(--text3);}
+  @keyframes pulse-green{0%,100%{opacity:1}50%{opacity:0.5}}
+
+  /* AI USED BADGE */
+  .ai-used-badge{font-size:11px;padding:4px 10px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;margin-top:4px;}
+  .ai-used-badge.claude{background:rgba(124,110,247,0.12);border:1px solid rgba(124,110,247,0.3);color:var(--accent2);}
+  .ai-used-badge.gemini{background:rgba(79,184,247,0.12);border:1px solid rgba(79,184,247,0.3);color:#4fb8f7;}
+  .ai-used-badge.openai{background:rgba(34,211,160,0.12);border:1px solid rgba(34,211,160,0.3);color:var(--green);}
+  .test-btn{width:100%;padding:8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text3);font-family:"DM Sans",sans-serif;font-size:12px;cursor:pointer;transition:all 0.2s;}
+  .test-btn:hover{border-color:var(--green);color:var(--green);}
+  .toast{position:fixed;bottom:28px;right:28px;background:#1a0e0e;border:1px solid rgba(240,80,80,0.4);border-radius:var(--radius-sm);padding:12px 18px;font-size:13px;color:#f09090;z-index:9999;max-width:380px;display:none;animation:su 0.3s ease;}
+  @keyframes su{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  .toast.ok{background:#0b1e14;border-color:rgba(34,211,160,0.4);color:var(--green);}
+
+  @media(max-width:900px){
+    .app-container{grid-template-columns:1fr;}
+    .sidebar{position:static;}
+    header,section.hero,.app-container{padding-left:20px;padding-right:20px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><div class="logo-mark">✦</div>IconAI</div>
+  <nav>
+    <a href="#app" class="nav-link">Generator</a>
+    <a href="#gallery" class="nav-link">Gallery</a>
+    <a href="#pricing" class="nav-link">Pricing</a>
+    <button class="btn-primary" onclick="document.getElementById('api-key-input').focus()">Get Started</button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-badge">✦ SVG Icons · DALL-E Scene Illustrations · Infographics</div>
+  <h1>Generate beautiful<br><span>vector illustrations</span></h1>
+  <p>Describe any scene, icon, or infographic. Get production-ready SVG art — people, objects, environments — instantly.</p>
+</section>
+
+<div class="mode-switcher-wrap">
+  <div class="mode-switcher" id="mode-switcher">
+    <div class="mode-btn active" id="mode-svg" onclick="setMode('svg')">
+      <span class="mode-icon">◻</span>
+      <div class="mode-info">
+        <div class="mode-name">SVG Generator</div>
+        <div class="mode-desc">Icons · Diagrams · Infographics · Scalable forever</div>
+      </div>
+      <div class="mode-badge">Vector</div>
+    </div>
+    <div class="mode-btn" id="mode-image" onclick="setMode('image')">
+      <span class="mode-icon">🖼</span>
+      <div class="mode-info">
+        <div class="mode-name">Image Generator</div>
+        <div class="mode-desc">Scene illustrations · Characters · Canva-quality PNG</div>
+      </div>
+      <div class="mode-badge dalle">GPT Image 1.5</div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="app-container" id="app">
+  <aside class="sidebar">
+
+    <!-- AI STATUS PANEL -->
+    <div class="section" id="api-section">
+      <div class="sec-title">AI Status</div>
+      <div style="display:flex;flex-direction:column;gap:6px;" id="ai-status-panel">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);">
+          <div style="display:flex;align-items:center;gap:7px;">
+            <div style="width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);" id="status-claude-dot"></div>
+            <span style="font-size:12px;color:var(--text2);">Claude</span>
+          </div>
+          <span style="font-size:10px;color:var(--text3);" id="status-claude-label">Primary</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);">
+          <div style="display:flex;align-items:center;gap:7px;">
+            <div style="width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);" id="status-gemini-dot"></div>
+            <span style="font-size:12px;color:var(--text2);">Gemini</span>
+          </div>
+          <span style="font-size:10px;color:var(--text3);">Fallback 1</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);">
+          <div style="display:flex;align-items:center;gap:7px;">
+            <div style="width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);" id="status-openai-dot"></div>
+            <span style="font-size:12px;color:var(--text2);">GPT Image 1.5</span>
+          </div>
+          <span style="font-size:10px;color:var(--text3);">Images</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);">
+          <div style="display:flex;align-items:center;gap:7px;">
+            <div style="width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);" id="status-fal-dot"></div>
+            <span style="font-size:12px;color:var(--text2);">Recraft V4</span>
+          </div>
+          <span style="font-size:10px;color:var(--text3);">SVG Export</span>
+        </div>
+      </div>
+      <div class="ai-used-badge" id="ai-used-badge" style="display:none;margin-top:4px;"></div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- PROMPT -->
+    <div class="section">
+      <label>What do you want to create?</label>
+      <textarea id="prompt-input" class="prompt-area" placeholder="e.g. settings gear, donation scene, wifi signal, shopping cart…"></textarea>
+      <!-- Quick picks -->
+      <div class="suggestions" id="suggestions">
+        <span class="suggestion-pill" onclick="setPrompt('settings gear')">⚙ Settings</span>
+        <span class="suggestion-pill" onclick="setPrompt('wifi signal')">📶 Wifi</span>
+        <span class="suggestion-pill" onclick="setPrompt('user profile')">👤 Profile</span>
+        <span class="suggestion-pill" onclick="setPrompt('security shield')">🔒 Security</span>
+        <span class="suggestion-pill" onclick="setPrompt('analytics chart')">📊 Analytics</span>
+        <span class="suggestion-pill" onclick="setPrompt('notification bell')">🔔 Bell</span>
+        <span class="suggestion-pill" onclick="setPrompt('A woman and child receiving blankets from a volunteer at a donation table')">🤝 Donation</span>
+        <span class="suggestion-pill" onclick="setPrompt('team collaborating around a laptop in a modern office')">💼 Team</span>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- OUTPUT MODE: SVG Icon vs Scene Illustration vs Icon Set -->
+    <div class="section">
+      <label>Output type</label>
+      <div class="output-type-tabs" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+        <div class="output-type-tab active" id="otype-svg-icon" onclick="setOutputTypeMain('svg-icon')">
+          <div style="font-size:16px;margin-bottom:2px;">◻</div>
+          <div style="font-size:11px;font-weight:500;">Icon</div>
+          <div style="font-size:9px;color:var(--text3);">SVG</div>
+        </div>
+        <div class="output-type-tab" id="otype-svg-scene" onclick="setOutputTypeMain('svg-scene')">
+          <div style="font-size:16px;margin-bottom:2px;">🖼</div>
+          <div style="font-size:11px;font-weight:500;">Scene</div>
+          <div style="font-size:9px;color:var(--text3);">SVG</div>
+        </div>
+        <div class="output-type-tab" id="otype-dalle" onclick="setOutputTypeMain('dalle')">
+          <div style="font-size:16px;margin-bottom:2px;">✦</div>
+          <div style="font-size:11px;font-weight:500;">AI Image</div>
+          <div style="font-size:9px;color:var(--text3);">GPT Image 1.5</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STYLE (shown for icon + scene) -->
+    <div class="section" id="style-section">
+      <label id="style-label">Icon style</label>
+      <div class="style-tabs" id="style-tabs">
+        <div class="style-tab active" data-style="minimal"><div class="style-tab-dot" style="background:#7c6ef7"></div>Minimal</div>
+        <div class="style-tab" data-style="bold-flat"><div class="style-tab-dot" style="background:#f06dba"></div>Bold</div>
+        <div class="style-tab" data-style="line-art"><div class="style-tab-dot" style="background:#4fb8f7"></div>Line Art</div>
+        <div class="style-tab" data-style="isometric"><div class="style-tab-dot" style="background:#22d3a0"></div>Isometric</div>
+        <div class="style-tab" data-style="duotone"><div class="style-tab-dot" style="background:#a292ff"></div>Duotone</div>
+        <div class="style-tab" data-style="glassmorphism"><div class="style-tab-dot" style="background:#c8c0ff"></div>Glass</div>
+        <div class="style-tab" data-style="retro"><div class="style-tab-dot" style="background:#e85454"></div>Retro</div>
+        <div class="style-tab" data-style="flat-illustration" id="tab-flat-illus" style="display:none"><div class="style-tab-dot" style="background:#f5a623"></div>Flat</div>
+      </div>
+    </div>
+
+    <!-- COLOR PALETTE -->
+    <div class="section" id="color-section">
+      <label>Color</label>
+      <div class="palette-grid" id="palette-grid">
+        <div class="palette-card active" data-palette="warm" onclick="setPalette(this,'warm')">
+          <div class="palette-swatches"><div class="palette-dot" style="background:#e8855a"></div><div class="palette-dot" style="background:#f5a623"></div><div class="palette-dot" style="background:#c4614a"></div></div>
+          <div class="palette-name">Warm</div>
+        </div>
+        <div class="palette-card" data-palette="cool" onclick="setPalette(this,'cool')">
+          <div class="palette-swatches"><div class="palette-dot" style="background:#7c6ef7"></div><div class="palette-dot" style="background:#4fb8f7"></div><div class="palette-dot" style="background:#22d3a0"></div></div>
+          <div class="palette-name">Cool</div>
+        </div>
+        <div class="palette-card" data-palette="bold" onclick="setPalette(this,'bold')">
+          <div class="palette-swatches"><div class="palette-dot" style="background:#e63946"></div><div class="palette-dot" style="background:#f4a261"></div><div class="palette-dot" style="background:#2a9d8f"></div></div>
+          <div class="palette-name">Bold</div>
+        </div>
+        <div class="palette-card" data-palette="earth" onclick="setPalette(this,'earth')">
+          <div class="palette-swatches"><div class="palette-dot" style="background:#8b6f47"></div><div class="palette-dot" style="background:#c8a97e"></div><div class="palette-dot" style="background:#d4956a"></div></div>
+          <div class="palette-name">Earth</div>
+        </div>
+        <div class="palette-card" data-palette="midnight" onclick="setPalette(this,'midnight')">
+          <div class="palette-swatches"><div class="palette-dot" style="background:#7c6ef7"></div><div class="palette-dot" style="background:#1e1e3a"></div><div class="palette-dot" style="background:#a292ff"></div></div>
+          <div class="palette-name">Midnight</div>
+        </div>
+        <div class="palette-card" data-palette="nature" onclick="setPalette(this,'nature')">
+          <div class="palette-swatches"><div class="palette-dot" style="background:#2d6a4f"></div><div class="palette-dot" style="background:#74c69d"></div><div class="palette-dot" style="background:#52b788"></div></div>
+          <div class="palette-name">Nature</div>
+        </div>
+        <div class="palette-card" data-palette="pastel" onclick="setPalette(this,'pastel')">
+          <div class="palette-swatches"><div class="palette-dot" style="background:#ffd6e0"></div><div class="palette-dot" style="background:#c8e6c9"></div><div class="palette-dot" style="background:#e1bee7"></div></div>
+          <div class="palette-name">Pastel</div>
+        </div>
+        <div class="palette-card" data-palette="mono" onclick="setPalette(this,'mono')">
+          <div class="palette-swatches"><div class="palette-dot" style="background:#111111"></div><div class="palette-dot" style="background:#555555"></div><div class="palette-dot" style="background:#aaaaaa"></div></div>
+          <div class="palette-name">Mono</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DALL-E SPECIFIC OPTIONS (hidden unless dalle mode) -->
+    <div class="section" id="dalle-options-section" style="display:none;">
+      <label>Image style</label>
+      <div class="img-style-grid" id="img-style-grid">
+        <div class="img-style-card active" data-img-style="flat-vector" onclick="setImgStyle(this,'flat-vector')">
+          <div class="img-style-card-name">Flat vector</div>
+          <div class="img-style-card-desc">Canva-style scenes</div>
+        </div>
+        <div class="img-style-card" data-img-style="cartoon" onclick="setImgStyle(this,'cartoon')">
+          <div class="img-style-card-name">Cartoon</div>
+          <div class="img-style-card-desc">Expressive characters</div>
+        </div>
+        <div class="img-style-card" data-img-style="3d-render" onclick="setImgStyle(this,'3d-render')">
+          <div class="img-style-card-name">3D render</div>
+          <div class="img-style-card-desc">Glossy 3D</div>
+        </div>
+        <div class="img-style-card" data-img-style="watercolor" onclick="setImgStyle(this,'watercolor')">
+          <div class="img-style-card-name">Watercolour</div>
+          <div class="img-style-card-desc">Painted textures</div>
+        </div>
+      </div>
+      <label style="margin-top:6px;">Output type</label>
+      <div class="output-type-tabs" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        <div class="output-type-tab active" id="dtype-scene" onclick="setDalleType('scene')" style="text-align:center;padding:8px;">Scene</div>
+        <div class="output-type-tab" id="dtype-iconset" onclick="setDalleType('iconset')" style="text-align:center;padding:8px;">Icon set</div>
+      </div>
+      <!-- Icon set sub-options -->
+      <div id="iconset-sub" style="display:none;flex-direction:column;gap:8px;margin-top:6px;">
+        <label>Color scheme</label>
+        <div class="color-scheme-grid" id="color-scheme-grid">
+          <div class="color-scheme-card active" data-scheme="navy-blue" onclick="setColorScheme(this,'navy-blue')"><div class="cs-swatches"><div class="cs-dot" style="background:#1a3a6b"></div><div class="cs-dot" style="background:#4a90d9"></div></div><div class="cs-name">Navy</div></div>
+          <div class="color-scheme-card" data-scheme="purple" onclick="setColorScheme(this,'purple')"><div class="cs-swatches"><div class="cs-dot" style="background:#4a1d96"></div><div class="cs-dot" style="background:#8b5cf6"></div></div><div class="cs-name">Purple</div></div>
+          <div class="color-scheme-card" data-scheme="teal" onclick="setColorScheme(this,'teal')"><div class="cs-swatches"><div class="cs-dot" style="background:#065f46"></div><div class="cs-dot" style="background:#10b981"></div></div><div class="cs-name">Teal</div></div>
+          <div class="color-scheme-card" data-scheme="orange" onclick="setColorScheme(this,'orange')"><div class="cs-swatches"><div class="cs-dot" style="background:#9a3412"></div><div class="cs-dot" style="background:#f97316"></div></div><div class="cs-name">Orange</div></div>
+          <div class="color-scheme-card" data-scheme="mono" onclick="setColorScheme(this,'mono')"><div class="cs-swatches"><div class="cs-dot" style="background:#1f2937"></div><div class="cs-dot" style="background:#6b7280"></div></div><div class="cs-name">Mono</div></div>
+          <div class="color-scheme-card" data-scheme="red" onclick="setColorScheme(this,'red')"><div class="cs-swatches"><div class="cs-dot" style="background:#991b1b"></div><div class="cs-dot" style="background:#ef4444"></div></div><div class="cs-name">Red</div></div>
+          <div class="color-scheme-card" data-scheme="gold" onclick="setColorScheme(this,'gold')"><div class="cs-swatches"><div class="cs-dot" style="background:#92400e"></div><div class="cs-dot" style="background:#f59e0b"></div></div><div class="cs-name">Gold</div></div>
+          <div class="color-scheme-card" data-scheme="pink" onclick="setColorScheme(this,'pink')"><div class="cs-swatches"><div class="cs-dot" style="background:#9d174d"></div><div class="cs-dot" style="background:#ec4899"></div></div><div class="cs-name">Pink</div></div>
+        </div>
+        <label>Icon count</label>
+        <div class="icon-count-row">
+          <div class="icon-count-btn" data-count="4" onclick="setIconCount(this,4)">4</div>
+          <div class="icon-count-btn active" data-count="6" onclick="setIconCount(this,6)">6</div>
+          <div class="icon-count-btn" data-count="9" onclick="setIconCount(this,9)">9</div>
+          <div class="icon-count-btn" data-count="12" onclick="setIconCount(this,12)">12</div>
+        </div>
+      </div>
+      <div class="dalle-notice" style="margin-top:6px;">GPT Image 1.5 (OpenAI) · ~$0.04–0.12/image · or Recraft V4 (fal.ai) for native SVG</div>
+    </div>
+
+    <button class="gen-btn" id="gen-btn" onclick="generate()">✦ Generate</button>
+    <button class="var-btn" id="var-btn" onclick="generateVariations()" disabled>⊞ Variations</button>
+
+    <!-- Hidden compatibility elements (used by JS) -->
+    <div style="display:none">
+      <input type="checkbox" id="quality-toggle" checked>
+      <input type="range" id="complexity" min="1" max="5" value="3">
+      <span id="complexity-val">3</span>
+      <select id="size-select"><option value="512">512</option><option value="800x600" selected>800x600</option></select>
+      <span id="quality-label"></span>
+      <span id="quality-sub"></span>
+      <div id="type-scene"></div>
+      <div id="type-iconset"></div>
+      <div id="image-style-section"></div>
+      <div id="iconset-controls"></div>
+    </div>
+
+  </aside>
+
+  <!-- CANVAS -->
+  <div class="canvas-panel">
+    <div class="preview-card">
+      <div class="preview-toolbar">
+        <div class="preview-toolbar-left">
+          <div class="status-dot" id="status-dot"></div>
+          <span id="status-label">Ready to generate</span>
+        </div>
+        <div class="preview-actions">
+          <button class="action-btn" id="btn-copy" onclick="copyAction()" disabled>⎘ Copy SVG</button>
+          <button class="action-btn dl" id="btn-svg" onclick="downloadSVG()" disabled>↓ SVG</button>
+          <button class="action-btn dl" id="btn-png" onclick="downloadPNG()" disabled>↓ PNG</button>
+          <button class="action-btn export" id="btn-export" onclick="toggleExportPanel()" disabled>⬡ PPTX</button>
+        </div>
+      </div>
+
+      <div class="canvas-area" id="canvas-area">
+        <div class="canvas-bg-dots"></div>
+        <div class="quality-badge" id="quality-badge"></div>
+
+        <div class="empty-state" id="empty-state">
+          <div class="empty-preview">🎨</div>
+          <h4>Your illustration appears here</h4>
+          <p>Choose a style, pick a scene starter or write your own description, then hit Generate</p>
+        </div>
+
+        <div class="loading-state" id="loading-state">
+          <div class="spinner-ring"></div>
+          <div class="loading-label" id="loading-label">Building your illustration…</div>
+          <div class="loading-sub" id="loading-sub">Composing scene elements</div>
+          <div class="loading-progress"><div class="loading-bar" id="loading-bar"></div></div>
+        </div>
+
+        <div id="svg-output"></div>
+        <img id="image-output" alt="AI generated illustration">
+        <!-- Icon grid overlay — clickable cells over icon set image -->
+        <div class="icon-grid-overlay" id="icon-grid-overlay"></div>
+      </div>
+
+      <div class="svg-info-bar" id="svg-info-bar">
+        <span id="svg-info-text">—</span>
+        <span id="svg-info-type" style="color:var(--text3)">SVG · Scalable to any size</span>
+      </div>
+
+      <div class="bg-row" id="bg-row" style="display:none">
+        <span class="bg-label">Background:</span>
+        <div class="bg-dot active" data-bg="transparent" style="background:repeating-conic-gradient(#222 0% 25%,#2e2e2e 0% 50%) 0 0/10px 10px;" title="Transparent" onclick="setBg(this,'transparent')"></div>
+        <div class="bg-dot" data-bg="#f5ede0" style="background:#f5ede0;" onclick="setBg(this,'#f5ede0')"></div>
+        <div class="bg-dot" data-bg="#ffffff" style="background:#ffffff;" onclick="setBg(this,'#ffffff')"></div>
+        <div class="bg-dot" data-bg="#0a0a0f" style="background:#0a0a0f;border:1px solid #333;" onclick="setBg(this,'#0a0a0f')"></div>
+        <div class="bg-dot" data-bg="#e8f4fd" style="background:#e8f4fd;" onclick="setBg(this,'#e8f4fd')"></div>
+        <div class="bg-dot" data-bg="#d8f3dc" style="background:#d8f3dc;" onclick="setBg(this,'#d8f3dc')"></div>
+      </div>
+
+      <!-- PPTX EXPORT PANEL -->
+      <div class="export-panel" id="export-panel">
+        <div class="export-panel-title">Export to PowerPoint</div>
+        <div class="export-row">
+          <input class="export-input export-input-full" id="pptx-title" placeholder="Slide title  e.g. Blanket Distribution Initiative – India" />
+        </div>
+        <div class="export-row">
+          <input class="export-input" id="pptx-subtitle" placeholder="Sub-heading (optional)" />
+          <input class="export-input" id="pptx-org" placeholder="Organisation name" />
+        </div>
+        <div class="export-row export-input-full">
+          <input class="export-input export-input-full" id="pptx-body" placeholder="Body text / bullet points  (one per line)" style="height:56px;" />
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">Slide theme</div>
+        <div class="slide-theme-row" id="slide-theme-row">
+          <div class="slide-theme-btn active" data-theme="warm" onclick="setSlideTheme(this,'warm')">Warm</div>
+          <div class="slide-theme-btn" data-theme="midnight" onclick="setSlideTheme(this,'midnight')">Midnight</div>
+          <div class="slide-theme-btn" data-theme="clean" onclick="setSlideTheme(this,'clean')">Clean White</div>
+          <div class="slide-theme-btn" data-theme="navy" onclick="setSlideTheme(this,'navy')">Navy</div>
+          <div class="slide-theme-btn" data-theme="forest" onclick="setSlideTheme(this,'forest')">Forest</div>
+          <div class="slide-theme-btn" data-theme="charcoal" onclick="setSlideTheme(this,'charcoal')">Charcoal</div>
+        </div>
+        <div class="export-action-row">
+          <button class="export-btn pptx" id="pptx-generate-btn" onclick="exportToPPTX()">⬡ Download .pptx slide</button>
+        </div>
+      </div>
+
+      <!-- ICON INDIVIDUAL DOWNLOAD NOTE -->
+      <div id="icon-download-note" style="display:none;padding:10px 20px;border-top:1px solid var(--border);font-size:12px;color:var(--text2);">
+        ✦ Click any icon in the set above to download it individually as PNG
+      </div>
+
+      <div class="var-panel" id="var-panel">
+        <div class="var-panel-title">Variations — click to use</div>
+        <div class="var-grid" id="var-grid"></div>
+      </div>
+    </div>
+
+    <div class="gallery-wrap" id="gallery">
+      <h3><span>Gallery</span><span id="gal-count" style="font-size:12px;color:var(--text3);font-family:'DM Sans',sans-serif;font-weight:400;"></span></h3>
+      <div class="gallery-grid" id="gallery-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<section id="pricing" style="max-width:920px;margin:0 auto 100px;padding:0 40px;">
+  <div style="text-align:center;margin-bottom:44px;">
+    <div class="hero-badge" style="margin:0 auto 16px;">Pricing</div>
+    <h2 style="font-family:'Syne',sans-serif;font-size:38px;font-weight:800;letter-spacing:-1px;margin-bottom:10px;">Simple, transparent pricing</h2>
+    <p style="color:var(--text2);font-size:16px;">Start free. Scale as you grow.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:28px;">
+      <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Free</div>
+      <div style="font-family:'Syne',sans-serif;font-size:34px;font-weight:800;margin-bottom:4px;">$0</div>
+      <div style="font-size:13px;color:var(--text3);margin-bottom:22px;">Forever free</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:26px;font-size:13px;color:var(--text2);">
+        <li>✓ &nbsp;20 generations/month</li><li>✓ &nbsp;SVG + PNG export</li><li>✓ &nbsp;All styles</li>
+        <li style="color:var(--text3);">✗ &nbsp;Variations</li><li style="color:var(--text3);">✗ &nbsp;Commercial use</li>
+      </ul>
+      <button class="btn-primary" style="width:100%;background:var(--bg3);color:var(--text2);">Get started</button>
+    </div>
+    <div style="background:var(--bg2);border:2px solid var(--accent);border-radius:var(--radius);padding:28px;position:relative;">
+      <div style="position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--accent);padding:3px 14px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap;">Most popular</div>
+      <div style="font-size:11px;color:var(--accent2);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Pro</div>
+      <div style="font-family:'Syne',sans-serif;font-size:34px;font-weight:800;margin-bottom:4px;">$12<span style="font-size:15px;color:var(--text2)">/mo</span></div>
+      <div style="font-size:13px;color:var(--text3);margin-bottom:22px;">Billed monthly</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:26px;font-size:13px;color:var(--text2);">
+        <li>✓ &nbsp;Unlimited generations</li><li>✓ &nbsp;SVG + PNG (4K)</li><li>✓ &nbsp;Commercial license</li>
+        <li>✓ &nbsp;3 variations per gen</li><li>✓ &nbsp;Priority queue</li>
+      </ul>
+      <button class="btn-primary" style="width:100%;">Start free trial</button>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:28px;">
+      <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Enterprise</div>
+      <div style="font-family:'Syne',sans-serif;font-size:34px;font-weight:800;margin-bottom:4px;">$79<span style="font-size:15px;color:var(--text2)">/mo</span></div>
+      <div style="font-size:13px;color:var(--text3);margin-bottom:22px;">Per workspace</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:26px;font-size:13px;color:var(--text2);">
+        <li>✓ &nbsp;Everything in Pro</li><li>✓ &nbsp;Team brand kits</li><li>✓ &nbsp;API access</li>
+        <li>✓ &nbsp;SSO / SAML</li><li>✓ &nbsp;Dedicated support</li>
+      </ul>
+      <button class="btn-primary" style="width:100%;background:var(--bg3);color:var(--text2);">Contact sales</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- FOOTER                                                       -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<footer style="border-top:1px solid var(--border);padding:40px;margin-top:20px;">
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div style="width:24px;height:24px;background:linear-gradient(135deg,var(--accent),var(--pink));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;">✦</div>
+      <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;">IconAI</span>
+      <span style="font-size:12px;color:var(--text3);margin-left:8px;">© 2026 IconAI. All rights reserved.</span>
+    </div>
+    <nav style="display:flex;gap:24px;flex-wrap:wrap;">
+      <a href="#" onclick="showModal('privacy')" style="font-size:13px;color:var(--text2);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">Privacy Policy</a>
+      <a href="#" onclick="showModal('terms')" style="font-size:13px;color:var(--text2);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">Terms of Service</a>
+      <a href="mailto:hello@iconai.app" style="font-size:13px;color:var(--text2);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">hello@iconai.app</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- PRIVACY POLICY MODAL                                         -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="modal-privacy" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);overflow-y:auto;" onclick="if(event.target===this)closeModal('privacy')">
+  <div style="max-width:720px;margin:40px auto;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:48px;position:relative;">
+    <button onclick="closeModal('privacy')" style="position:absolute;top:20px;right:20px;background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;line-height:1;">✕</button>
+    <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px;">Legal</div>
+    <h1 style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:4px;letter-spacing:-0.5px;">Privacy Policy</h1>
+    <p style="font-size:12px;color:var(--text3);margin-bottom:32px;">Last updated: April 2026</p>
+
+    <div style="font-size:14px;color:var(--text2);line-height:1.8;display:flex;flex-direction:column;gap:24px;">
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">1. Who we are</h2>
+        <p>IconAI ("we", "us", "our") is an AI-powered graphic generation service. We help users create SVG icons, illustrations, infographics, and images. Our contact email is <a href="mailto:hello@iconai.app" style="color:var(--accent2);">hello@iconai.app</a>.</p>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">2. What data we collect</h2>
+        <p><strong style="color:var(--text);">Account data:</strong> When you sign up, we collect your email address and a hashed password. If you sign in via Google or another OAuth provider, we receive your name and email from that provider.</p>
+        <p style="margin-top:8px;"><strong style="color:var(--text);">Usage data:</strong> We log the number of generations you perform per month to enforce plan limits. We do not store the text prompts you enter or the images you generate on our servers.</p>
+        <p style="margin-top:8px;"><strong style="color:var(--text);">API keys:</strong> Any API keys you enter (Anthropic, OpenAI, fal.ai) are stored in your browser's local storage only. They are never transmitted to or stored on our servers.</p>
+        <p style="margin-top:8px;"><strong style="color:var(--text);">Payment data:</strong> Billing is handled entirely by Stripe. We never see or store your card number. We receive a Stripe customer ID and subscription status from Stripe.</p>
+        <p style="margin-top:8px;"><strong style="color:var(--text);">Analytics:</strong> We use privacy-respecting analytics (no cross-site tracking, no fingerprinting) to understand page traffic and feature usage in aggregate.</p>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">3. How we use your data</h2>
+        <p>We use your data solely to: provide and improve the service, enforce usage limits on your plan, send transactional emails (receipts, password resets), and respond to support requests. We do not sell your data to third parties. We do not use your data for advertising.</p>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">4. Third-party services</h2>
+        <p>When you generate content, your prompts are sent directly from your browser to the AI provider you have configured (Anthropic, OpenAI, fal.ai). Each provider has its own privacy policy. We recommend reviewing them:</p>
+        <ul style="margin-top:8px;padding-left:20px;display:flex;flex-direction:column;gap:4px;">
+          <li><a href="https://www.anthropic.com/privacy" target="_blank" style="color:var(--accent2);">Anthropic Privacy Policy</a></li>
+          <li><a href="https://openai.com/policies/privacy-policy" target="_blank" style="color:var(--accent2);">OpenAI Privacy Policy</a></li>
+          <li><a href="https://fal.ai/privacy" target="_blank" style="color:var(--accent2);">fal.ai Privacy Policy</a></li>
+          <li><a href="https://stripe.com/privacy" target="_blank" style="color:var(--accent2);">Stripe Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">5. Data retention</h2>
+        <p>We retain your account data for as long as your account is active. If you delete your account, we delete your personal data within 30 days, except where retention is required by law (e.g. billing records, which Stripe retains for 7 years).</p>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">6. Your rights</h2>
+        <p>You have the right to access, correct, export, or delete your personal data at any time. To exercise any of these rights, email us at <a href="mailto:hello@iconai.app" style="color:var(--accent2);">hello@iconai.app</a>. We will respond within 30 days.</p>
+        <p style="margin-top:8px;">If you are in the EU or UK, you have additional rights under GDPR / UK GDPR, including the right to lodge a complaint with your local data protection authority.</p>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">7. Cookies</h2>
+        <p>We use only essential cookies necessary for authentication (keeping you logged in) and session management. We do not use advertising or tracking cookies.</p>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">8. Children</h2>
+        <p>IconAI is not directed at children under 13. We do not knowingly collect data from children. If you believe a child has provided us with personal data, contact us and we will delete it promptly.</p>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">9. Changes to this policy</h2>
+        <p>We may update this policy occasionally. When we do, we will update the date at the top and notify registered users by email of material changes. Continued use of the service after changes constitutes acceptance.</p>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">10. Contact</h2>
+        <p>For any privacy questions or requests: <a href="mailto:hello@iconai.app" style="color:var(--accent2);">hello@iconai.app</a></p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TERMS OF SERVICE MODAL                                       -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="modal-terms" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);overflow-y:auto;" onclick="if(event.target===this)closeModal('terms')">
+  <div style="max-width:720px;margin:40px auto;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:48px;position:relative;">
+    <button onclick="closeModal('terms')" style="position:absolute;top:20px;right:20px;background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;line-height:1;">✕</button>
+    <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px;">Legal</div>
+    <h1 style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:4px;letter-spacing:-0.5px;">Terms of Service</h1>
+    <p style="font-size:12px;color:var(--text3);margin-bottom:32px;">Last updated: April 2026</p>
+
+    <div style="font-size:14px;color:var(--text2);line-height:1.8;display:flex;flex-direction:column;gap:24px;">
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">1. Acceptance of terms</h2>
+        <p>By accessing or using IconAI ("the Service"), you agree to be bound by these Terms of Service. If you do not agree, do not use the Service. These terms apply to all users including free-tier and paid subscribers.</p>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">2. Description of service</h2>
+        <p>IconAI provides AI-powered graphic generation tools that allow users to create SVG icons, vector illustrations, infographics, and raster images. The Service uses third-party AI APIs (Anthropic Claude, OpenAI GPT, fal.ai Recraft) to generate content based on user prompts. Output quality depends on the underlying AI model and is not guaranteed.</p>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">3. Accounts and billing</h2>
+        <p>You must provide accurate information when creating an account. You are responsible for all activity under your account. Free-tier accounts are limited to 20 generations per month. Paid plans are billed monthly or annually via Stripe. You may cancel at any time; cancellation takes effect at the end of the current billing period. No refunds are issued for partial periods.</p>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">4. Your API keys</h2>
+        <p>In the current version of the Service, you provide your own API keys for Anthropic, OpenAI, and fal.ai. You are solely responsible for those keys, their associated costs, and compliance with each provider's terms of use. IconAI stores your keys only in your browser's local storage and does not transmit them to our servers.</p>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">5. Ownership of generated content</h2>
+        <p><strong style="color:var(--text);">Free tier:</strong> You may use generated assets for personal and non-commercial purposes only.</p>
+        <p style="margin-top:8px;"><strong style="color:var(--text);">Pro and Enterprise tiers:</strong> You are granted a non-exclusive, worldwide licence to use, reproduce, modify, and distribute generated assets for any lawful commercial purpose. You own the outputs you create.</p>
+        <p style="margin-top:8px;">You acknowledge that AI-generated content may be similar to content generated for other users. IconAI does not warrant that outputs are unique or free from third-party intellectual property claims.</p>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">6. Acceptable use</h2>
+        <p>You may not use the Service to generate content that: is illegal, defamatory, or fraudulent; infringes third-party intellectual property; depicts or facilitates harm to any person; violates any applicable AI provider's usage policy; or attempts to circumvent usage limits or security measures.</p>
+        <p style="margin-top:8px;">We reserve the right to suspend or terminate accounts that violate these restrictions without refund.</p>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">7. Disclaimers</h2>
+        <p>The Service is provided "as is" without warranties of any kind, express or implied. We do not warrant that the Service will be uninterrupted, error-free, or that AI outputs will meet your requirements. AI generation is inherently non-deterministic — results may vary between identical prompts.</p>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">8. Limitation of liability</h2>
+        <p>To the maximum extent permitted by law, IconAI's total liability to you for any claim arising out of or relating to these Terms or the Service shall not exceed the amount you paid us in the 3 months preceding the claim, or $50, whichever is greater. We are not liable for indirect, incidental, consequential, or punitive damages.</p>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">9. Third-party AI providers</h2>
+        <p>When using the Service, your prompts are processed by third-party AI APIs. You must comply with each provider's terms: <a href="https://www.anthropic.com/legal/usage-policy" target="_blank" style="color:var(--accent2);">Anthropic</a>, <a href="https://openai.com/policies/usage-policies" target="_blank" style="color:var(--accent2);">OpenAI</a>, <a href="https://fal.ai/terms" target="_blank" style="color:var(--accent2);">fal.ai</a>. IconAI is not responsible for any actions those providers take regarding your use of their APIs.</p>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">10. Changes to the service and terms</h2>
+        <p>We may modify the Service or these Terms at any time. For material changes to paid tiers, we will give 30 days' notice by email. Continued use after notice constitutes acceptance of the revised Terms.</p>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">11. Governing law</h2>
+        <p>These Terms are governed by the laws of the jurisdiction in which IconAI is registered. Disputes shall be resolved by binding arbitration or, where arbitration is not available, in the courts of that jurisdiction.</p>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">12. Contact</h2>
+        <p>Questions about these Terms: <a href="mailto:hello@iconai.app" style="color:var(--accent2);">hello@iconai.app</a></p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+// API keys are stored securely on the server as environment variables.
+// Users never need to enter keys.
+let apiKey = 'server'; let geminiKey = 'server'; let openaiKey = 'server'; let falKey = 'server';
+let selectedStyle = 'minimal';
+let selectedPalette = 'warm';
+let currentMode   = 'svg';       // 'svg' | 'image'
+let selectedImgStyle  = 'flat-vector';
+let selectedImgSize   = '1024x1024';
+let selectedOutputType = 'scene';    // 'scene' | 'iconset'
+let selectedIconStyle  = 'duotone-solid';
+let selectedIconCount  = 6;
+let selectedColorScheme = 'navy-blue';
+let currentSVG    = '';
+let currentImgUrl = '';
+let currentImgBlob = null;
+let lastUsedProvider = '';
+let gallery = [];
+let canvasBg = 'transparent';
+
+// Keys are managed server-side — no client-side key storage needed
+updateFailoverChain();
+
+// ═══════════════════════════════════════════════════════════
+// PALETTE DEFINITIONS
+// ═══════════════════════════════════════════════════════════
+const PALETTES = {
+  warm:    { bg:'#f5ede0', primary:'#e8855a', secondary:'#f5a623', dark:'#4a3728', mid:'#c4614a', light:'#fdf3e8', skin:'#f2c9a0', accent:'#d4795a' },
+  cool:    { bg:'#e8f4fd', primary:'#4fb8f7', secondary:'#7c6ef7', dark:'#1a2a4a', mid:'#22d3a0', light:'#f0f9ff', skin:'#f0d0b8', accent:'#6ea8d4' },
+  pastel:  { bg:'#fef9f0', primary:'#ffd6e0', secondary:'#c8e6c9', dark:'#5a4060', mid:'#ffe0b2', light:'#ffffff', skin:'#fddbb4', accent:'#e1bee7' },
+  bold:    { bg:'#f0f0f0', primary:'#e63946', secondary:'#f4a261', dark:'#264653', mid:'#2a9d8f', light:'#ffffff', skin:'#f2c9a0', accent:'#e76f51' },
+  earth:   { bg:'#f5ede0', primary:'#c8a97e', secondary:'#d4956a', dark:'#3d2b1f', mid:'#8b6f47', light:'#fdf5ec', skin:'#e8c49a', accent:'#a0785a' },
+  midnight:{ bg:'#0f0f1a', primary:'#7c6ef7', secondary:'#a292ff', dark:'#f0eff8', mid:'#1e1e3a', light:'#2a2a4a', skin:'#d4a882', accent:'#4a3f8f' },
+  nature:  { bg:'#f5f5dc', primary:'#2d6a4f', secondary:'#74c69d', dark:'#1b4332', mid:'#52b788', light:'#d8f3dc', skin:'#f2d0a0', accent:'#40916c' },
+  mono:    { bg:'#f5f5f5', primary:'#333333', secondary:'#777777', dark:'#111111', mid:'#555555', light:'#eeeeee', skin:'#d4b896', accent:'#444444' }
+};
+
+// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// ICON GENERATION ENGINE v3 — Claude writes real SVG paths
+// ═══════════════════════════════════════════════════════════
+
+// Style system prompts — tell Claude exactly HOW to construct each style
+const ICON_STYLE_SYSTEMS = {
+
+  'minimal': (color) => ({
+    system: `You are an expert icon designer. Create clean minimal SVG icons exactly like Feather Icons or Heroicons.
+RULES:
+- viewBox="0 0 24 24", xmlns="http://www.w3.org/2000/svg"
+- ONLY strokes: fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+- 4-8 path/circle/rect/line elements
+- No fills anywhere. No text. No gradients.
+- Keep within x=1 to x=23, y=1 to y=23
+
+EXAMPLE output for a "settings" icon:
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3" fill="none" stroke="${color}" stroke-width="1.5"/><path fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+
+Output ONLY the raw SVG. No explanation.`,
+    user: (prompt, vw, vh) => `Create a minimal line icon for: "${prompt}". viewBox="0 0 24 24". Strokes only, fill="none", stroke="${color}". Output ONLY the SVG.`
+  }),
+
+  'bold-flat': (color) => ({
+    system: `You are an expert icon designer. Create bold flat filled SVG icons exactly like Font Awesome Solid or Material Icons Filled.
+RULES:
+- viewBox="0 0 24 24", xmlns="http://www.w3.org/2000/svg"  
+- Main icon shape: ONE solid filled path using fill="${color}"
+- Interior details/cutouts: fill="white" or fill="#ffffff" on top of the main shape
+- The icon must be a recognizable FILLED SOLID silhouette
+- NO strokes as primary elements. Pure solid fills.
+- 2-4 elements total. No text. No gradients.
+
+EXAMPLE output for a "home" icon:
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="${color}" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+
+EXAMPLE for "settings":
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="${color}" d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/><circle fill="white" cx="12" cy="12" r="2"/></svg>
+
+Output ONLY the raw SVG. No explanation.`,
+    user: (prompt, vw, vh) => `Create a bold flat filled icon for: "${prompt}". viewBox="0 0 24 24". One solid fill="${color}" main shape + white cutout details. Output ONLY the SVG.`
+  }),
+
+  'line-art': (color) => ({
+    system: `You are an expert icon designer. Create detailed line art SVG icons like Lucide or Heroicons Outline.
+RULES:
+- viewBox="0 0 24 24", xmlns="http://www.w3.org/2000/svg"
+- EVERY element: fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+- 6-14 elements for rich detail
+- Absolutely no fills. No text. No gradients.
+
+Output ONLY the raw SVG. No explanation.`,
+    user: (prompt, vw, vh) => `Create a detailed line art outline icon for: "${prompt}". viewBox="0 0 24 24". Everything fill="none" stroke="${color}" stroke-width="1.5" rounded. Output ONLY the SVG.`
+  }),
+
+  'duotone': (color) => {
+    const dark = shadeColor(color, -40);
+    const light = shadeColor(color, 50);
+    return {
+      system: `You are an expert icon designer. Create professional SOLID DUOTONE icons exactly like the AI icon pack style (dark background shape + lighter accent details on top).
+
+THIS IS THE EXACT PATTERN TO FOLLOW:
+1. Draw the MAIN BACKGROUND SHAPE filled with "${dark}" (the darker tone) — this is the complete icon silhouette
+2. Draw ACCENT/DETAIL SHAPES filled with "${color}" (medium tone) on top — these add the highlights and details
+3. Optionally add tiny "${light}" (lightest tone) dots or lines for fine detail
+
+CRITICAL: The icon must look like a SOLID COLORED SHAPE with lighter details cut into or drawn on top.
+Think: dark navy/blue background shape + medium blue details = professional duotone icon
+
+EXAMPLE for "artificial intelligence / brain":
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path fill="${dark}" d="M12 2C8.5 2 6 4.5 6 7c0 1.5.6 2.8 1.6 3.8C6.6 11.8 6 13.2 6 14.8c0 .7.1 1.4.4 2H4v2h16v-2h-2.4c.3-.6.4-1.3.4-2 0-1.6-.6-3-1.6-4C17.4 9.8 18 8.5 18 7c0-2.5-2.5-5-6-5z"/>
+  <circle fill="${color}" cx="10" cy="8" r="1.5"/>
+  <circle fill="${color}" cx="14" cy="8" r="1.5"/>
+  <path fill="${color}" stroke="${color}" stroke-width="0.5" d="M9 12h6M10 14h4"/>
+</svg>
+
+EXAMPLE for "settings/gear":
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path fill="${dark}" d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.19-.15.24-.42.12-.64l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54C14.39 3.17 14.2 3 14 3h-4c-.21 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 9.15c-.12.21-.08.47.12.64l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.19.15-.24.42-.12.64l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.04.24.24.41.47.41h4c.21 0 .43-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.64l-2.01-1.58z"/>
+  <circle fill="${color}" cx="12" cy="12" r="3"/>
+  <circle fill="${dark}" cx="12" cy="12" r="1.5"/>
+</svg>
+
+Output ONLY the raw SVG. No markdown. No explanation.`,
+      user: (prompt, vw, vh) => `Create a solid duotone icon for: "${prompt}".
+viewBox="0 0 24 24".
+Layer 1 (main shape): fill="${dark}" — the complete dark silhouette of the concept
+Layer 2 (accent details): fill="${color}" — highlights and key details on top
+Layer 3 (optional fine detail): fill="${light}" — tiny accent points
+Make it look like a PROFESSIONAL SOLID DUOTONE ICON — dark background shape + colored details.
+Output ONLY the SVG.`
+    };
+  },
+
+  'glassmorphism': (color) => ({
+    system: `You are an expert icon designer. Create glassmorphism frosted-glass icons.
+EXACT STRUCTURE (4 layers in this order):
+1. Glass base: <rect x="2" y="2" width="44" height="44" rx="12" fill="${color}" fill-opacity="0.15" stroke="${color}" stroke-opacity="0.5" stroke-width="1"/>
+2. Top highlight: <rect x="2" y="2" width="44" height="22" rx="12" fill="white" fill-opacity="0.1"/>
+3. Icon symbol (centered at 24,28): clean paths using stroke="white" fill="none" stroke-width="1.5" stroke-linecap="round"
+4. Gloss dot: <circle cx="10" cy="10" r="3" fill="white" fill-opacity="0.3"/>
+viewBox="0 0 48 48". No text. Output ONLY the SVG.`,
+    user: (prompt, vw, vh) => `Create a glassmorphism icon for: "${prompt}". viewBox="0 0 48 48". 4 layers: glass rect, highlight rect, white stroke symbol centered, gloss dot. Output ONLY the SVG.`
+  }),
+
+  'isometric': (color) => {
+    const dark = shadeColor(color, -35);
+    const light = shadeColor(color, 35);
+    return {
+      system: `You are an expert icon designer. Create isometric 3D icons.
+EXACT RULES:
+- viewBox="0 0 64 64"
+- Draw a 3D object in isometric projection (30° angle)
+- Top face: fill="${light}" — rhombus shape at top
+- Left face: fill="${color}" — parallelogram on left
+- Right face: fill="${dark}" — parallelogram on right (darkest)
+- Add edge definition lines: stroke="${dark}" stroke-width="0.5" fill="none"
+- Use <polygon> elements for faces
+- The 3D object should represent the concept clearly
+No text. Output ONLY the SVG.`,
+      user: (prompt, vw, vh) => `Create an isometric 3D icon for: "${prompt}". viewBox="0 0 64 64". Three-face isometric object: top="${light}", left="${color}", right="${dark}". Use polygons. Output ONLY the SVG.`
+    };
+  },
+
+  'retro': (color) => ({
+    system: `You are an expert icon designer. Create retro badge/enamel pin style icons.
+EXACT STRUCTURE:
+1. Badge shape: hexagon <polygon points="32,4 56,17 56,47 32,60 8,47 8,17" fill="${color}"/>
+2. Inner border: same hexagon slightly smaller, fill="none" stroke="white" stroke-opacity="0.5" stroke-width="1.5"
+3. Icon symbol centered: white filled shapes fill="white" representing the concept clearly
+4. Optional: small star ornaments fill="white" opacity="0.6" in 1-2 corners
+viewBox="0 0 64 64". No text. Output ONLY the SVG.`,
+    user: (prompt, vw, vh) => `Create a retro badge icon for: "${prompt}". viewBox="0 0 64 64". Hexagon badge fill="${color}", inner border white stroke, centered white symbol. Output ONLY the SVG.`
+  }),
+
+  'flat-illustration': () => null  // handled by generateSVGWithAI
+};
+
+function buildIconPrompt(userPrompt, style, color) {
+  const styleKey = style === 'flat-illustration' ? 'minimal' : style;
+  const styleFn = ICON_STYLE_SYSTEMS[styleKey] || ICON_STYLE_SYSTEMS['minimal'];
+
+  // New style systems are functions that return {system, user}
+  if (typeof styleFn === 'function') {
+    const built = styleFn(color);
+    if (!built) return buildIconPrompt(userPrompt, 'minimal', color);
+    const [vw, vh] = getDims();
+    return {
+      system: built.system,
+      user: built.user(userPrompt, vw, vh)
+    };
+  }
+
+  // Fallback for old string-based systems
+  return {
+    system: `Create a clean SVG icon. viewBox="0 0 24 24". Strokes only, fill="none", stroke="${color}", stroke-width="1.5". ZERO text. Output ONLY the SVG.`,
+    user: `SVG icon for: "${userPrompt}". Output ONLY the SVG.`
+  };
+}
+
+function shadeColor(hex, percent) {
+  hex = (hex || '#7c6ef7').replace('#','');
+  if (hex.length === 3) hex = hex.split('').map(c=>c+c).join('');
+  const num = parseInt(hex, 16);
+  const r = Math.min(255,Math.max(0,(num>>16) + Math.round(percent*2.55)));
+  const g = Math.min(255,Math.max(0,((num>>8)&0xff) + Math.round(percent*2.55)));
+  const b = Math.min(255,Math.max(0,(num&0xff) + Math.round(percent*2.55)));
+  return '#'+[r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+
+// Clean and validate SVG output
+function cleanIconSVG(rawSVG, color, style, vw, vh) {
+  if (!rawSVG || !rawSVG.includes('<svg')) return null;
+  let svg = rawSVG.match(/<svg[\s\S]*<\/svg>/i)?.[0];
+  if (!svg) return null;
+
+  // Replace placeholder colors
+  svg = svg.replace(/COLOR_DARK/g, shadeColor(color,-35));
+  svg = svg.replace(/COLOR_LIGHT/g, shadeColor(color,40));
+  svg = svg.replace(/COLOR/g, color);
+
+  // Remove text elements
+  svg = svg.replace(/<text[^>]*>[\s\S]*?<\/text>/gi, '');
+  svg = svg.replace(/<tspan[^>]*>[\s\S]*?<\/tspan>/gi, '');
+
+  // Ensure there's a viewBox (critical for display)
+  if (!svg.includes('viewBox')) {
+    svg = svg.replace('<svg', `<svg viewBox="0 0 ${vw} ${vh}"`);
+  }
+
+  // Strip explicit width/height so responsive CSS works
+  svg = svg.replace(/ width="[^"]*"/, '').replace(/ height="[^"]*"/, '');
+
+  return svg;
+}
+
+// BLUEPRINTS — just metadata now, rendering handled above
+const BLUEPRINTS = {
+  'flat-illustration': { name: 'Flat Illustration' },
+  'minimal':           { name: 'Minimal' },
+  'bold-flat':         { name: 'Bold Flat' },
+  'line-art':          { name: 'Line Art' },
+  'isometric':         { name: 'Isometric' },
+  'duotone':           { name: 'Duotone' },
+  'glassmorphism':     { name: 'Glass' },
+  'retro':             { name: 'Retro' }
+};
+
+
+// ═══════════════════════════════════════════════════════════
+// INTERACTIONS
+// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// MODE SWITCHING — SVG vs Image
+// ═══════════════════════════════════════════════════════════
+function setOutputTypeMain(type) {
+  // type: 'svg-icon' | 'svg-scene' | 'dalle'
+  const tabs = ['svg-icon','svg-scene','dalle'];
+  tabs.forEach(t => {
+    const el = document.getElementById('otype-' + t);
+    if (el) el.classList.toggle('active', t === type);
+  });
+
+  const isSVG = type !== 'dalle';
+  const isIcon = type === 'svg-icon';
+  const isDalle = type === 'dalle';
+
+  // Switch the internal mode
+  currentMode = isDalle ? 'image' : 'svg';
+
+  // Show/hide style section
+  document.getElementById('style-section').style.display = isSVG ? '' : 'none';
+  document.getElementById('color-section').style.display = isSVG ? '' : 'none';
+  document.getElementById('dalle-options-section').style.display = isDalle ? '' : 'none';
+
+  // For scenes, show flat-illustration style tab and auto-select it
+  const flatTab = document.getElementById('tab-flat-illus');
+  if (flatTab) {
+    if (!isIcon) {
+      flatTab.style.display = '';
+      if (type === 'svg-scene') {
+        document.querySelectorAll('#style-tabs .style-tab').forEach(t2 => t2.classList.remove('active'));
+        flatTab.classList.add('active');
+        selectedStyle = 'flat-illustration';
+      }
+    } else {
+      flatTab.style.display = 'none';
+      if (selectedStyle === 'flat-illustration') {
+        selectedStyle = 'minimal';
+        document.querySelectorAll('#style-tabs .style-tab').forEach(t2 => {
+          t2.classList.toggle('active', t2.dataset.style === 'minimal');
+        });
+      }
+    }
+  }
+
+  // Update prompt placeholder
+  const ta = document.getElementById('prompt-input');
+  if (type === 'svg-icon') ta.placeholder = 'e.g. settings gear, wifi, shopping cart, security shield…';
+  else if (type === 'svg-scene') ta.placeholder = 'e.g. A woman and child receiving blankets from a volunteer…';
+  else ta.placeholder = 'e.g. team collaboration, donation scene, office workers…';
+
+  // Update generate button color
+  const btn = document.getElementById('gen-btn');
+  if (btn) btn.style.background = isDalle
+    ? 'linear-gradient(135deg,#22d3a0,#4fb8f7)'
+    : 'linear-gradient(135deg,var(--accent),var(--pink))';
+
+  // Reset canvas
+  document.getElementById('svg-output').style.display = 'none';
+  document.getElementById('image-output').style.display = 'none';
+  document.getElementById('empty-state').style.display = 'flex';
+  document.getElementById('bg-row').style.display = 'none';
+  setStatus('Ready to generate', false);
+}
+
+function setDalleType(type) {
+  selectedOutputType = type;
+  document.getElementById('dtype-scene').classList.toggle('active', type === 'scene');
+  document.getElementById('dtype-iconset').classList.toggle('active', type === 'iconset');
+  const sub = document.getElementById('iconset-sub');
+  if (sub) sub.style.display = type === 'iconset' ? 'flex' : 'none';
+  const ta = document.getElementById('prompt-input');
+  if (ta) ta.placeholder = type === 'iconset'
+    ? 'e.g. artificial intelligence, data science, machine learning, automation…'
+    : 'e.g. A woman and child receiving blankets from a volunteer at a donation table…';
+}
+
+function toggleKeySection() {
+  const body = document.getElementById('api-key-body');
+  const btn  = document.getElementById('key-collapse-btn');
+  if (!body || !btn) return;
+  const collapsed = body.style.display === 'none';
+  body.style.display = collapsed ? '' : 'none';
+  btn.textContent = collapsed ? '▲ Hide' : '▼ Show';
+}
+
+function setMode(mode) {
+  currentMode = mode;
+  const isSVG = mode === 'svg';
+
+  // Mode buttons
+  document.getElementById('mode-svg').className   = 'mode-btn' + (isSVG ? ' active' : '');
+  document.getElementById('mode-image').className = 'mode-btn' + (!isSVG ? ' active-image' : '');
+
+  // Show/hide SVG-only panels
+  document.querySelectorAll('.svg-only').forEach(el => {
+    el.classList.toggle('hidden', !isSVG);
+  });
+
+  // Show/hide image controls
+  document.querySelectorAll('.image-controls').forEach(el => {
+    el.classList.toggle('show', !isSVG);
+  });
+
+  // Update generate button
+  const btn = document.getElementById('gen-btn');
+  btn.style.background = isSVG
+    ? 'linear-gradient(135deg,var(--accent),var(--pink))'
+    : 'linear-gradient(135deg,#22d3a0,#4fb8f7)';
+
+  // Update toolbar buttons
+  document.getElementById('btn-copy').textContent = isSVG ? '⎘ Copy SVG' : '⎘ Copy URL';
+  document.getElementById('btn-svg').style.display = isSVG ? '' : 'none';
+
+  // Update quality label
+  const ql = document.getElementById('quality-label'); if(ql) ql.textContent = isSVG ? 'High quality mode' : 'HD quality (1792×1024)';
+  const qs = document.getElementById('quality-sub');   if(qs) qs.textContent = isSVG ? '4× more tokens · richer detail' : 'Larger image size · higher cost';
+
+  // Update var btn
+  document.getElementById('var-btn').textContent = isSVG ? '⊞ Generate 3 variations' : '⊞ Generate 3 image variations';
+  document.getElementById('var-btn').disabled = true;
+
+  // Reset canvas
+  document.getElementById('svg-output').style.display = 'none';
+  document.getElementById('image-output').style.display = 'none';
+  document.getElementById('empty-state').style.display = 'flex';
+  document.getElementById('bg-row').style.display = 'none';
+  document.getElementById('svg-info-bar').className = 'svg-info-bar';
+  document.getElementById('quality-badge').className = 'quality-badge';
+  setStatus('Ready to generate', false);
+}
+
+function setImgStyle(el, style) {
+  document.querySelectorAll('.img-style-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  selectedImgStyle = style;
+}
+
+function setImgSize(el, size) {
+  document.querySelectorAll('.img-size-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  selectedImgSize = size;
+}
+
+document.querySelectorAll('#style-tabs .style-tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('#style-tabs .style-tab').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    selectedStyle = t.dataset.style;
+    syncShowcase(selectedStyle);
+  });
+});
+
+const complexityEl = document.getElementById('complexity');
+if (complexityEl) complexityEl.addEventListener('input', e => {
+  const valEl = document.getElementById('complexity-val');
+  if (valEl) valEl.textContent = e.target.value;
+});
+
+function pickShowcaseStyle(style) {
+  document.querySelectorAll('.showcase-pill').forEach(p => p.classList.remove('active'));
+  event.target.closest('.showcase-pill').classList.add('active');
+  // ═══════════════════════════════════════════════════════════
+// MODE SWITCHING — SVG vs Image
+// ═══════════════════════════════════════════════════════════
+function setOutputTypeMain(type) {
+  // type: 'svg-icon' | 'svg-scene' | 'dalle'
+  const tabs = ['svg-icon','svg-scene','dalle'];
+  tabs.forEach(t => {
+    const el = document.getElementById('otype-' + t);
+    if (el) el.classList.toggle('active', t === type);
+  });
+
+  const isSVG = type !== 'dalle';
+  const isIcon = type === 'svg-icon';
+  const isDalle = type === 'dalle';
+
+  // Switch the internal mode
+  currentMode = isDalle ? 'image' : 'svg';
+
+  // Show/hide style section
+  document.getElementById('style-section').style.display = isSVG ? '' : 'none';
+  document.getElementById('color-section').style.display = isSVG ? '' : 'none';
+  document.getElementById('dalle-options-section').style.display = isDalle ? '' : 'none';
+
+  // For scenes, show flat-illustration style tab and auto-select it
+  const flatTab = document.getElementById('tab-flat-illus');
+  if (flatTab) {
+    if (!isIcon) {
+      flatTab.style.display = '';
+      if (type === 'svg-scene') {
+        document.querySelectorAll('#style-tabs .style-tab').forEach(t2 => t2.classList.remove('active'));
+        flatTab.classList.add('active');
+        selectedStyle = 'flat-illustration';
+      }
+    } else {
+      flatTab.style.display = 'none';
+      if (selectedStyle === 'flat-illustration') {
+        selectedStyle = 'minimal';
+        document.querySelectorAll('#style-tabs .style-tab').forEach(t2 => {
+          t2.classList.toggle('active', t2.dataset.style === 'minimal');
+        });
+      }
+    }
+  }
+
+  // Update prompt placeholder
+  const ta = document.getElementById('prompt-input');
+  if (type === 'svg-icon') ta.placeholder = 'e.g. settings gear, wifi, shopping cart, security shield…';
+  else if (type === 'svg-scene') ta.placeholder = 'e.g. A woman and child receiving blankets from a volunteer…';
+  else ta.placeholder = 'e.g. team collaboration, donation scene, office workers…';
+
+  // Update generate button color
+  const btn = document.getElementById('gen-btn');
+  if (btn) btn.style.background = isDalle
+    ? 'linear-gradient(135deg,#22d3a0,#4fb8f7)'
+    : 'linear-gradient(135deg,var(--accent),var(--pink))';
+
+  // Reset canvas
+  document.getElementById('svg-output').style.display = 'none';
+  document.getElementById('image-output').style.display = 'none';
+  document.getElementById('empty-state').style.display = 'flex';
+  document.getElementById('bg-row').style.display = 'none';
+  setStatus('Ready to generate', false);
+}
+
+function setDalleType(type) {
+  selectedOutputType = type;
+  document.getElementById('dtype-scene').classList.toggle('active', type === 'scene');
+  document.getElementById('dtype-iconset').classList.toggle('active', type === 'iconset');
+  const sub = document.getElementById('iconset-sub');
+  if (sub) sub.style.display = type === 'iconset' ? 'flex' : 'none';
+  const ta = document.getElementById('prompt-input');
+  if (ta) ta.placeholder = type === 'iconset'
+    ? 'e.g. artificial intelligence, data science, machine learning, automation…'
+    : 'e.g. A woman and child receiving blankets from a volunteer at a donation table…';
+}
+
+function toggleKeySection() {
+  const body = document.getElementById('api-key-body');
+  const btn  = document.getElementById('key-collapse-btn');
+  if (!body || !btn) return;
+  const collapsed = body.style.display === 'none';
+  body.style.display = collapsed ? '' : 'none';
+  btn.textContent = collapsed ? '▲ Hide' : '▼ Show';
+}
+
+function setMode(mode) {
+  currentMode = mode;
+  const isSVG = mode === 'svg';
+
+  // Mode buttons
+  document.getElementById('mode-svg').className   = 'mode-btn' + (isSVG ? ' active' : '');
+  document.getElementById('mode-image').className = 'mode-btn' + (!isSVG ? ' active-image' : '');
+
+  // Show/hide SVG-only panels
+  document.querySelectorAll('.svg-only').forEach(el => {
+    el.classList.toggle('hidden', !isSVG);
+  });
+
+  // Show/hide image controls
+  document.querySelectorAll('.image-controls').forEach(el => {
+    el.classList.toggle('show', !isSVG);
+  });
+
+  // Update generate button
+  const btn = document.getElementById('gen-btn');
+  btn.style.background = isSVG
+    ? 'linear-gradient(135deg,var(--accent),var(--pink))'
+    : 'linear-gradient(135deg,#22d3a0,#4fb8f7)';
+
+  // Update toolbar buttons
+  document.getElementById('btn-copy').textContent = isSVG ? '⎘ Copy SVG' : '⎘ Copy URL';
+  document.getElementById('btn-svg').style.display = isSVG ? '' : 'none';
+
+  // Update quality label
+  const ql = document.getElementById('quality-label'); if(ql) ql.textContent = isSVG ? 'High quality mode' : 'HD quality (1792×1024)';
+  const qs = document.getElementById('quality-sub');   if(qs) qs.textContent = isSVG ? '4× more tokens · richer detail' : 'Larger image size · higher cost';
+
+  // Update var btn
+  document.getElementById('var-btn').textContent = isSVG ? '⊞ Generate 3 variations' : '⊞ Generate 3 image variations';
+  document.getElementById('var-btn').disabled = true;
+
+  // Reset canvas
+  document.getElementById('svg-output').style.display = 'none';
+  document.getElementById('image-output').style.display = 'none';
+  document.getElementById('empty-state').style.display = 'flex';
+  document.getElementById('bg-row').style.display = 'none';
+  document.getElementById('svg-info-bar').className = 'svg-info-bar';
+  document.getElementById('quality-badge').className = 'quality-badge';
+  setStatus('Ready to generate', false);
+}
+
+function setImgStyle(el, style) {
+  document.querySelectorAll('.img-style-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  selectedImgStyle = style;
+}
+
+function setImgSize(el, size) {
+  document.querySelectorAll('.img-size-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  selectedImgSize = size;
+}
+
+document.querySelectorAll('#style-tabs .style-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.style === style);
+  });
+  selectedStyle = style;
+}
+
+function syncShowcase(style) {
+  document.querySelectorAll('.showcase-pill').forEach(p => {
+    if (!p) return;
+    const txt = p.textContent.trim().toLowerCase().replace(/\s+/g,'-');
+    p.classList.toggle('active', txt === style);
+  });
+}
+
+function setPalette(el, name) {
+  document.querySelectorAll('.palette-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  selectedPalette = name;
+}
+
+function setPrompt(t) { document.getElementById('prompt-input').value = t; document.getElementById('prompt-input').focus(); }
+
+// ═══════════════════════════════════════════════════════════
+// PROVIDER UI HELPERS
+// ═══════════════════════════════════════════════════════════
+function switchProviderTab(provider) {
+  document.querySelectorAll('.provider-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.provider-panel').forEach(p => p.style.display = 'none');
+  const tab = document.querySelector(`.provider-tab[data-provider="${provider}"]`);
+  if (tab) tab.classList.add('active');
+  const panel = document.getElementById('panel-' + provider);
+  if (panel) panel.style.display = 'block';
+}
+
+function updateProviderStatus(provider, state) {
+  // state: 'saved' | 'ok' | 'err' | 'na'
+  const el = document.getElementById('status-' + provider);
+  if (!el) return;
+  if (state === 'ok')    { el.textContent = '✓'; el.className = 'provider-status ok'; }
+  else if (state === 'err') { el.textContent = '✗'; el.className = 'provider-status err'; }
+  else if (state === 'saved') { el.textContent = '●'; el.className = 'provider-status ok'; }
+  else { el.textContent = '—'; el.className = 'provider-status na'; }
+}
+
+function updateFailoverChain() {
+  const providers = ['claude','gemini','openai'];
+  const keys = { claude: apiKey, gemini: geminiKey, openai: openaiKey };
+  providers.forEach(p => {
+    const el = document.getElementById('chain-' + p);
+    if (!el) return;
+    el.className = 'chain-item' + (keys[p] ? ' active' : ' no-key');
+  });
+  // fal.ai status badge
+  updateProviderStatus('fal', falKey ? 'saved' : 'na');
+}
+
+function showAIBadge(provider) {
+  const names = { claude: '✦ Claude', gemini: '◆ Gemini', openai: '● GPT Image 1.5', fal: '◈ Recraft V4' };
+  const badge = document.getElementById('ai-used-badge');
+  if (!badge) return;
+  badge.textContent = names[provider] || provider;
+  badge.className = 'ai-used-badge ' + provider;
+  badge.style.display = 'inline-flex';
+}
+
+function saveKey(provider, inputId) {
+  const val = document.getElementById(inputId).value.trim();
+  if (!val) { toast('Please enter a key', false); return; }
+  if (provider === 'claude')  { apiKey    = val; localStorage.setItem('iconai_key_claude', val); }
+  if (provider === 'gemini')  { geminiKey = val; localStorage.setItem('iconai_key_gemini', val); }
+  if (provider === 'openai')  { openaiKey = val; localStorage.setItem('iconai_key_openai', val); }
+  if (provider === 'fal')     { falKey    = val; localStorage.setItem('iconai_key_fal',    val); }
+  updateProviderStatus(provider, 'saved');
+  updateFailoverChain();
+  toast(provider.charAt(0).toUpperCase()+provider.slice(1) + ' key saved!', true);
+  // Show collapse button now that a key is saved
+  const colBtn = document.getElementById('key-collapse-btn');
+  if (colBtn) colBtn.style.display = '';
+}
+
+// ═══════════════════════════════════════════════════════════
+// TEST ALL CONNECTIONS
+// ═══════════════════════════════════════════════════════════
+async function testAllConnections() {
+  const box = document.getElementById('error-detail-box');
+  if (box) { box.style.display='block'; box.style.color='#f5a623'; box.textContent='Testing backend…'; }
+  try {
+    const r = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: 'You are a test.', user: 'Reply with just: OK', maxTokens: 10 })
+    });
+    const d = await r.json();
+    if (r.ok && d.text) {
+      if (box) { box.style.color='#22d3a0'; box.textContent='✓ Backend connected · Provider: '+(d.provider||'auto')+' · All systems operational'; }
+      toast('Backend is working!', true);
+    } else {
+      if (box) { box.style.color='#f09090'; box.textContent='✗ Backend error: '+(d.error||'Unknown'); }
+    }
+  } catch(e) {
+    if (box) { box.style.color='#f09090'; box.textContent='✗ Cannot reach backend: '+e.message; }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// PROVIDER-SPECIFIC API CALLERS
+// ═══════════════════════════════════════════════════════════
+// ── Unified backend proxy calls ─────────────────────────────────────────────
+async function callClaude(system, user, tokens) {
+  return await callBackendGenerate(system, user, tokens, 'claude');
+}
+
+async function callGemini(system, user, tokens) {
+  return await callBackendGenerate(system, user, tokens, 'gemini');
+}
+
+async function callOpenAI(system, user, tokens) {
+  return await callBackendGenerate(system, user, tokens, 'openai');
+}
+
+async function callBackendGenerate(system, user, tokens, preferredProvider) {
+  const r = await fetch('/api/generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ system, user, maxTokens: tokens || 4000, provider: preferredProvider || 'auto' })
+  });
+  if (!r.ok) {
+    const e = await r.json().catch(() => ({}));
+    const err = new Error(e?.error || ('Backend error ' + r.status));
+    err.status = r.status;
+    err.isOverloaded = r.status === 503 || r.status === 429;
+    throw err;
+  }
+  const d = await r.json();
+  return d.text || '';
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// FAILOVER CALL — Claude → Gemini → GPT-4o
+// ═══════════════════════════════════════════════════════════
+async function callAPI(system, user, maxTok) {
+  const quality = document.getElementById('quality-toggle').checked;
+  const tokens = quality ? 4000 : (maxTok || 2000);
+  return await callBackendGenerate(system, user, tokens, 'auto');
+}
+
+function setBg(el, bg) {
+  document.querySelectorAll('.bg-dot').forEach(d => d.classList.remove('active'));
+  el.classList.add('active');
+  canvasBg = bg;
+  const area = document.getElementById('canvas-area');
+  area.style.background = bg === 'transparent' ? '' : bg;
+}
+
+// ═══════════════════════════════════════════════════════════
+// PROMPT BUILDER
+// ═══════════════════════════════════════════════════════════
+function getDims() {
+  // For icon/SVG mode, use style-appropriate viewBox dimensions
+  // These match what ICON_STYLE_SYSTEMS specifies
+  if (currentMode === 'svg') {
+    const styleDims = {
+      'minimal': [24, 24], 'bold-flat': [24, 24], 'line-art': [24, 24],
+      'duotone': [24, 24], 'glassmorphism': [48, 48],
+      'isometric': [64, 64], 'retro': [64, 64],
+      'flat-illustration': [800, 600]
+    };
+    return styleDims[selectedStyle] || [24, 24];
+  }
+  const v = document.getElementById('size-select').value;
+  if (v==='512') return [512,512];
+  if (v==='1200x630') return [1200,630];
+  if (v==='1024x768') return [1024,768];
+  if (v==='400x800') return [400,800];
+  return [800,600];
+}
+
+function buildCall(prompt, style, palette, vw, vh, complexity) {
+  // For flat-illustration AI mode
+  const p = PALETTES[palette] || PALETTES['warm'];
+  return {
+    system: `You are a world-class SVG flat vector illustrator. Flat 2D filled shapes, palette (${p.primary}, ${p.secondary}, ${p.skin}, ${p.bg}). ZERO text. Output ONLY the SVG.`,
+    user: `Flat vector illustration: ${prompt}
+ViewBox: 0 0 ${vw} ${vh}. Background: ${p.bg}. Complexity: ${complexity}/5. ZERO text. Output ONLY the SVG.`
+  };
+}
+
+// ═══════════════════════════════════════════════════════════
+// API CALL
+// ═══════════════════════════════════════════════════════════
+
+
+// ═══════════════════════════════════════════════════════════
+// GENERATE
+// ═══════════════════════════════════════════════════════════
+async function generate() {
+  const prompt = document.getElementById('prompt-input').value.trim();
+  if (!prompt) { toast('Describe what you want to create', false); return; }
+
+  // Determine mode from active output type button
+  const isImage = document.getElementById('otype-dalle')?.classList.contains('active');
+  if (isImage) {
+    currentMode = 'image';
+    await generateImage(prompt);
+  } else {
+    currentMode = 'svg';
+    await generateSVG(prompt);
+  }
+}
+
+async function generateSVG(prompt) {
+  if (selectedStyle === 'flat-illustration') {
+    await generateSVGWithAI(prompt);
+    return;
+  }
+
+  // Keys managed server-side
+
+  setLoading(true);
+
+  const p = PALETTES[selectedPalette] || PALETTES['warm'];
+  const color = p.primary || '#7c6ef7';
+  const [vw, vh] = getDims();
+
+  const { system, user } = buildIconPrompt(prompt, selectedStyle, color);
+
+  try {
+    const rawText = await callAPI(system, user, 2000);
+    const svg = cleanIconSVG(rawText, color, selectedStyle, vw, vh);
+
+    if (!svg) throw new Error('No valid SVG generated — try a simpler description');
+
+    clearInterval(window._li);
+    showResultSVG(svg, prompt, selectedStyle);
+    document.getElementById('var-btn').disabled = false;
+    document.getElementById('var-panel').classList.remove('show');
+  } catch(err) {
+    console.error('SVG icon error:', err);
+    clearInterval(window._li);
+    setLoading(false);
+    toast(err.message, false);
+    setStatus('Error — try again', false);
+  }
+}
+
+async function generateSVGWithAI(prompt) {
+  // Keys managed server-side
+
+  const [vw, vh] = getDims();
+  const complexity = parseInt(document.getElementById('complexity').value);
+  const p = PALETTES[selectedPalette] || PALETTES['warm'];
+
+  const system = `You are a world-class SVG flat vector illustrator creating scenes like Storyset, unDraw, or Blush Design.
+STYLE: Flat 2D, filled shapes (NO outlines/strokes as primary), warm colors (${p.primary}, ${p.secondary}, ${p.skin} for skin, ${p.bg} background).
+Characters: oval heads, rounded bodies, expressive poses. Objects clearly drawn. ZERO text elements. Output ONLY the SVG.`;
+
+  const user = `Flat vector illustration scene: ${prompt}
+ViewBox: 0 0 ${vw} ${vh}. Fill background with ${p.bg}. Complexity ${complexity}/5.
+Characters interact naturally. ZERO text/labels anywhere. Output ONLY raw SVG starting with <svg.`;
+
+  setLoading(true);
+  try {
+    const rawText = await callAPI(system, user, 4000);
+    const svg = cleanIconSVG(rawText, p.primary, selectedStyle, vw, vh);
+    if (!svg) throw new Error('No SVG returned — try a simpler description');
+    showResultSVG(svg, prompt, selectedStyle);
+    document.getElementById('var-btn').disabled = false;
+    document.getElementById('var-panel').classList.remove('show');
+  } catch(err) {
+    clearInterval(window._li);
+    setLoading(false);
+    toast(err.message, false);
+    setStatus('Error — try again', false);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// DALL-E 3 IMAGE GENERATION
+// ═══════════════════════════════════════════════════════════
+const DALLE_STYLE_PROMPTS = {
+  'flat-vector':   'flat vector illustration style, clean bold shapes, no outlines, solid color fills, minimal and modern, professional stock illustration, similar to Canva or Storyset illustrations',
+  'cartoon':       'cartoon illustration style, friendly expressive characters, bright colors, playful and fun, editorial cartoon, clean linework',
+  'watercolor':    'watercolor illustration style, soft painted textures, gentle color washes, artistic and dreamy, hand-painted appearance',
+  '3d-render':     'smooth 3D render illustration style, glossy polished surfaces, soft shadows, modern 3D character design, Blender-style render',
+  'line-drawing':  'minimal line drawing illustration, clean thin lines, sketch-like, pen and ink style, simple and elegant',
+  'isometric-3d':  'isometric 3D illustration style, geometric perspective, cute isometric scene, bold colors, clean edges'
+};
+
+function setOutputType(type) {
+  selectedOutputType = type;
+  const ts = document.getElementById('type-scene');   if(ts) ts.className   = 'output-type-tab' + (type === 'scene' ? ' active' : '');
+  const ti = document.getElementById('type-iconset'); if(ti) ti.className = 'output-type-tab' + (type === 'iconset' ? ' active' : '');
+
+  // Show/hide scene vs icon controls
+  const sceneStyleEl  = document.getElementById('image-style-section');
+  const iconsetCtrlEl = document.getElementById('iconset-controls');
+
+  if (type === 'scene') {
+    sceneStyleEl.style.removeProperty('display');
+    sceneStyleEl.classList.add('show');
+    // Force hide iconset
+    iconsetCtrlEl.setAttribute('style', 'display:none!important');
+  } else {
+    sceneStyleEl.style.display = 'none';
+    sceneStyleEl.classList.remove('show');
+    // Show iconset (override the !important)
+    iconsetCtrlEl.setAttribute('style', 'display:flex;flex-direction:column;gap:10px;');
+  }
+
+  // Update prompt placeholder
+  const ta = document.getElementById('prompt-input');
+  if (type === 'iconset') {
+    ta.placeholder = 'e.g. artificial intelligence, data science, machine learning, algorithm…';
+  } else {
+    ta.placeholder = 'e.g. A woman and child receiving blankets from a volunteer…';
+  }
+  // Update generate button label
+  document.getElementById('gen-btn').querySelector ? null : null;
+}
+
+function setIconStyle(el, style) {
+  document.querySelectorAll('.icon-style-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  selectedIconStyle = style;
+}
+
+function setIconCount(el, count) {
+  document.querySelectorAll('.icon-count-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  selectedIconCount = count;
+}
+
+function setColorScheme(el, scheme) {
+  document.querySelectorAll('.color-scheme-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  selectedColorScheme = scheme;
+}
+
+// ── COLOR SCHEME DEFINITIONS ──────────────────────────────────────────────────
+const COLOR_SCHEMES = {
+  'navy-blue': { dark: 'dark navy blue (#1a3a6b)', mid: 'medium blue (#4a90d9)', light: 'light blue (#e8f0fb)', bg: 'white' },
+  'purple':    { dark: 'deep purple (#4a1d96)',    mid: 'violet (#8b5cf6)',       light: 'lavender (#ede9fe)',   bg: 'white' },
+  'teal':      { dark: 'dark teal (#065f46)',       mid: 'emerald (#10b981)',      light: 'mint (#d1fae5)',       bg: 'white' },
+  'orange':    { dark: 'deep orange (#9a3412)',     mid: 'orange (#f97316)',       light: 'peach (#fff7ed)',      bg: 'white' },
+  'red':       { dark: 'dark red (#991b1b)',        mid: 'red (#ef4444)',          light: 'rose (#fef2f2)',       bg: 'white' },
+  'pink':      { dark: 'deep pink (#9d174d)',       mid: 'hot pink (#ec4899)',     light: 'blush (#fdf2f8)',      bg: 'white' },
+  'gold':      { dark: 'dark amber (#92400e)',      mid: 'gold (#f59e0b)',         light: 'cream (#fffbeb)',      bg: 'white' },
+  'mono':      { dark: 'charcoal (#1f2937)',        mid: 'grey (#6b7280)',         light: 'light grey (#f9fafb)', bg: 'white' }
+};
+
+// ── ICON STYLE PROMPT BUILDERS ───────────────────────────────────────────────
+const ICON_STYLE_PROMPTS = {
+  'duotone-solid': (cs) => `professional icon set in solid duotone style. Each icon uses exactly two tones: ${cs.dark} for the main solid shape background and primary elements, and ${cs.mid} for accent details and overlapping shapes on top. Clean geometric shapes, bold fills, no outlines, no strokes. Very clean and professional like Adobe or Flaticon icon packs. White background.`,
+
+  'outline': (cs) => `professional icon set in clean outline style. Each icon uses thin ${cs.mid} strokes on white background, stroke width 2px, rounded line caps, no fills. Consistent weight throughout. Similar to Heroicons, Feather Icons or Material Outline icons.`,
+
+  'filled-flat': (cs) => `professional icon set in filled flat style. Each icon is a single solid ${cs.mid} filled shape on white background, no gradients, no shadows, simple geometric silhouettes. Similar to Material Icons filled or Font Awesome solid icons.`,
+
+  'gradient': (cs) => `professional icon set with gradient fills. Each icon uses a smooth gradient from ${cs.dark} to ${cs.mid}, applied to bold rounded shapes. Modern, vibrant, gradient mesh style. White background, slight soft shadow.`,
+
+  '3d-clay': (cs) => `professional icon set in 3D clay/inflated style. Each icon is a soft rounded puffy 3D shape rendered in ${cs.mid} with ${cs.light} highlights and subtle ${cs.dark} shadows. Cute, modern, inflated look like iOS 3D emoji style. White background.`,
+
+  'glassmorphic': (cs) => `professional icon set in glassmorphism style. Each icon has a frosted glass card in ${cs.light}, with ${cs.mid} icon symbol inside, subtle ${cs.dark} border, slight blur and transparency effect. Modern glass UI look. White or very light background.`
+};
+
+// ── ICON SET GRID LAYOUTS ─────────────────────────────────────────────────────
+const ICON_GRID_LAYOUTS = {
+  4:  { cols: 2, rows: 2, size: '1024x1024' },
+  6:  { cols: 3, rows: 2, size: '1792x1024' },
+  9:  { cols: 3, rows: 3, size: '1024x1024' },
+  12: { cols: 4, rows: 3, size: '1792x1024' },
+  16: { cols: 4, rows: 4, size: '1024x1024' }
+};
+
+// ── GPT Image 1.5 (successor to DALL-E 3 — better prompt adherence) ──────────
+// ── Image generation — routed through secure backend ─────────────────────────
+async function callGPTImage(fullPrompt, size, hd) {
+  const r = await fetch('/api/image', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt: fullPrompt, size, quality: hd ? 'hd' : 'standard', provider: 'openai', outputFormat: 'png' })
+  });
+  if (!r.ok) {
+    const e = await r.json().catch(() => ({}));
+    throw new Error(e?.error || ('Image API error ' + r.status));
+  }
+  const d = await r.json();
+  if (d.b64) {
+    const blob = await fetch('data:image/png;base64,' + d.b64).then(r => r.blob());
+    return { url: URL.createObjectURL(blob), type: 'blob' };
+  }
+  return { url: d.url, type: 'url' };
+}
+
+async function callRecraft(fullPrompt, outputFormat) {
+  const r = await fetch('/api/image', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt: fullPrompt, size: '1024x1024', provider: 'recraft', outputFormat: outputFormat || 'png' })
+  });
+  if (!r.ok) {
+    const e = await r.json().catch(() => ({}));
+    throw new Error(e?.error || ('Recraft error ' + r.status));
+  }
+  const d = await r.json();
+  return { url: d.url, type: 'url', isSVG: outputFormat === 'svg' };
+}
+
+async function callDallE(fullPrompt, size, hd) {
+  const result = await callGPTImage(fullPrompt, size, hd);
+  return result.url || result;
+}
+
+
+
+// ── Recraft V4 via fal.ai — returns native SVG ────────────────────────────────
+async function callRecraft(fullPrompt, outputFormat) {
+  // outputFormat: 'svg' | 'png'
+  const endpoint = outputFormat === 'svg'
+    ? 'https://fal.run/fal-ai/recraft-v3/text-to-image'
+    : 'https://fal.run/fal-ai/recraft-v3/text-to-image';
+
+  const body = {
+    prompt: fullPrompt,
+    image_size: 'square_hd',
+    num_images: 1,
+    style: 'vector_illustration',  // Recraft's flat vector style
+    output_format: outputFormat === 'svg' ? 'svg' : 'png'
+  };
+
+  const r = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Key ' + falKey },
+    body: JSON.stringify(body)
+  });
+
+  if (!r.ok) {
+    const e = await r.json().catch(() => ({}));
+    const msg = e?.detail || e?.message || ('HTTP ' + r.status);
+    if (r.status === 401 || r.status === 403) throw new Error('Invalid fal.ai key — check fal.ai tab in API Setup');
+    throw new Error('Recraft error: ' + msg);
+  }
+
+  const data = await r.json();
+  const imageUrl = data.images?.[0]?.url;
+  if (!imageUrl) throw new Error('No image returned from Recraft V4');
+
+  return { url: imageUrl, type: outputFormat === 'svg' ? 'svg' : 'url', isSVG: outputFormat === 'svg' };
+}
+
+async function generateImage(prompt) {
+  // Keys managed server-side
+  if (selectedOutputType === 'iconset') { await generateIconSet(prompt); return; }
+
+  const hd = document.getElementById('quality-toggle').checked;
+  const size = hd ? '1792x1024' : selectedImgSize;
+  const stylePrompt = DALLE_STYLE_PROMPTS[selectedImgStyle] || DALLE_STYLE_PROMPTS['flat-vector'];
+
+  // Use Recraft SVG mode if fal key available and style is flat-vector or icon-related
+  const useRecraft = falKey && (selectedImgStyle === 'flat-vector' || selectedImgStyle === 'line-drawing');
+  const fullPrompt = prompt + '. Style: ' + stylePrompt + '. No text, no labels, no watermarks.';
+
+  setLoading(true, 'image');
+  try {
+    let result;
+    if (useRecraft) {
+      setLoadingSub('Recraft V4 · Native vector…');
+      result = await callRecraft(fullPrompt, 'svg').catch(async (e) => {
+        console.warn('Recraft failed, trying GPT Image:', e.message);
+        setLoadingSub('Falling back to GPT Image 1.5…');
+        return await callGPTImage(fullPrompt, size, hd);
+      });
+    } else if (openaiKey) {
+      setLoadingSub('GPT Image 1.5…');
+      result = await callGPTImage(fullPrompt, size, hd);
+    } else {
+      throw new Error('No image generation key available');
+    }
+
+    // Handle SVG result from Recraft
+    if (result.isSVG) {
+      const svgText = await fetch(result.url).then(r => r.text()).catch(() => null);
+      if (svgText && svgText.includes('<svg')) {
+        const cleanSVG = svgText.replace(/<[?]xml[^>]*>/,'').trim();
+        showResultSVG(cleanSVG, prompt, 'flat-illustration');
+        toast('✓ Native SVG from Recraft V4', true);
+      } else {
+        showResultImage(result.url, prompt);
+      }
+    } else {
+      showResultImage(result.url || result, prompt);
+    }
+
+    document.getElementById('var-btn').disabled = false;
+    document.getElementById('var-panel').classList.remove('show');
+  } catch(err) {
+    console.error('Image error:', err);
+    setLoading(false);
+    toast(err.message, false);
+    setStatus('Error — try again', false);
+  }
+}
+
+async function generateIconSet(prompt) {
+  const layout = ICON_GRID_LAYOUTS[selectedIconCount] || ICON_GRID_LAYOUTS[6];
+  const cs = COLOR_SCHEMES[selectedColorScheme] || COLOR_SCHEMES['navy-blue'];
+  const styleFn = ICON_STYLE_PROMPTS[selectedIconStyle] || ICON_STYLE_PROMPTS['duotone-solid'];
+  const styleDesc = styleFn(cs);
+  const hd = document.getElementById('quality-toggle').checked;
+
+  const topics = prompt.split(/[,;]/).map(t => t.trim()).filter(Boolean);
+  const iconList = topics.length >= 2 ? topics.slice(0, selectedIconCount).join(', ') : prompt;
+
+  const fullPrompt =
+    'Create a professional icon set grid of exactly ' + selectedIconCount + ' icons arranged in a ' +
+    layout.cols + ' column by ' + layout.rows + ' row grid. ' +
+    'The icons represent these topics: ' + iconList + '. ' +
+    'Style: ' + styleDesc + ' ' +
+    'CRITICAL: All icons must be exactly the same size, perfectly aligned in a neat grid with equal spacing. ' +
+    'Each icon has a small readable label below it. ' +
+    'Consistent visual language across all icons. Very clean professional icon pack. ' +
+    'Pure white background. No outer border.';
+
+  setLoading(true, 'image');
+  try {
+    let imageUrl;
+    if (falKey) {
+      // Recraft V4 is better for icon sets — cleaner, more consistent
+      setLoadingSub('Recraft V4 · Icon set…');
+      try {
+        const result = await callRecraft(fullPrompt, 'png');
+        imageUrl = result.url;
+        showAIBadge('fal');
+      } catch(e) {
+        console.warn('Recraft failed for icon set, trying GPT Image:', e.message);
+        setLoadingSub('GPT Image 1.5 · Icon set…');
+        const result = await callGPTImage(fullPrompt, layout.size, hd);
+        imageUrl = result.url || result;
+      }
+    } else if (openaiKey) {
+      setLoadingSub('GPT Image 1.5 · Icon set…');
+      const result = await callGPTImage(fullPrompt, layout.size, hd);
+      imageUrl = result.url || result;
+    } else {
+      throw new Error('Add an OpenAI or fal.ai key to generate icon sets');
+    }
+    showResultImage(imageUrl, prompt);
+    document.getElementById('var-btn').disabled = false;
+    document.getElementById('var-panel').classList.remove('show');
+  } catch(err) {
+    console.error('Icon set error:', err);
+    setLoading(false);
+    toast(err.message, false);
+    setStatus('Error — try again', false);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// VARIATIONS
+// ═══════════════════════════════════════════════════════════
+async function generateVariations() {
+  const prompt = document.getElementById('prompt-input').value.trim();
+  if (!prompt) return;
+  if (currentMode === 'image') { await generateImageVariations(prompt); return; }
+  if (!apiKey) return;
+  const [vw,vh] = getDims();
+  const complexity = parseInt(document.getElementById('complexity').value);
+  const panel = document.getElementById('var-panel');
+  const grid = document.getElementById('var-grid');
+  panel.classList.add('show');
+  grid.innerHTML = '';
+
+  // Pick 3 palette variations of the same style
+  const palettes = Object.keys(PALETTES).filter(p=>p!==selectedPalette).slice(0,2);
+  const varPalettes = [selectedPalette, ...palettes];
+  const varLabels = varPalettes.map(p => PALETTES[p] ? p.charAt(0).toUpperCase()+p.slice(1) : p);
+
+  varPalettes.forEach((pal,i) => {
+    const el = document.createElement('div');
+    el.className='var-item'; el.id=`vari-${i}`;
+    el.innerHTML=`<div class="var-spinner"></div><div class="var-item-label">${varLabels[i]} palette</div>`;
+    grid.appendChild(el);
+  });
+
+  await Promise.allSettled(varPalettes.map(async (pal,i) => {
+    try {
+      const {system,user} = buildCall(prompt, selectedStyle, pal, vw, vh, complexity);
+      const svg = await callAPI(system, user, 2000);
+      const el = document.getElementById(`vari-${i}`);
+      if (el) {
+        const thumbVar = makeThumbnailSVG(svg);
+        el.innerHTML = thumbVar+`<div class="var-item-label">${varLabels[i]}</div>`;
+        el.onclick = () => { showResultSVG(svg, prompt, selectedStyle, true); panel.classList.remove('show'); };
+      }
+    } catch(e) {
+      const el = document.getElementById(`vari-${i}`);
+      if (el) el.innerHTML='<div style="font-size:10px;color:var(--text3)">Failed</div>';
+    }
+  }));
+}
+
+// ═══════════════════════════════════════════════════════════
+// UI HELPERS
+// ═══════════════════════════════════════════════════════════
+const LOADING_MSGS = {
+  'flat-illustration': ['Sketching the characters…','Adding clothing and details…','Composing the scene…','Polishing the colours…'],
+  'minimal': ['Drawing clean strokes…','Stripping back the noise…','Centering the composition…','Refining paths…'],
+  'bold-flat': ['Laying bold fills…','Cutting highlights…','Building the silhouette…','Finalising…'],
+  'line-art': ['Tracing outlines…','Keeping it clean…','Consistent stroke weight…','Finalising…'],
+  'isometric': ['Projecting to 3D…','Building top face…','Adding depth and sides…','Finalising…'],
+  'duotone': ['Layering tones…','Setting opacities…','Creating depth…','Finalising…'],
+  'glassmorphism': ['Frosting the glass…','Adding highlights…','Polishing surface…','Finalising…'],
+  'retro': ['Stamping the badge…','Adding ornaments…','Ageing the details…','Finalising…']
+};
+
+function setLoadingSub(msg) {
+  const el = document.getElementById('loading-sub');
+  if (el) el.textContent = msg;
+}
+
+function setLoading(on, mode) {
+  document.getElementById('gen-btn').disabled = on;
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('loading-state').style.display = on ? 'flex' : 'none';
+  document.getElementById('svg-output').style.display = 'none';
+  document.getElementById('image-output').style.display = 'none';
+  document.getElementById('status-dot').className = 'status-dot '+(on?'loading':'');
+  document.getElementById('status-label').textContent = on ? 'Generating…' : 'Ready';
+  document.getElementById('quality-badge').className = 'quality-badge';
+  document.getElementById('svg-info-bar').className = 'svg-info-bar';
+  // Reset export panel
+  const ep = document.getElementById('export-panel');
+  if (ep) ep.classList.remove('show');
+  const io = document.getElementById('icon-grid-overlay');
+  if (io) { io.classList.remove('show'); io.innerHTML=''; }
+  document.getElementById('icon-download-note').style.display='none';
+  const expBtn = document.getElementById('btn-export');
+  if (expBtn) expBtn.disabled = true;
+  if (on) {
+    const isImg = mode === 'image';
+    const isIconSet = isImg && selectedOutputType === 'iconset';
+    const msgs = isIconSet
+      ? ['Designing icons…','Arranging the grid…','Applying colour scheme…','Polishing the set…']
+      : isImg
+      ? ['Sending to DALL-E 3…','AI is painting your scene…','Rendering illustration…','Almost ready…']
+      : (LOADING_MSGS[selectedStyle]||['Generating…','Composing…','Refining…','Finalising…']);
+    let i=0;
+    const subs = ['Composing scene elements','Applying palette colours','Building SVG paths','Quality checking'];
+    document.getElementById('loading-label').textContent = msgs[0];
+    document.getElementById('loading-sub').textContent = subs[0];
+    // reset progress bar
+    const bar = document.getElementById('loading-bar');
+    bar.style.animation = 'none';
+    void bar.offsetWidth;
+    bar.style.animation = 'progress-anim 8s ease-in-out forwards';
+    window._li = setInterval(()=>{
+      i=(i+1)%msgs.length;
+      document.getElementById('loading-label').textContent=msgs[i];
+      document.getElementById('loading-sub').textContent=subs[i%subs.length];
+    }, 1600);
+  } else {
+    clearInterval(window._li);
+  }
+}
+
+function setStatus(msg, ready) {
+  document.getElementById('status-dot').className='status-dot '+(ready?'ready':'');
+  document.getElementById('status-label').textContent=msg;
+}
+
+function scoreSVG(svg) {
+  let s=0;
+  if (!/<text|<tspan/i.test(svg)) s+=3;
+  if (svg.includes('viewBox')) s+=1;
+  const pc=(svg.match(/<path/g)||[]).length;
+  if (pc>=4) s+=2;
+  if (svg.length>1200) s+=2;
+  if (svg.includes('<ellipse')||svg.includes('<circle')) s+=1;
+  if (svg.includes('<g')) s+=1;
+  return s>=7?'high':'med';
+}
+
+function showResultSVG(svg, prompt, style, skipGallery) {
+  currentSVG = svg;
+  currentImgUrl = '';
+  currentMode = 'svg';
+  clearInterval(window._li);
+
+  // Hide image output, show SVG
+  document.getElementById('image-output').style.display = 'none';
+  document.getElementById('empty-state').style.display = 'none';
+
+  const out = document.getElementById('svg-output');
+  // Normalise SVG for display: ensure it has a viewBox and scales correctly
+  let displaySVG = svg || '';
+  // If SVG has no viewBox, add one based on width/height attributes
+  if (!displaySVG.includes('viewBox')) {
+    const wm = displaySVG.match(/width="([^"]+)"/);
+    const hm = displaySVG.match(/height="([^"]+)"/);
+    if (wm && hm) displaySVG = displaySVG.replace('<svg', `<svg viewBox="0 0 ${wm[1]} ${hm[1]}"`);
+    else displaySVG = displaySVG.replace('<svg', '<svg viewBox="0 0 24 24"');
+  }
+  // Remove fixed width/height so CSS can control display size
+  displaySVG = displaySVG.replace(/ width="[^"]*"/, '').replace(/ height="[^"]*"/, '');
+  // Add responsive sizing
+  displaySVG = displaySVG.replace('<svg', '<svg width="100%" height="100%" style="max-width:400px;max-height:400px;display:block;margin:auto;"');
+  out.innerHTML = displaySVG;
+  out.style.display = 'block';
+  document.getElementById('loading-state').style.display='none';
+  document.getElementById('gen-btn').disabled=false;
+  document.getElementById('bg-row').style.display='flex';
+  document.getElementById('btn-svg').disabled=false;
+  document.getElementById('btn-svg').style.display='';
+  document.getElementById('btn-png').disabled=false;
+  document.getElementById('btn-copy').disabled=false;
+  document.getElementById('btn-copy').textContent='⎘ Copy SVG';
+  document.getElementById('btn-export').disabled=false;
+  // Clear icon overlay for SVG results
+  const ovly = document.getElementById('icon-grid-overlay');
+  if (ovly) { ovly.classList.remove('show'); ovly.innerHTML=''; }
+  document.getElementById('icon-download-note').style.display='none';
+
+  const q=scoreSVG(svg);
+  const badge=document.getElementById('quality-badge');
+  badge.textContent=q==='high'?'✦ High quality':'· Good';
+  badge.className=`quality-badge show ${q}`;
+
+  const kb = Math.round(svg.length/1024*10)/10;
+  const elCount = (svg.match(/<(path|rect|circle|ellipse|polygon|line|polyline)/g)||[]).length;
+  document.getElementById('svg-info-text').textContent = `${elCount} elements · ${kb}kb`;
+  document.getElementById('svg-info-type').textContent = 'SVG · Scalable to any size';
+  document.getElementById('svg-info-bar').className='svg-info-bar show';
+
+  setStatus(`${BLUEPRINTS[style]?.name||style} ready`, true);
+  showAIBadge(lastUsedProvider || 'claude');
+  if (!skipGallery) addToGallery(svg, prompt, style, null);
+}
+
+function showResultImage(url, prompt, skipGallery) {
+  currentImgUrl = url;
+  currentSVG = '';
+  currentMode = 'image';
+  clearInterval(window._li);
+
+  // Hide SVG output, show image
+  document.getElementById('svg-output').style.display = 'none';
+  document.getElementById('empty-state').style.display = 'none';
+
+  const img = document.getElementById('image-output');
+
+  // Remove previous onload to avoid stale closures
+  img.onload = null;
+  img.onerror = null;
+
+  img.onload = () => {
+    document.getElementById('loading-state').style.display = 'none';
+    img.style.display = 'block';
+    document.getElementById('gen-btn').disabled = false;
+    document.getElementById('bg-row').style.display = 'flex';
+    document.getElementById('btn-png').disabled = false;
+    document.getElementById('btn-svg').disabled = true;
+    document.getElementById('btn-svg').style.display = 'none';
+    document.getElementById('btn-copy').disabled = false;
+    document.getElementById('btn-copy').textContent = '⎘ Copy URL';
+
+    const badge = document.getElementById('quality-badge');
+    badge.textContent = '✦ DALL-E 3';
+    badge.className = 'quality-badge show high';
+
+    const sizeLabel = url === img.src ? selectedImgSize : '1024×1024';
+    document.getElementById('svg-info-text').textContent = 'PNG · ' + sizeLabel;
+    document.getElementById('svg-info-type').textContent = 'Raster image · DALL-E 3';
+    document.getElementById('svg-info-bar').className = 'svg-info-bar show';
+
+    setStatus('Image ready', true);
+    showAIBadge('openai');
+
+    // Enable PPTX export button
+    document.getElementById('btn-export').disabled = false;
+
+    // If this was an icon set, build the click overlay
+    if (selectedOutputType === 'iconset' && !skipGallery) {
+      const layout = ICON_GRID_LAYOUTS[selectedIconCount] || ICON_GRID_LAYOUTS[6];
+      setTimeout(() => buildIconGridOverlay(selectedIconCount, layout), 100);
+    } else {
+      // Clear any previous icon overlay
+      const overlay = document.getElementById('icon-grid-overlay');
+      overlay.classList.remove('show');
+      overlay.innerHTML = '';
+      document.getElementById('icon-download-note').style.display = 'none';
+    }
+
+    // Only add to gallery for new generations, not gallery clicks
+    if (!skipGallery) addToGallery(null, prompt, 'dalle-' + selectedImgStyle, url);
+  };
+  img.onerror = () => {
+    setLoading(false);
+    toast('Image failed to load — DALL-E URLs expire after ~1hr', false);
+    setStatus('Error', false);
+  };
+  img.src = url;
+}
+
+function makeThumbnailSVG(svg) {
+  if (!svg) return '';
+  let s = svg;
+  // Add explicit dimensions if missing
+  if (!s.includes('width=')) {
+    s = s.replace('<svg', '<svg width="120" height="120"');
+  } else {
+    s = s.replace(/width="[^"]*"/, 'width="120"').replace(/height="[^"]*"/, 'height="120"');
+  }
+  // Ensure viewBox is present (required for proper scaling)
+  if (!s.includes('viewBox')) {
+    s = s.replace('<svg', '<svg viewBox="0 0 24 24"');
+  }
+  // Force display to fill thumbnail
+  s = s.replace('<svg', '<svg style="width:100%;height:100%;display:block;"');
+  return s;
+}
+
+function addToGallery(svg, prompt, style, imgUrl) {
+  gallery.unshift({svg, prompt, style, imgUrl});
+  if (gallery.length>24) gallery.pop();
+  const grid=document.getElementById('gallery-grid');
+  const el=document.createElement('div');
+  el.className='gal-item';
+  const styleTag = style.startsWith('dalle-') ? 'DALL-E' : (BLUEPRINTS[style]?.name||style);
+  if (imgUrl) {
+    el.innerHTML=`<img src="${imgUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:6px;"><div class="gal-style-tag">${styleTag}</div><div class="gal-overlay"><span>↓ Load</span></div>`;
+    el.addEventListener('click',()=>{ showResultImage(imgUrl, prompt, true); document.getElementById('canvas-area').scrollIntoView({behavior:'smooth',block:'start'}); });
+  } else {
+    el.style.padding='6px';
+    const thumbSVG = makeThumbnailSVG(svg);
+    el.innerHTML=thumbSVG+`<div class="gal-style-tag">${styleTag}</div><div class="gal-overlay"><span>↓ Load</span></div>`;
+    el.addEventListener('click',()=>{ showResultSVG(svg,prompt,style, true); document.getElementById('canvas-area').scrollIntoView({behavior:'smooth',block:'start'}); });
+  }
+  grid.insertBefore(el,grid.firstChild);
+  document.getElementById('gal-count').textContent=`(${gallery.length})`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// EXPORT
+// ═══════════════════════════════════════════════════════════
+function downloadSVG() {
+  if (!currentSVG) return;
+  const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([currentSVG],{type:'image/svg+xml'})),download:'iconai.svg'});
+  a.click(); URL.revokeObjectURL(a.href); toast('SVG downloaded!',true);
+}
+function downloadPNG() {
+  // Image mode: download the DALL-E PNG directly
+  if (currentMode === 'image' && currentImgUrl) {
+    const a = Object.assign(document.createElement('a'), { href: currentImgUrl, download: 'iconai-image.png', target: '_blank' });
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    toast('Opening image for download — right-click and Save As if needed', true);
+    return;
+  }
+  if (!currentSVG) return;
+  const svgEl=document.querySelector('#svg-output svg');
+  if (!svgEl) return;
+  const w=parseInt(svgEl.getAttribute('width'))||800, h=parseInt(svgEl.getAttribute('height'))||600, sc=2;
+  const cv=document.createElement('canvas'); cv.width=w*sc; cv.height=h*sc;
+  const ctx=cv.getContext('2d');
+  if (canvasBg!=='transparent'){ctx.fillStyle=canvasBg;ctx.fillRect(0,0,cv.width,cv.height);}
+  ctx.scale(sc,sc);
+  const url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svgEl)],{type:'image/svg+xml;charset=utf-8'}));
+  const img=new Image();
+  img.onload=()=>{ ctx.drawImage(img,0,0); URL.revokeObjectURL(url); cv.toBlob(b=>{ const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(b),download:'iconai.png'}); a.click(); toast('PNG downloaded!',true); },'image/png'); };
+  img.onerror=()=>{ URL.revokeObjectURL(url); toast('PNG export failed — try SVG',false); };
+  img.src=url;
+}
+function copyAction() {
+  if (currentMode === 'image' && currentImgUrl) {
+    navigator.clipboard.writeText(currentImgUrl).then(()=>toast('Image URL copied!',true)).catch(()=>toast('Copy failed',false));
+    return;
+  }
+  copySVG();
+}
+function copySVG() {
+  if (!currentSVG) return;
+  navigator.clipboard.writeText(currentSVG).then(()=>toast('SVG copied!',true)).catch(()=>toast('Copy failed',false));
+}
+async function generateImageVariations(prompt) {
+  if (!openaiKey) { toast('OpenAI key needed for image variations', false); return; }
+  const panel = document.getElementById('var-panel');
+  const grid  = document.getElementById('var-grid');
+  panel.classList.add('show');
+  grid.innerHTML = '';
+
+  const styles = Object.keys(DALLE_STYLE_PROMPTS).filter(s => s !== selectedImgStyle).slice(0, 2);
+  const varStyles = [selectedImgStyle, ...styles];
+
+  varStyles.forEach((style, i) => {
+    const el = document.createElement('div');
+    el.className = 'var-item'; el.id = 'vari-' + i;
+    el.innerHTML = '<div class="var-spinner"></div><div class="var-item-label">' + style.replace(/-/g,' ') + '</div>';
+    grid.appendChild(el);
+  });
+
+  await Promise.allSettled(varStyles.map(async (style, i) => {
+    try {
+      const stylePrompt = DALLE_STYLE_PROMPTS[style];
+      const fullPrompt = prompt + '. Style: ' + stylePrompt + '. No text, no labels.';
+      const varResult = await callGPTImage(fullPrompt, selectedImgSize, false).catch(() => null);
+      const url = varResult ? (varResult.url || varResult) : null;
+      const el = document.getElementById('vari-' + i);
+      const el2 = document.getElementById('vari-' + i);
+      if (el2 && url) {
+        el2.innerHTML = '<img src="'+url+'" style="width:100%;height:100%;object-fit:cover;border-radius:6px;"><div class="var-item-label">' + style.replace(/-/g,' ') + '</div>';
+        el2.onclick = () => { showResultImage(url, prompt, true); panel.classList.remove('show'); };
+      }
+    } catch(e) {
+      const el = document.getElementById('vari-' + i);
+      if (el) el.innerHTML = '<div style="font-size:10px;color:var(--text3)">Failed</div>';
+    }
+  }));
+}
+
+// ═══════════════════════════════════════════════════════════
+// PPTX EXPORT SYSTEM
+// ═══════════════════════════════════════════════════════════
+let selectedSlideTheme = 'warm';
+let isIconSetResult = false;
+
+const SLIDE_THEMES = {
+  warm:     { bg: 'F5EDE0', primary: '8B5C3A', accent: 'C47A3A', text: '2C1A0E', subtext: '6B4226', sidebar: 'C47A3A' },
+  midnight: { bg: '0F0F1A', primary: 'A292FF', accent: '7C6EF7', text: 'F0EFF8', subtext: '9998B0', sidebar: '7C6EF7' },
+  clean:    { bg: 'FFFFFF', primary: '1A1A2E', accent: '4472C4', text: '1A1A2E', subtext: '555577', sidebar: '4472C4' },
+  navy:     { bg: '1A3A6B', primary: 'FFFFFF', accent: '4A90D9', text: 'FFFFFF', subtext: 'B0C8E8', sidebar: '4A90D9' },
+  forest:   { bg: 'F5F5DC', primary: '2C5F2D', accent: '74C69D', text: '1B3A1B', subtext: '3D6B3D', sidebar: '2C5F2D' },
+  charcoal: { bg: '36454F', primary: 'FFFFFF', accent: '02C39A', text: 'FFFFFF', subtext: 'B0BEC5', sidebar: '02C39A' }
+};
+
+function setSlideTheme(el, theme) {
+  document.querySelectorAll('.slide-theme-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  selectedSlideTheme = theme;
+}
+
+function toggleExportPanel() {
+  const panel = document.getElementById('export-panel');
+  panel.classList.toggle('show');
+}
+
+async function getImageAsBase64(url) {
+  // Fetch the image and convert to base64 for embedding in PPTX
+  const resp = await fetch(url);
+  const blob = await resp.blob();
+  return new Promise((res, rej) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      // result is "data:image/png;base64,..."
+      // PptxGenJS wants "image/png;base64,..."
+      res(reader.result.replace('data:', ''));
+    };
+    reader.onerror = rej;
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function exportToPPTX() {
+  const btn = document.getElementById('pptx-generate-btn');
+  const title   = document.getElementById('pptx-title').value.trim() || 'Generated Illustration';
+  const subtitle = document.getElementById('pptx-subtitle').value.trim();
+  const org     = document.getElementById('pptx-org').value.trim();
+  const bodyRaw = document.getElementById('pptx-body').value.trim();
+  const theme   = SLIDE_THEMES[selectedSlideTheme] || SLIDE_THEMES.warm;
+
+  if (!currentImgUrl && !currentSVG) {
+    toast('Generate an image first before exporting', false);
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Building slide…';
+
+  try {
+    const pres = new PptxGenJS();
+    pres.layout = 'LAYOUT_WIDE'; // 13.3 × 7.5"
+
+    const slide = pres.addSlide();
+    slide.background = { color: theme.bg };
+
+    // ── Left accent bar ──────────────────────────────────────────────────
+    slide.addShape(pres.shapes.ROUNDED_RECTANGLE, {
+      x: 0.18, y: 0.4, w: 0.12, h: 6.7,
+      fill: { color: theme.sidebar },
+      line: { color: theme.sidebar },
+      rectRadius: 0.06
+    });
+
+    // ── Left content zone (x 0.5 to 6.2") ───────────────────────────────
+    const leftW = 5.8;
+
+    // Org name / subtitle tag
+    if (org) {
+      slide.addShape(pres.shapes.RECTANGLE, {
+        x: 0.5, y: 0.55, w: leftW - 0.5, h: 0.45,
+        fill: { color: 'FFFFFF', transparency: 85 },
+        line: { color: theme.primary, width: 1 }
+      });
+      slide.addText(org, {
+        x: 0.55, y: 0.55, w: leftW - 0.6, h: 0.45,
+        fontSize: 10, fontFace: 'Calibri', bold: true,
+        color: theme.primary, valign: 'middle', margin: 0
+      });
+    }
+
+    // Main title — large, bold
+    const titleLines = title.split(/\s+/);
+    // Break into 2-3 word chunks for big display title
+    const chunks = [];
+    let chunk = [];
+    titleLines.forEach((w, i) => {
+      chunk.push(w);
+      if (chunk.length === 3 || i === titleLines.length - 1) { chunks.push(chunk.join(' ')); chunk = []; }
+    });
+    const titleY = org ? 1.15 : 0.7;
+    const titleTextArr = chunks.map((c, i) => ({ text: c, options: { breakLine: i < chunks.length - 1 } }));
+    slide.addText(titleTextArr, {
+      x: 0.5, y: titleY, w: leftW, h: 3.2,
+      fontSize: 44, fontFace: 'Georgia', bold: true,
+      color: theme.primary, valign: 'top', lineSpacingMultiple: 1.1
+    });
+
+    // Sub-heading
+    if (subtitle) {
+      slide.addText(subtitle, {
+        x: 0.5, y: titleY + 3.3, w: leftW, h: 0.5,
+        fontSize: 15, fontFace: 'Calibri', italic: true,
+        color: theme.subtext, valign: 'middle'
+      });
+    }
+
+    // Body bullets
+    if (bodyRaw) {
+      const lines = bodyRaw.split('\n').filter(l => l.trim());
+      const bulletArr = lines.map((l, i) => ({
+        text: l.trim(),
+        options: { bullet: true, breakLine: i < lines.length - 1, paraSpaceAfter: 4 }
+      }));
+      const bodyY = subtitle ? titleY + 3.9 : titleY + 3.4;
+      slide.addText(bulletArr, {
+        x: 0.5, y: bodyY, w: leftW, h: 1.8,
+        fontSize: 13, fontFace: 'Calibri',
+        color: theme.text, valign: 'top'
+      });
+    }
+
+    // Accent line below title
+    slide.addShape(pres.shapes.RECTANGLE, {
+      x: 0.5, y: 6.6, w: leftW * 0.65, h: 0.04,
+      fill: { color: theme.accent },
+      line: { color: theme.accent }
+    });
+
+    // Decorative dots (matching reference style)
+    [0.6, 1.0, 1.4].forEach(dy => {
+      slide.addShape(pres.shapes.OVAL, {
+        x: 5.5, y: dy, w: 0.18, h: 0.18,
+        fill: { color: theme.primary, transparency: 70 },
+        line: { color: theme.primary, transparency: 50 }
+      });
+    });
+
+    // ── Right image zone (x 6.5 to 13.0") ───────────────────────────────
+    const imgX = 6.3, imgY = 0.3, imgW = 6.7, imgH = 6.9;
+
+    if (currentImgUrl) {
+      try {
+        const imgData = await getImageAsBase64(currentImgUrl);
+        slide.addImage({ data: imgData, x: imgX, y: imgY, w: imgW, h: imgH,
+          sizing: { type: 'contain', w: imgW, h: imgH } });
+      } catch(e) {
+        // Fallback: try URL directly (may work if CORS allows)
+        slide.addImage({ path: currentImgUrl, x: imgX, y: imgY, w: imgW, h: imgH,
+          sizing: { type: 'contain', w: imgW, h: imgH } });
+      }
+    } else if (currentSVG) {
+      // SVG: encode as data URI
+      const svgData = 'image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(currentSVG)));
+      slide.addImage({ data: svgData, x: imgX, y: imgY, w: imgW, h: imgH,
+        sizing: { type: 'contain', w: imgW, h: imgH } });
+    }
+
+    // Footer
+    slide.addText('Generated with IconAI', {
+      x: 0.5, y: 7.15, w: 5, h: 0.3,
+      fontSize: 8, fontFace: 'Calibri', color: theme.subtext, valign: 'middle'
+    });
+
+    await pres.writeFile({ fileName: (title || 'IconAI-Slide') + '.pptx' });
+    toast('PowerPoint slide downloaded!', true);
+    btn.textContent = '✓ Downloaded!';
+    setTimeout(() => { btn.textContent = '⬡ Download .pptx slide'; btn.disabled = false; }, 2500);
+
+  } catch(err) {
+    console.error('PPTX export error:', err);
+    toast('PPTX export failed: ' + err.message, false);
+    btn.textContent = '⬡ Download .pptx slide';
+    btn.disabled = false;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// ICON GRID OVERLAY — click individual icons to download
+// ═══════════════════════════════════════════════════════════
+function buildIconGridOverlay(iconCount, layout) {
+  const overlay = document.getElementById('icon-grid-overlay');
+  const imgEl   = document.getElementById('image-output');
+  overlay.innerHTML = '';
+
+  if (!imgEl || !imgEl.naturalWidth) return;
+
+  const rect = imgEl.getBoundingClientRect();
+  const containerRect = document.getElementById('canvas-area').getBoundingClientRect();
+
+  const imgDisplayW = imgEl.offsetWidth;
+  const imgDisplayH = imgEl.offsetHeight;
+
+  // Calculate where the image is inside the canvas-area (it's centered)
+  const imgLeft = imgEl.offsetLeft;
+  const imgTop  = imgEl.offsetTop;
+
+  const cols = layout.cols;
+  const rows = layout.rows;
+  const cellW = imgDisplayW / cols;
+  const cellH = imgDisplayH / rows;
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const idx = r * cols + c;
+      if (idx >= iconCount) break;
+
+      const cell = document.createElement('div');
+      cell.className = 'icon-cell';
+      cell.style.left   = (imgLeft + c * cellW) + 'px';
+      cell.style.top    = (imgTop  + r * cellH) + 'px';
+      cell.style.width  = cellW + 'px';
+      cell.style.height = cellH + 'px';
+
+      const tooltip = document.createElement('div');
+      tooltip.className = 'icon-cell-tooltip';
+      tooltip.textContent = 'Click to download icon ' + (idx + 1);
+      cell.appendChild(tooltip);
+
+      cell.addEventListener('click', () => cropAndDownloadIcon(c, r, cols, rows, idx + 1));
+      overlay.appendChild(cell);
+    }
+  }
+
+  overlay.classList.add('show');
+  document.getElementById('icon-download-note').style.display = 'block';
+}
+
+function cropAndDownloadIcon(col, row, cols, rows, iconNum) {
+  const imgEl = document.getElementById('image-output');
+  if (!imgEl || !imgEl.naturalWidth) return;
+
+  const naturalW = imgEl.naturalWidth;
+  const naturalH = imgEl.naturalHeight;
+
+  const cellW = naturalW / cols;
+  const cellH = naturalH / rows;
+  const sx = col * cellW;
+  const sy = row * cellH;
+
+  // Render the cropped cell to a canvas
+  const canvas = document.createElement('canvas');
+  // Add padding to crop inner icon area (exclude label at bottom ~12%)
+  const padX = cellW * 0.05;
+  const padY = cellH * 0.05;
+  canvas.width  = Math.round(cellW - padX * 2);
+  canvas.height = Math.round(cellH - padY * 2);
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(imgEl,
+    sx + padX, sy + padY,
+    cellW - padX * 2, cellH - padY * 2,
+    0, 0,
+    canvas.width, canvas.height
+  );
+
+  canvas.toBlob(blob => {
+    const a = Object.assign(document.createElement('a'), {
+      href: URL.createObjectURL(blob),
+      download: 'icon-' + iconNum + '.png'
+    });
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+    toast('Icon ' + iconNum + ' downloaded!', true);
+  }, 'image/png');
+}
+
+// ═══════════════════════════════════════════════════════════
+// MODAL SYSTEM — Privacy Policy & Terms of Service
+// ═══════════════════════════════════════════════════════════
+function showModal(name) {
+  const el = document.getElementById('modal-' + name);
+  if (el) {
+    el.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+  return false;
+}
+
+function closeModal(name) {
+  const el = document.getElementById('modal-' + name);
+  if (el) {
+    el.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+}
+
+// Close modals on Escape key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeModal('privacy');
+    closeModal('terms');
+  }
+});
+
+function toast(msg,ok) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast '+(ok?'ok':''); t.style.display='block';
+  clearTimeout(window._tt); window._tt=setTimeout(()=>t.style.display='none',3500);
+}
+document.addEventListener('keydown',e=>{ if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){e.preventDefault();generate();} });
+</script>
+</body>
+</html>
