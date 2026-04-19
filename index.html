@@ -352,59 +352,63 @@
     background:radial-gradient(ellipse,rgba(124,110,247,.1) 0%,rgba(240,109,186,.05) 45%,transparent 70%);
     pointer-events:none; filter:blur(40px); z-index:0;
   }
-  /* ── SAMPLE MOSAIC ── */
+  /* ── SAMPLE MOSAIC SCROLLER ── */
   .lp-mosaic-wrap {
     width:100%;
     background:var(--bg);
     border-bottom:1px solid var(--border);
+    overflow:hidden;
     position:relative;
   }
-  .lp-mosaic-wrap::after {
+  .lp-mosaic-wrap::before, .lp-mosaic-wrap::after {
     content:'';
     position:absolute;
-    bottom:0; left:0; right:0;
-    height:60px;
-    background:linear-gradient(0deg,var(--bg),transparent);
-    pointer-events:none;
+    top:0; bottom:0;
+    width:100px;
     z-index:2;
+    pointer-events:none;
   }
+  .lp-mosaic-wrap::before { left:0; background:linear-gradient(90deg,var(--bg),transparent); }
+  .lp-mosaic-wrap::after  { right:0; background:linear-gradient(-90deg,var(--bg),transparent); }
   .lp-mosaic {
-    display:grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 140px);
-    gap:8px;
-    padding:8px;
-    width:100%;
-    box-sizing:border-box;
-    position:relative;
-    z-index:1;
+    display:flex;
+    gap:10px;
+    padding:10px;
+    animation:mosaic-scroll 30s linear infinite;
+    width:max-content;
   }
+  .lp-mosaic:hover { animation-play-state:paused; }
   .lp-mosaic-cell {
+    width:160px;
+    height:160px;
+    flex-shrink:0;
     background:var(--bg2);
     border:1px solid var(--border);
-    border-radius:10px;
+    border-radius:12px;
     overflow:hidden;
     display:flex;
     align-items:center;
     justify-content:center;
-    padding:16px;
-    transition:border-color .3s;
-    animation:mosaic-fade 5s ease-in-out infinite;
+    padding:20px;
+    box-sizing:border-box;
+    transition:border-color .2s;
   }
   .lp-mosaic-cell:hover { border-color:var(--border-hover); }
-  .lp-mosaic-cell svg { max-width:100%; max-height:100%; }
-  .lp-mosaic-cell:nth-child(1){animation-delay:0s}
-  .lp-mosaic-cell:nth-child(2){animation-delay:.5s}
-  .lp-mosaic-cell:nth-child(3){animation-delay:1s}
-  .lp-mosaic-cell:nth-child(4){animation-delay:1.5s}
-  .lp-mosaic-cell:nth-child(5){animation-delay:2s}
-  .lp-mosaic-cell:nth-child(6){animation-delay:2.5s}
-  .lp-mosaic-cell:nth-child(7){animation-delay:3s}
-  .lp-mosaic-cell:nth-child(8){animation-delay:3.5s}
-  .lp-mosaic-cell.wide { grid-column: span 2; }
-  @keyframes mosaic-fade {
-    0%,100% { opacity:.55; }
-    50% { opacity:1; }
+  .lp-mosaic-cell svg {
+    width:100%;
+    height:100%;
+    max-width:100px;
+    max-height:100px;
+    display:block;
+    flex-shrink:0;
+  }
+  .lp-mosaic-cell.scene svg {
+    max-width:140px;
+    max-height:100px;
+  }
+  @keyframes mosaic-scroll {
+    0%   { transform:translateX(0); }
+    100% { transform:translateX(-50%); }
   }
   .lp-hero > * { position:relative; z-index:1; }
   .lp-badge {
@@ -663,101 +667,38 @@
 <div id="page-landing">
 
   <!-- HERO -->
-  <!-- ── FULL-WIDTH MOSAIC (flush to navbar) ────────────── -->
+  <!-- ── FULL-WIDTH SCROLLING MOSAIC ────────────── -->
   <div class="lp-mosaic-wrap">
     <div class="lp-mosaic">
-      <div class="lp-mosaic-cell">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#7c6ef7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="#7c6ef7" stroke="none"/>
-        </svg>
-      </div>
-      <div class="lp-mosaic-cell">
-        <svg viewBox="0 0 24 24">
-          <rect x="2" y="3" width="20" height="14" rx="2" fill="#7c6ef7" fill-opacity=".2"/>
-          <rect x="2" y="3" width="20" height="14" rx="2" stroke="#7c6ef7" stroke-width="1.5" fill="none"/>
-          <rect x="5" y="6" width="6" height="4" rx="1" fill="#7c6ef7" fill-opacity=".6"/>
-          <rect x="13" y="6" width="6" height="2" rx="1" fill="#7c6ef7" fill-opacity=".4"/>
-          <rect x="13" y="10" width="4" height="2" rx="1" fill="#7c6ef7" fill-opacity=".3"/>
-          <path d="M8 17v2M12 17v2M16 17v2M6 19h12" stroke="#7c6ef7" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-        </svg>
-      </div>
-      <div class="lp-mosaic-cell">
-        <svg viewBox="0 0 48 48">
-          <rect x="2" y="2" width="44" height="44" rx="14" fill="#f06dba" fill-opacity=".15" stroke="#f06dba" stroke-opacity=".4" stroke-width="1"/>
-          <rect x="2" y="2" width="44" height="20" rx="14" fill="white" fill-opacity=".1"/>
-          <path d="M24 13a9 9 0 0 1 9 9v5l3 3H12l3-3v-5a9 9 0 0 1 9-9z" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M21 34a3 3 0 0 0 6 0" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
-          <circle cx="9" cy="9" r="3.5" fill="white" fill-opacity=".35"/>
-        </svg>
-      </div>
-      <div class="lp-mosaic-cell">
-        <svg viewBox="0 0 24 24">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="#22d3a0"/>
-          <path d="M9 22V12h6v10" fill="white" fill-opacity=".9"/>
-          <path d="M3 9l9-7 9 7" stroke="#1a9e78" stroke-width=".5" fill="none"/>
-        </svg>
-      </div>
-      <div class="lp-mosaic-cell">
-        <svg viewBox="0 0 64 64">
-          <polygon points="32,4 56,17 56,47 32,60 8,47 8,17" fill="#e8855a"/>
-          <polygon points="32,9 52,20 52,44 32,55 12,44 12,20" fill="none" stroke="white" stroke-opacity=".35" stroke-width="1.5"/>
-          <polygon points="32,16 35.5,26 46,26 37.5,32 40.5,42 32,36 23.5,42 26.5,32 18,26 28.5,26" fill="white"/>
-          <circle cx="12" cy="12" r="2" fill="white" fill-opacity=".5"/>
-          <circle cx="52" cy="12" r="2" fill="white" fill-opacity=".5"/>
-        </svg>
-      </div>
-      <div class="lp-mosaic-cell wide">
-        <svg viewBox="0 0 200 100">
-          <rect width="200" height="100" fill="#e8f4fd"/>
-          <rect x="30" y="55" width="140" height="8" rx="4" fill="#b8d4e8"/>
-          <rect x="60" y="63" width="8" height="20" rx="2" fill="#b8d4e8"/>
-          <rect x="132" y="63" width="8" height="20" rx="2" fill="#b8d4e8"/>
-          <rect x="85" y="42" width="30" height="20" rx="2" fill="#4a90d9"/>
-          <rect x="83" y="61" width="34" height="3" rx="1" fill="#2d6a9f"/>
-          <rect x="88" y="45" width="24" height="14" rx="1" fill="#e8f4fd"/>
-          <rect x="90" y="47" width="8" height="2" rx="1" fill="#7c6ef7" fill-opacity=".6"/>
-          <rect x="90" y="51" width="12" height="2" rx="1" fill="#7c6ef7" fill-opacity=".4"/>
-          <circle cx="50" cy="38" r="10" fill="#f2c9a0"/>
-          <rect x="38" y="47" width="24" height="18" rx="6" fill="#7c6ef7"/>
-          <rect x="34" y="50" width="8" height="14" rx="4" fill="#f2c9a0"/>
-          <rect x="58" y="50" width="8" height="14" rx="4" fill="#f2c9a0"/>
-          <circle cx="150" cy="38" r="10" fill="#e8b896"/>
-          <rect x="138" y="47" width="24" height="18" rx="6" fill="#f06dba"/>
-          <rect x="134" y="50" width="8" height="14" rx="4" fill="#e8b896"/>
-          <rect x="158" y="50" width="8" height="14" rx="4" fill="#e8b896"/>
-          <circle cx="100" cy="32" r="8" fill="#d4a882"/>
-          <rect x="90" y="39" width="20" height="14" rx="5" fill="#22d3a0"/>
-          <rect x="155" y="18" width="36" height="18" rx="6" fill="#7c6ef7"/>
-          <polygon points="162,36 168,36 165,41" fill="#7c6ef7"/>
-          <rect x="159" y="22" width="12" height="2" rx="1" fill="white" fill-opacity=".8"/>
-          <rect x="159" y="27" width="18" height="2" rx="1" fill="white" fill-opacity=".6"/>
-        </svg>
-      </div>
-      <div class="lp-mosaic-cell">
-        <svg viewBox="0 0 64 64">
-          <polygon points="32,8 54,20 54,44 32,56 10,44 10,20" fill="#c8e6c9"/>
-          <polygon points="10,20 32,32 32,56 10,44" fill="#66bb6a"/>
-          <polygon points="54,20 32,32 32,56 54,44" fill="#388e3c"/>
-          <polygon points="10,20 32,8 54,20 32,32" fill="#a5d6a7"/>
-          <line x1="32" y1="8" x2="32" y2="32" stroke="#2e7d32" stroke-width=".8"/>
-          <line x1="10" y1="20" x2="32" y2="32" stroke="#2e7d32" stroke-width=".8"/>
-          <line x1="54" y1="20" x2="32" y2="32" stroke="#2e7d32" stroke-width=".8"/>
-        </svg>
-      </div>
-      <div class="lp-mosaic-cell">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
-          <line x1="2" y1="20" x2="22" y2="20"/>
-          <polyline points="2,14 8,8 13,13 22,4" stroke="#f06dba" stroke-width="1.5"/>
-          <circle cx="8" cy="8" r="1.5" fill="#f06dba" stroke="none"/>
-          <circle cx="13" cy="13" r="1.5" fill="#f06dba" stroke="none"/>
-          <circle cx="22" cy="4" r="1.5" fill="#f06dba" stroke="none"/>
-        </svg>
-      </div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 24 24" fill="none" stroke="#7c6ef7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="#7c6ef7" stroke="none"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" fill="#7c6ef7" fill-opacity=".2"/><rect x="2" y="3" width="20" height="14" rx="2" stroke="#7c6ef7" stroke-width="1.5" fill="none"/><rect x="5" y="6" width="6" height="4" rx="1" fill="#7c6ef7" fill-opacity=".6"/><rect x="13" y="6" width="6" height="2" rx="1" fill="#7c6ef7" fill-opacity=".4"/><rect x="13" y="10" width="4" height="2" rx="1" fill="#7c6ef7" fill-opacity=".3"/><path d="M8 17v2M12 17v2M16 17v2M6 19h12" stroke="#7c6ef7" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="14" fill="#f06dba" fill-opacity=".15" stroke="#f06dba" stroke-opacity=".4" stroke-width="1"/><rect x="2" y="2" width="44" height="20" rx="14" fill="white" fill-opacity=".1"/><path d="M24 13a9 9 0 0 1 9 9v5l3 3H12l3-3v-5a9 9 0 0 1 9-9z" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 34a3 3 0 0 0 6 0" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="9" cy="9" r="3.5" fill="white" fill-opacity=".35"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="#22d3a0"/><path d="M9 22V12h6v10" fill="white" fill-opacity=".9"/><path d="M3 9l9-7 9 7" stroke="#1a9e78" stroke-width=".5" fill="none"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 64 64"><polygon points="32,4 56,17 56,47 32,60 8,47 8,17" fill="#e8855a"/><polygon points="32,9 52,20 52,44 32,55 12,44 12,20" fill="none" stroke="white" stroke-opacity=".35" stroke-width="1.5"/><polygon points="32,16 35.5,26 46,26 37.5,32 40.5,42 32,36 23.5,42 26.5,32 18,26 28.5,26" fill="white"/><circle cx="12" cy="12" r="2" fill="white" fill-opacity=".5"/><circle cx="52" cy="12" r="2" fill="white" fill-opacity=".5"/></svg></div>
+      <div class="lp-mosaic-cell scene"><svg viewBox="0 0 200 100"><rect width="200" height="100" fill="#e8f4fd"/><rect x="30" y="55" width="140" height="8" rx="4" fill="#b8d4e8"/><rect x="60" y="63" width="8" height="20" rx="2" fill="#b8d4e8"/><rect x="132" y="63" width="8" height="20" rx="2" fill="#b8d4e8"/><rect x="85" y="42" width="30" height="20" rx="2" fill="#4a90d9"/><rect x="83" y="61" width="34" height="3" rx="1" fill="#2d6a9f"/><rect x="88" y="45" width="24" height="14" rx="1" fill="#e8f4fd"/><circle cx="50" cy="38" r="10" fill="#f2c9a0"/><rect x="38" y="47" width="24" height="18" rx="6" fill="#7c6ef7"/><circle cx="150" cy="38" r="10" fill="#e8b896"/><rect x="138" y="47" width="24" height="18" rx="6" fill="#f06dba"/><circle cx="100" cy="32" r="8" fill="#d4a882"/><rect x="90" y="39" width="20" height="14" rx="5" fill="#22d3a0"/><rect x="155" y="18" width="36" height="18" rx="6" fill="#7c6ef7"/><polygon points="162,36 168,36 165,41" fill="#7c6ef7"/><rect x="159" y="22" width="12" height="2" rx="1" fill="white" fill-opacity=".8"/><rect x="159" y="27" width="18" height="2" rx="1" fill="white" fill-opacity=".6"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 64 64"><polygon points="32,8 54,20 54,44 32,56 10,44 10,20" fill="#c8e6c9"/><polygon points="10,20 32,32 32,56 10,44" fill="#66bb6a"/><polygon points="54,20 32,32 32,56 54,44" fill="#388e3c"/><polygon points="10,20 32,8 54,20 32,32" fill="#a5d6a7"/><line x1="32" y1="8" x2="32" y2="32" stroke="#2e7d32" stroke-width=".8"/><line x1="10" y1="20" x2="32" y2="32" stroke="#2e7d32" stroke-width=".8"/><line x1="54" y1="20" x2="32" y2="32" stroke="#2e7d32" stroke-width=".8"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/><polyline points="2,14 8,8 13,13 22,4" stroke="#f06dba" stroke-width="1.5"/><circle cx="8" cy="8" r="1.5" fill="#f06dba" stroke="none"/><circle cx="13" cy="13" r="1.5" fill="#f06dba" stroke="none"/><circle cx="22" cy="4" r="1.5" fill="#f06dba" stroke="none"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 24 24" fill="none" stroke="#a292ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1" fill="#a292ff" stroke="none"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 24 24" fill="none" stroke="#f06dba" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="14" fill="#22d3a0" fill-opacity=".15" stroke="#22d3a0" stroke-opacity=".4" stroke-width="1"/><rect x="2" y="2" width="44" height="20" rx="14" fill="white" fill-opacity=".08"/><circle cx="24" cy="20" r="7" stroke="white" stroke-width="2" fill="none"/><path d="M10 38c0-7.73 6.27-14 14-14s14 6.27 14 14" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="9" cy="9" r="3.5" fill="white" fill-opacity=".35"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 64 64"><polygon points="32,4 56,17 56,47 32,60 8,47 8,17" fill="#4fb8f7"/><polygon points="32,9 52,20 52,44 32,55 12,44 12,20" fill="none" stroke="white" stroke-opacity=".3" stroke-width="1.5"/><path d="M20 32h24M36 24l8 8-8 8" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
+      <!-- Duplicate for seamless infinite scroll -->
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 24 24" fill="none" stroke="#7c6ef7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="#7c6ef7" stroke="none"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" fill="#7c6ef7" fill-opacity=".2"/><rect x="2" y="3" width="20" height="14" rx="2" stroke="#7c6ef7" stroke-width="1.5" fill="none"/><rect x="5" y="6" width="6" height="4" rx="1" fill="#7c6ef7" fill-opacity=".6"/><rect x="13" y="6" width="6" height="2" rx="1" fill="#7c6ef7" fill-opacity=".4"/><rect x="13" y="10" width="4" height="2" rx="1" fill="#7c6ef7" fill-opacity=".3"/><path d="M8 17v2M12 17v2M16 17v2M6 19h12" stroke="#7c6ef7" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="14" fill="#f06dba" fill-opacity=".15" stroke="#f06dba" stroke-opacity=".4" stroke-width="1"/><rect x="2" y="2" width="44" height="20" rx="14" fill="white" fill-opacity=".1"/><path d="M24 13a9 9 0 0 1 9 9v5l3 3H12l3-3v-5a9 9 0 0 1 9-9z" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 34a3 3 0 0 0 6 0" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="9" cy="9" r="3.5" fill="white" fill-opacity=".35"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="#22d3a0"/><path d="M9 22V12h6v10" fill="white" fill-opacity=".9"/><path d="M3 9l9-7 9 7" stroke="#1a9e78" stroke-width=".5" fill="none"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 64 64"><polygon points="32,4 56,17 56,47 32,60 8,47 8,17" fill="#e8855a"/><polygon points="32,9 52,20 52,44 32,55 12,44 12,20" fill="none" stroke="white" stroke-opacity=".35" stroke-width="1.5"/><polygon points="32,16 35.5,26 46,26 37.5,32 40.5,42 32,36 23.5,42 26.5,32 18,26 28.5,26" fill="white"/><circle cx="12" cy="12" r="2" fill="white" fill-opacity=".5"/><circle cx="52" cy="12" r="2" fill="white" fill-opacity=".5"/></svg></div>
+      <div class="lp-mosaic-cell scene"><svg viewBox="0 0 200 100"><rect width="200" height="100" fill="#e8f4fd"/><rect x="30" y="55" width="140" height="8" rx="4" fill="#b8d4e8"/><rect x="60" y="63" width="8" height="20" rx="2" fill="#b8d4e8"/><rect x="132" y="63" width="8" height="20" rx="2" fill="#b8d4e8"/><rect x="85" y="42" width="30" height="20" rx="2" fill="#4a90d9"/><rect x="83" y="61" width="34" height="3" rx="1" fill="#2d6a9f"/><rect x="88" y="45" width="24" height="14" rx="1" fill="#e8f4fd"/><circle cx="50" cy="38" r="10" fill="#f2c9a0"/><rect x="38" y="47" width="24" height="18" rx="6" fill="#7c6ef7"/><circle cx="150" cy="38" r="10" fill="#e8b896"/><rect x="138" y="47" width="24" height="18" rx="6" fill="#f06dba"/><circle cx="100" cy="32" r="8" fill="#d4a882"/><rect x="90" y="39" width="20" height="14" rx="5" fill="#22d3a0"/><rect x="155" y="18" width="36" height="18" rx="6" fill="#7c6ef7"/><polygon points="162,36 168,36 165,41" fill="#7c6ef7"/><rect x="159" y="22" width="12" height="2" rx="1" fill="white" fill-opacity=".8"/><rect x="159" y="27" width="18" height="2" rx="1" fill="white" fill-opacity=".6"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 64 64"><polygon points="32,8 54,20 54,44 32,56 10,44 10,20" fill="#c8e6c9"/><polygon points="10,20 32,32 32,56 10,44" fill="#66bb6a"/><polygon points="54,20 32,32 32,56 54,44" fill="#388e3c"/><polygon points="10,20 32,8 54,20 32,32" fill="#a5d6a7"/><line x1="32" y1="8" x2="32" y2="32" stroke="#2e7d32" stroke-width=".8"/><line x1="10" y1="20" x2="32" y2="32" stroke="#2e7d32" stroke-width=".8"/><line x1="54" y1="20" x2="32" y2="32" stroke="#2e7d32" stroke-width=".8"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/><polyline points="2,14 8,8 13,13 22,4" stroke="#f06dba" stroke-width="1.5"/><circle cx="8" cy="8" r="1.5" fill="#f06dba" stroke="none"/><circle cx="13" cy="13" r="1.5" fill="#f06dba" stroke="none"/><circle cx="22" cy="4" r="1.5" fill="#f06dba" stroke="none"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 24 24" fill="none" stroke="#a292ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1" fill="#a292ff" stroke="none"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 24 24" fill="none" stroke="#f06dba" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="14" fill="#22d3a0" fill-opacity=".15" stroke="#22d3a0" stroke-opacity=".4" stroke-width="1"/><rect x="2" y="2" width="44" height="20" rx="14" fill="white" fill-opacity=".08"/><circle cx="24" cy="20" r="7" stroke="white" stroke-width="2" fill="none"/><path d="M10 38c0-7.73 6.27-14 14-14s14 6.27 14 14" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="9" cy="9" r="3.5" fill="white" fill-opacity=".35"/></svg></div>
+      <div class="lp-mosaic-cell"><svg viewBox="0 0 64 64"><polygon points="32,4 56,17 56,47 32,60 8,47 8,17" fill="#4fb8f7"/><polygon points="32,9 52,20 52,44 32,55 12,44 12,20" fill="none" stroke="white" stroke-opacity=".3" stroke-width="1.5"/><path d="M20 32h24M36 24l8 8-8 8" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
     </div>
   </div>
 
-  <!-- ── HERO TEXT (compact, no top padding) ─────────── -->
+    <!-- ── HERO TEXT (compact, no top padding) ─────────── -->
   <section class="lp-hero">
     <div class="lp-glow"></div>
     <div class="lp-badge">✦ SVG Icons &nbsp;·&nbsp; Scene Illustrations &nbsp;·&nbsp; Icon Sets &nbsp;·&nbsp; PPTX Export</div>
