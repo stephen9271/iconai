@@ -344,13 +344,67 @@
   .lp-hero {
     display:flex; flex-direction:column;
     align-items:center; justify-content:flex-start; text-align:center;
-    padding:80px 24px 0; position:relative; overflow:hidden;
+    padding:40px 24px 0; position:relative; overflow:hidden;
   }
   .lp-glow {
-    position:absolute; top:-100px; left:50%; transform:translateX(-50%);
-    width:700px; height:400px;
-    background:radial-gradient(ellipse,rgba(124,110,247,.15) 0%,rgba(240,109,186,.08) 45%,transparent 70%);
+    position:absolute; top:-200px; left:50%; transform:translateX(-50%);
+    width:600px; height:300px;
+    background:radial-gradient(ellipse,rgba(124,110,247,.1) 0%,rgba(240,109,186,.05) 45%,transparent 70%);
     pointer-events:none; filter:blur(40px); z-index:0;
+  }
+  /* ── SAMPLE MOSAIC ── */
+  .lp-mosaic-wrap {
+    width:100%;
+    background:var(--bg);
+    border-bottom:1px solid var(--border);
+    position:relative;
+  }
+  .lp-mosaic-wrap::after {
+    content:'';
+    position:absolute;
+    bottom:0; left:0; right:0;
+    height:60px;
+    background:linear-gradient(0deg,var(--bg),transparent);
+    pointer-events:none;
+    z-index:2;
+  }
+  .lp-mosaic {
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 140px);
+    gap:8px;
+    padding:8px;
+    width:100%;
+    box-sizing:border-box;
+    position:relative;
+    z-index:1;
+  }
+  .lp-mosaic-cell {
+    background:var(--bg2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+    transition:border-color .3s;
+    animation:mosaic-fade 5s ease-in-out infinite;
+  }
+  .lp-mosaic-cell:hover { border-color:var(--border-hover); }
+  .lp-mosaic-cell svg { max-width:100%; max-height:100%; }
+  .lp-mosaic-cell:nth-child(1){animation-delay:0s}
+  .lp-mosaic-cell:nth-child(2){animation-delay:.5s}
+  .lp-mosaic-cell:nth-child(3){animation-delay:1s}
+  .lp-mosaic-cell:nth-child(4){animation-delay:1.5s}
+  .lp-mosaic-cell:nth-child(5){animation-delay:2s}
+  .lp-mosaic-cell:nth-child(6){animation-delay:2.5s}
+  .lp-mosaic-cell:nth-child(7){animation-delay:3s}
+  .lp-mosaic-cell:nth-child(8){animation-delay:3.5s}
+  .lp-mosaic-cell.wide { grid-column: span 2; }
+  @keyframes mosaic-fade {
+    0%,100% { opacity:.55; }
+    50% { opacity:1; }
   }
   .lp-hero > * { position:relative; z-index:1; }
   .lp-badge {
@@ -609,6 +663,101 @@
 <div id="page-landing">
 
   <!-- HERO -->
+  <!-- ── FULL-WIDTH MOSAIC (flush to navbar) ────────────── -->
+  <div class="lp-mosaic-wrap">
+    <div class="lp-mosaic">
+      <div class="lp-mosaic-cell">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#7c6ef7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="#7c6ef7" stroke="none"/>
+        </svg>
+      </div>
+      <div class="lp-mosaic-cell">
+        <svg viewBox="0 0 24 24">
+          <rect x="2" y="3" width="20" height="14" rx="2" fill="#7c6ef7" fill-opacity=".2"/>
+          <rect x="2" y="3" width="20" height="14" rx="2" stroke="#7c6ef7" stroke-width="1.5" fill="none"/>
+          <rect x="5" y="6" width="6" height="4" rx="1" fill="#7c6ef7" fill-opacity=".6"/>
+          <rect x="13" y="6" width="6" height="2" rx="1" fill="#7c6ef7" fill-opacity=".4"/>
+          <rect x="13" y="10" width="4" height="2" rx="1" fill="#7c6ef7" fill-opacity=".3"/>
+          <path d="M8 17v2M12 17v2M16 17v2M6 19h12" stroke="#7c6ef7" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="lp-mosaic-cell">
+        <svg viewBox="0 0 48 48">
+          <rect x="2" y="2" width="44" height="44" rx="14" fill="#f06dba" fill-opacity=".15" stroke="#f06dba" stroke-opacity=".4" stroke-width="1"/>
+          <rect x="2" y="2" width="44" height="20" rx="14" fill="white" fill-opacity=".1"/>
+          <path d="M24 13a9 9 0 0 1 9 9v5l3 3H12l3-3v-5a9 9 0 0 1 9-9z" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M21 34a3 3 0 0 0 6 0" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <circle cx="9" cy="9" r="3.5" fill="white" fill-opacity=".35"/>
+        </svg>
+      </div>
+      <div class="lp-mosaic-cell">
+        <svg viewBox="0 0 24 24">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="#22d3a0"/>
+          <path d="M9 22V12h6v10" fill="white" fill-opacity=".9"/>
+          <path d="M3 9l9-7 9 7" stroke="#1a9e78" stroke-width=".5" fill="none"/>
+        </svg>
+      </div>
+      <div class="lp-mosaic-cell">
+        <svg viewBox="0 0 64 64">
+          <polygon points="32,4 56,17 56,47 32,60 8,47 8,17" fill="#e8855a"/>
+          <polygon points="32,9 52,20 52,44 32,55 12,44 12,20" fill="none" stroke="white" stroke-opacity=".35" stroke-width="1.5"/>
+          <polygon points="32,16 35.5,26 46,26 37.5,32 40.5,42 32,36 23.5,42 26.5,32 18,26 28.5,26" fill="white"/>
+          <circle cx="12" cy="12" r="2" fill="white" fill-opacity=".5"/>
+          <circle cx="52" cy="12" r="2" fill="white" fill-opacity=".5"/>
+        </svg>
+      </div>
+      <div class="lp-mosaic-cell wide">
+        <svg viewBox="0 0 200 100">
+          <rect width="200" height="100" fill="#e8f4fd"/>
+          <rect x="30" y="55" width="140" height="8" rx="4" fill="#b8d4e8"/>
+          <rect x="60" y="63" width="8" height="20" rx="2" fill="#b8d4e8"/>
+          <rect x="132" y="63" width="8" height="20" rx="2" fill="#b8d4e8"/>
+          <rect x="85" y="42" width="30" height="20" rx="2" fill="#4a90d9"/>
+          <rect x="83" y="61" width="34" height="3" rx="1" fill="#2d6a9f"/>
+          <rect x="88" y="45" width="24" height="14" rx="1" fill="#e8f4fd"/>
+          <rect x="90" y="47" width="8" height="2" rx="1" fill="#7c6ef7" fill-opacity=".6"/>
+          <rect x="90" y="51" width="12" height="2" rx="1" fill="#7c6ef7" fill-opacity=".4"/>
+          <circle cx="50" cy="38" r="10" fill="#f2c9a0"/>
+          <rect x="38" y="47" width="24" height="18" rx="6" fill="#7c6ef7"/>
+          <rect x="34" y="50" width="8" height="14" rx="4" fill="#f2c9a0"/>
+          <rect x="58" y="50" width="8" height="14" rx="4" fill="#f2c9a0"/>
+          <circle cx="150" cy="38" r="10" fill="#e8b896"/>
+          <rect x="138" y="47" width="24" height="18" rx="6" fill="#f06dba"/>
+          <rect x="134" y="50" width="8" height="14" rx="4" fill="#e8b896"/>
+          <rect x="158" y="50" width="8" height="14" rx="4" fill="#e8b896"/>
+          <circle cx="100" cy="32" r="8" fill="#d4a882"/>
+          <rect x="90" y="39" width="20" height="14" rx="5" fill="#22d3a0"/>
+          <rect x="155" y="18" width="36" height="18" rx="6" fill="#7c6ef7"/>
+          <polygon points="162,36 168,36 165,41" fill="#7c6ef7"/>
+          <rect x="159" y="22" width="12" height="2" rx="1" fill="white" fill-opacity=".8"/>
+          <rect x="159" y="27" width="18" height="2" rx="1" fill="white" fill-opacity=".6"/>
+        </svg>
+      </div>
+      <div class="lp-mosaic-cell">
+        <svg viewBox="0 0 64 64">
+          <polygon points="32,8 54,20 54,44 32,56 10,44 10,20" fill="#c8e6c9"/>
+          <polygon points="10,20 32,32 32,56 10,44" fill="#66bb6a"/>
+          <polygon points="54,20 32,32 32,56 54,44" fill="#388e3c"/>
+          <polygon points="10,20 32,8 54,20 32,32" fill="#a5d6a7"/>
+          <line x1="32" y1="8" x2="32" y2="32" stroke="#2e7d32" stroke-width=".8"/>
+          <line x1="10" y1="20" x2="32" y2="32" stroke="#2e7d32" stroke-width=".8"/>
+          <line x1="54" y1="20" x2="32" y2="32" stroke="#2e7d32" stroke-width=".8"/>
+        </svg>
+      </div>
+      <div class="lp-mosaic-cell">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+          <line x1="2" y1="20" x2="22" y2="20"/>
+          <polyline points="2,14 8,8 13,13 22,4" stroke="#f06dba" stroke-width="1.5"/>
+          <circle cx="8" cy="8" r="1.5" fill="#f06dba" stroke="none"/>
+          <circle cx="13" cy="13" r="1.5" fill="#f06dba" stroke="none"/>
+          <circle cx="22" cy="4" r="1.5" fill="#f06dba" stroke="none"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── HERO TEXT (compact, no top padding) ─────────── -->
   <section class="lp-hero">
     <div class="lp-glow"></div>
     <div class="lp-badge">✦ SVG Icons &nbsp;·&nbsp; Scene Illustrations &nbsp;·&nbsp; Icon Sets &nbsp;·&nbsp; PPTX Export</div>
@@ -1398,30 +1547,33 @@ const PALETTES = {
 const ICON_STYLE_SYSTEMS = {
 
   'minimal': (color) => ({
-    system: `You are an expert icon designer. Create clean minimal SVG icons exactly like Feather Icons or Heroicons.
-RULES:
-- viewBox="0 0 24 24", xmlns="http://www.w3.org/2000/svg"
-- ONLY strokes: fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-- 4-8 path/circle/rect/line elements
-- No fills anywhere. No text. No gradients.
-- Keep within x=1 to x=23, y=1 to y=23
+    system: `You are a world-class icon designer creating pixel-perfect SVG icons identical to Feather Icons or Heroicons. Your icons ship in production apps.
 
-EXAMPLE output for a "settings" icon:
-<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3" fill="none" stroke="${color}" stroke-width="1.5"/><path fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+STRICT RULES:
+- viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+- ALL elements: fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+- Use 5-10 elements for clear, detailed, recognisable icons
+- Work within x=2 to x=22, y=2 to y=22
+- Mix element types: <path> with bezier curves, <circle>, <rect rx>, <line>, <polyline>
+- ZERO fills, ZERO text, ZERO gradients. Must be clear at 24px.
 
-Output ONLY the raw SVG. No explanation.`,
-    user: (prompt, vw, vh) => `Create a minimal line icon for: "${prompt}". viewBox="0 0 24 24". Strokes only, fill="none", stroke="${color}". Output ONLY the SVG.`
+EXAMPLES:
+Lock: <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="11" width="18" height="11" rx="2" fill="none" stroke="${color}" stroke-width="1.5"/><path fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1" fill="${color}"/></svg>
+
+Output ONLY the raw SVG. No markdown, no explanation.`,
+    user: (prompt, vw, vh) => `Minimal line icon for: "${prompt}". viewBox="0 0 24 24". Strokes only, fill="none", stroke="${color}" stroke-width="1.5" rounded. Clearly recognisable concept. Output ONLY the <svg>.`
   }),
 
   'bold-flat': (color) => ({
-    system: `You are an expert icon designer. Create bold flat filled SVG icons exactly like Font Awesome Solid or Material Icons Filled.
-RULES:
-- viewBox="0 0 24 24", xmlns="http://www.w3.org/2000/svg"  
-- Main icon shape: ONE solid filled path using fill="${color}"
-- Interior details/cutouts: fill="white" or fill="#ffffff" on top of the main shape
-- The icon must be a recognizable FILLED SOLID silhouette
-- NO strokes as primary elements. Pure solid fills.
-- 2-4 elements total. No text. No gradients.
+    system: `You are a world-class icon designer creating bold filled SVG icons identical to Font Awesome Solid or Material Icons. Your icons are used in production apps at all sizes.
+
+STRICT RULES:
+- viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+- Main shape: solid filled path(s) using fill="${color}" — creates the complete recognisable silhouette
+- Cutout details: use fill="white" for holes/interior detail on top of main shape
+- The icon silhouette must be INSTANTLY recognisable even at small sizes
+- 2-5 elements total. NO strokes. NO text. NO gradients. NO outlines.
+- Think carefully: what is the most iconic simplified shape for this concept?
 
 EXAMPLE output for a "home" icon:
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="${color}" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
@@ -1434,15 +1586,18 @@ Output ONLY the raw SVG. No explanation.`,
   }),
 
   'line-art': (color) => ({
-    system: `You are an expert icon designer. Create detailed line art SVG icons like Lucide or Heroicons Outline.
-RULES:
-- viewBox="0 0 24 24", xmlns="http://www.w3.org/2000/svg"
-- EVERY element: fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-- 6-14 elements for rich detail
-- Absolutely no fills. No text. No gradients.
+    system: `You are a world-class icon designer creating detailed line art SVG icons like Lucide or Heroicons Outline. Every icon ships in production software.
 
-Output ONLY the raw SVG. No explanation.`,
-    user: (prompt, vw, vh) => `Create a detailed line art outline icon for: "${prompt}". viewBox="0 0 24 24". Everything fill="none" stroke="${color}" stroke-width="1.5" rounded. Output ONLY the SVG.`
+STRICT RULES:
+- viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+- ALL elements: fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+- Use 6-12 elements for rich detail — more elements than minimal style
+- Vary types: <path> with curves, <circle>, <rect rx>, <line>, <polyline>, <polygon>
+- Work within x=2 to x=22, y=2 to y=22
+- ZERO fills, ZERO text. Concept must be detailed and clear.
+
+Output ONLY the raw SVG. No markdown, no explanation.`,
+    user: (prompt, vw, vh) => `Detailed line art outline icon for: "${prompt}". viewBox="0 0 24 24". All strokes fill="none" stroke="${color}" stroke-width="1.5" rounded. Rich detail, 8+ elements. Output ONLY the <svg>.`
   }),
 
   'duotone': (color) => {
@@ -1475,55 +1630,65 @@ EXAMPLE for "settings/gear":
 </svg>
 
 Output ONLY the raw SVG. No markdown. No explanation.`,
-      user: (prompt, vw, vh) => `Create a solid duotone icon for: "${prompt}".
+      user: (prompt, vw, vh) => `Professional solid duotone icon for: "${prompt}".
 viewBox="0 0 24 24".
-Layer 1 (main shape): fill="${dark}" — the complete dark silhouette of the concept
-Layer 2 (accent details): fill="${color}" — highlights and key details on top
-Layer 3 (optional fine detail): fill="${light}" — tiny accent points
-Make it look like a PROFESSIONAL SOLID DUOTONE ICON — dark background shape + colored details.
-Output ONLY the SVG.`
+Layer 1: fill="${dark}" — the COMPLETE recognisable silhouette filled solid (this is the main icon shape)
+Layer 2: fill="${color}" — accent shapes ON TOP that add detail and visual interest
+Layer 3 (optional): fill="${light}" — tiny highlights
+The silhouette must be INSTANTLY recognisable. Dark base + coloured accents = professional duotone.
+Output ONLY the <svg>.`
     };
   },
 
   'glassmorphism': (color) => ({
-    system: `You are an expert icon designer. Create glassmorphism frosted-glass icons.
-EXACT STRUCTURE (4 layers in this order):
-1. Glass base: <rect x="2" y="2" width="44" height="44" rx="12" fill="${color}" fill-opacity="0.15" stroke="${color}" stroke-opacity="0.5" stroke-width="1"/>
-2. Top highlight: <rect x="2" y="2" width="44" height="22" rx="12" fill="white" fill-opacity="0.1"/>
-3. Icon symbol (centered at 24,28): clean paths using stroke="white" fill="none" stroke-width="1.5" stroke-linecap="round"
-4. Gloss dot: <circle cx="10" cy="10" r="3" fill="white" fill-opacity="0.3"/>
-viewBox="0 0 48 48". No text. Output ONLY the SVG.`,
-    user: (prompt, vw, vh) => `Create a glassmorphism icon for: "${prompt}". viewBox="0 0 48 48". 4 layers: glass rect, highlight rect, white stroke symbol centered, gloss dot. Output ONLY the SVG.`
+    system: `You are a world-class icon designer creating premium glassmorphism frosted-glass SVG icons for modern SaaS and mobile apps.
+
+EXACT 4-LAYER STRUCTURE (render in this order):
+1. Glass card base: <rect x="2" y="2" width="44" height="44" rx="14" fill="${color}" fill-opacity="0.18" stroke="${color}" stroke-opacity="0.45" stroke-width="1"/>
+2. Top gloss highlight: <rect x="2" y="2" width="44" height="20" rx="14" fill="white" fill-opacity="0.12"/>
+3. Icon symbol: detailed icon centered around (24, 27), use stroke="white" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" — 4-8 elements, clearly represents the concept
+4. Corner gloss dot: <circle cx="9" cy="9" r="3.5" fill="white" fill-opacity="0.35"/>
+
+QUALITY: Layer 3 (the icon symbol) is the hero — make it detailed and immediately recognisable. Use curves and precise paths.
+viewBox="0 0 48 48". No text. Output ONLY the raw SVG.`,
+    user: (prompt, vw, vh) => `Glassmorphism icon for: "${prompt}". viewBox="0 0 48 48". 4 layers: glass rect rx=14, top gloss rect, detailed white stroke icon at (24,27), corner gloss dot. Output ONLY the <svg>.`
   }),
 
   'isometric': (color) => {
     const dark = shadeColor(color, -35);
     const light = shadeColor(color, 35);
     return {
-      system: `You are an expert icon designer. Create isometric 3D icons.
-EXACT RULES:
+      system: `You are a world-class icon designer creating precise isometric 3D SVG icons for professional apps and presentations.
+
+ISOMETRIC RULES:
 - viewBox="0 0 64 64"
-- Draw a 3D object in isometric projection (30° angle)
-- Top face: fill="${light}" — rhombus shape at top
-- Left face: fill="${color}" — parallelogram on left
-- Right face: fill="${dark}" — parallelogram on right (darkest)
-- Add edge definition lines: stroke="${dark}" stroke-width="0.5" fill="none"
-- Use <polygon> elements for faces
-- The 3D object should represent the concept clearly
-No text. Output ONLY the SVG.`,
-      user: (prompt, vw, vh) => `Create an isometric 3D icon for: "${prompt}". viewBox="0 0 64 64". Three-face isometric object: top="${light}", left="${color}", right="${dark}". Use polygons. Output ONLY the SVG.`
+- Use true isometric projection: x-axis goes right-down at 30°, y-axis goes left-down at 30°, z-axis goes straight up
+- Top face: fill="${light}" (lightest shade)
+- Left face: fill="${color}" (mid shade)  
+- Right face: fill="${dark}" (darkest shade)
+- Edge outlines: stroke="${dark}" stroke-width="0.5" fill="none" on visible edges
+- Use <polygon> for flat faces, <path> for curved surfaces
+- Center the 3D object in 64×64 with breathing room
+- The shape must CLEARLY represent the concept
+
+QUALITY: Three-face shading must be geometrically correct. Object must be centred and well-proportioned.
+No text. Output ONLY the raw SVG.`,
+      user: (prompt, vw, vh) => `Isometric 3D icon for: "${prompt}". viewBox="0 0 64 64". True isometric projection, top="${light}", left="${color}", right="${dark}". Clearly represents concept. Output ONLY the <svg>.`
     };
   },
 
   'retro': (color) => ({
-    system: `You are an expert icon designer. Create retro badge/enamel pin style icons.
-EXACT STRUCTURE:
-1. Badge shape: hexagon <polygon points="32,4 56,17 56,47 32,60 8,47 8,17" fill="${color}"/>
-2. Inner border: same hexagon slightly smaller, fill="none" stroke="white" stroke-opacity="0.5" stroke-width="1.5"
-3. Icon symbol centered: white filled shapes fill="white" representing the concept clearly
-4. Optional: small star ornaments fill="white" opacity="0.6" in 1-2 corners
-viewBox="0 0 64 64". No text. Output ONLY the SVG.`,
-    user: (prompt, vw, vh) => `Create a retro badge icon for: "${prompt}". viewBox="0 0 64 64". Hexagon badge fill="${color}", inner border white stroke, centered white symbol. Output ONLY the SVG.`
+    system: `You are a world-class icon designer creating premium retro badge/enamel pin SVG icons for modern apps and marketing.
+
+EXACT 4-LAYER STRUCTURE:
+1. Outer badge: <polygon points="32,4 56,17 56,47 32,60 8,47 8,17" fill="${color}"/>
+2. Inner ring border: <polygon points="32,9 52,20 52,44 32,55 12,44 12,20" fill="none" stroke="white" stroke-opacity="0.4" stroke-width="1.5"/>
+3. Icon symbol: draw a DETAILED, clearly recognisable symbol centred at (32,32), fill="white" for shapes — use 4-8 elements, make the symbol obvious
+4. Accent ornaments: 2-3 small <circle r="2" fill="white" fill-opacity="0.5"/> decorations near corners
+
+QUALITY: Layer 3 (white symbol) must be the obvious focal point and clearly represent the concept.
+viewBox="0 0 64 64". No text. Output ONLY the raw SVG.`,
+    user: (prompt, vw, vh) => `Retro badge icon for: "${prompt}". viewBox="0 0 64 64". 4 layers: hexagon fill="${color}", inner ring border, detailed white symbol at (32,32), accent dots. Output ONLY the <svg>.`
   }),
 
   'flat-illustration': () => null  // handled by generateSVGWithAI
@@ -2118,16 +2283,18 @@ async function generate() {
   if (!currentUser) { showAuthModal(); return; }
   const prompt = document.getElementById('prompt-input').value.trim();
   if (!prompt) { toast('Describe what you want to create', false); return; }
-  if (!trackGeneration()) return;
+
+  // Track ALL generations in the batch upfront
+  for (let i = 0; i < batchCount; i++) {
+    if (!trackGeneration()) return; // stops if limit hit mid-batch
+  }
 
   const isImage = document.getElementById('otype-dalle')?.classList.contains('active');
 
   if (batchCount === 1) {
-    // Single generation — existing behaviour
     if (isImage) { currentMode = 'image'; await generateImage(prompt); }
     else { currentMode = 'svg'; await generateSVG(prompt); }
   } else {
-    // Batch generation
     await generateBatch(prompt, isImage);
   }
 }
@@ -2198,7 +2365,7 @@ async function generateBatchItem(idx, prompt, isImage) {
       const p = PALETTES[selectedPalette] || PALETTES['warm'];
       const color = p.primary || '#7c6ef7';
       const { system, user } = buildIconPrompt(prompt, selectedStyle, color);
-      const rawText = await callAPI(system, user, 2000);
+      const rawText = await callAPI(system, user, 3000);
       const [vw, vh] = getDims();
       const svg = cleanIconSVG(rawText, color, selectedStyle, vw, vh);
       if (!svg) throw new Error('No SVG');
@@ -2237,7 +2404,7 @@ async function generateSVG(prompt) {
   const { system, user } = buildIconPrompt(prompt, selectedStyle, color);
 
   try {
-    const rawText = await callAPI(system, user, 2000);
+    const rawText = await callAPI(system, user, 3000);
     const svg = cleanIconSVG(rawText, color, selectedStyle, vw, vh);
 
     if (!svg) throw new Error('No valid SVG generated — try a simpler description');
@@ -3373,15 +3540,82 @@ function trackGeneration() {
 
   // Check limit for free users
   if (!currentUser || currentUser.plan !== 'pro') {
-    if (generationsUsed >= FREE_LIMIT) {
-      toast('Free limit reached: ' + FREE_LIMIT + ' generations/month. Upgrade to Pro for unlimited!', false);
-      setTimeout(() => {
-        document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
-      }, 1500);
-      return false; // Block generation
+    if (generationsUsed > FREE_LIMIT) {
+      showUpgradeModal();
+      return false;
+    }
+    if (generationsUsed === FREE_LIMIT) {
+      // Last generation — warn after
+      setTimeout(() => showUpgradeModal(), 3000);
     }
   }
-  return true; // Allow generation
+  return true;
+}
+
+function showUpgradeModal() {
+  // Remove existing if any
+  const existing = document.getElementById('upgrade-modal');
+  if (existing) existing.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'upgrade-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:24px;';
+  modal.innerHTML = `
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:40px;max-width:780px;width:100%;position:relative;text-align:center;">
+      <button onclick="document.getElementById('upgrade-modal').remove()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;">✕</button>
+
+      <div style="width:52px;height:52px;background:linear-gradient(135deg,#7c6ef7,#f06dba);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 16px;">✦</div>
+      <h2 style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin-bottom:8px;">You've used all ${FREE_LIMIT} free generations</h2>
+      <p style="font-size:14px;color:var(--text3);margin-bottom:32px;">Upgrade to Pro for unlimited generations, commercial licence, and 4K exports.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;text-align:left;">
+        <!-- Free -->
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:22px;">
+          <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Free</div>
+          <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:4px;">$0</div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:16px;">You are here</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:7px;font-size:12px;color:var(--text3);">
+            <li>✓ 20 generations / mo</li>
+            <li>✓ SVG + PNG export</li>
+            <li>✗ Commercial licence</li>
+            <li>✗ Variations</li>
+          </ul>
+        </div>
+        <!-- Pro -->
+        <div style="background:var(--bg3);border:2px solid #7c6ef7;border-radius:14px;padding:22px;position:relative;">
+          <div style="position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#7c6ef7,#f06dba);padding:2px 14px;border-radius:999px;font-size:10px;font-weight:600;color:#fff;white-space:nowrap;">Most popular</div>
+          <div style="font-size:10px;color:#a292ff;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Pro</div>
+          <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:4px;">$12<span style="font-size:13px;color:var(--text2);">/mo</span></div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:16px;">Billed monthly</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:7px;font-size:12px;color:var(--text2);">
+            <li>✓ Unlimited generations</li>
+            <li>✓ SVG + PNG (4K)</li>
+            <li>✓ Commercial licence</li>
+            <li>✓ 3 variations per gen</li>
+            <li>✓ Priority queue</li>
+          </ul>
+          <button onclick="document.getElementById('upgrade-modal').remove()" style="width:100%;margin-top:16px;padding:11px;background:linear-gradient(135deg,#7c6ef7,#f06dba);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Upgrade to Pro →</button>
+        </div>
+        <!-- Enterprise -->
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:22px;">
+          <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Enterprise</div>
+          <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:4px;">$79<span style="font-size:13px;color:var(--text2);">/mo</span></div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:16px;">Per workspace</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:7px;font-size:12px;color:var(--text2);">
+            <li>✓ Everything in Pro</li>
+            <li>✓ Team brand kits</li>
+            <li>✓ API access</li>
+            <li>✓ SSO / SAML</li>
+            <li>✓ Dedicated support</li>
+          </ul>
+          <button style="width:100%;margin-top:16px;padding:11px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;">Contact sales</button>
+        </div>
+      </div>
+
+      <p style="margin-top:20px;font-size:12px;color:var(--text3);">Your 20 free generations reset on the 1st of each month.</p>
+    </div>
+  `;
+  document.body.appendChild(modal);
 }
 
 function updateGenLimitBar() {
