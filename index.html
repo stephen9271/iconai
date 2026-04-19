@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IconAI – AI Vector Illustrations & Icons</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+<title>IconAI — AI Icon & Illustration Generator</title>
 <style>
+  /* PAGE CONTROL */
+  #page-landing { display:block; }
+  #page-dashboard { display:none; }
   :root {
     --bg:#0a0a0f;--bg2:#111118;--bg3:#18181f;--border:rgba(255,255,255,0.08);--border-hover:rgba(255,255,255,0.18);
     --text:#f0eff8;--text2:#9998b0;--text3:#5c5b72;--accent:#7c6ef7;--accent2:#a292ff;--accent-glow:rgba(124,110,247,0.25);
@@ -331,31 +332,525 @@
     .sidebar{position:static;}
     header,section.hero,.app-container{padding-left:20px;padding-right:20px;}
   }
+
+  /* ═══════════════════════ LANDING PAGE ═══════════════════════ */
+  /* Page visibility controlled by showPage() JS function */
+  #page-landing { display:block; }
+  #page-dashboard { display:none; }
+
+  .lp-section { max-width:1100px; margin:0 auto; padding:0 40px; }
+
+  /* Hero */
+  .lp-hero {
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:flex-start; text-align:center;
+    padding:80px 24px 0; position:relative; overflow:hidden;
+  }
+  .lp-glow {
+    position:absolute; top:-100px; left:50%; transform:translateX(-50%);
+    width:700px; height:400px;
+    background:radial-gradient(ellipse,rgba(124,110,247,.15) 0%,rgba(240,109,186,.08) 45%,transparent 70%);
+    pointer-events:none; filter:blur(40px); z-index:0;
+  }
+  .lp-hero > * { position:relative; z-index:1; }
+  .lp-badge {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:5px 16px; background:rgba(124,110,247,.1);
+    border:1px solid rgba(124,110,247,.25); border-radius:999px;
+    font-size:12px; color:#a292ff; margin-bottom:24px; letter-spacing:.3px;
+  }
+  .lp-h1 {
+    font-family:'Syne',sans-serif; font-size:clamp(48px,6.5vw,84px);
+    font-weight:800; line-height:1.04; letter-spacing:-3px;
+    margin-bottom:20px; max-width:860px;
+  }
+  .lp-h1 span {
+    background:linear-gradient(135deg,#a292ff,#f06dba);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+  .lp-sub {
+    font-size:18px; color:var(--text2); max-width:540px;
+    line-height:1.65; margin-bottom:36px;
+  }
+  .lp-cta-row { display:flex; gap:12px; align-items:center; justify-content:center; margin-bottom:64px; }
+  .lp-btn-primary {
+    padding:15px 32px; background:linear-gradient(135deg,#7c6ef7,#f06dba);
+    border:none; border-radius:10px; color:#fff; font-size:15px; font-weight:600;
+    cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; letter-spacing:.2px;
+  }
+  .lp-btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(124,110,247,.4); }
+  .lp-btn-secondary {
+    padding:15px 28px; background:transparent; border:1px solid var(--border);
+    border-radius:10px; color:var(--text2); font-size:15px; font-weight:500;
+    cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s;
+  }
+  .lp-btn-secondary:hover { border-color:var(--border-hover); color:var(--text); }
+
+  /* Icon preview row */
+  .lp-icon-row {
+    display:flex; gap:12px; flex-wrap:wrap; justify-content:center;
+    padding:0 16px;
+  }
+  .lp-icon-pill {
+    background:var(--bg2); border:1px solid var(--border); border-radius:14px;
+    padding:16px 20px; display:flex; flex-direction:column;
+    align-items:center; gap:8px; transition:border-color .2s;
+  }
+  .lp-icon-pill:hover { border-color:var(--border-hover); }
+  .lp-icon-pill span { font-size:11px; color:var(--text3); }
+
+  /* Features */
+  .lp-features-wrap {
+    background:var(--bg2); border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border); padding:80px 0;
+  }
+  .lp-features-grid {
+    max-width:1100px; margin:0 auto; padding:0 40px;
+    display:grid; grid-template-columns:repeat(3,1fr); gap:2px;
+  }
+  .lp-feat {
+    padding:32px; border-right:1px solid var(--border);
+  }
+  .lp-feat:nth-child(3n) { border-right:none; }
+  .lp-feat:nth-child(n+4) { border-top:1px solid var(--border); }
+  .lp-feat-icon {
+    width:40px; height:40px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; margin-bottom:14px;
+  }
+  .lp-feat-title { font-family:'Syne',sans-serif; font-size:15px; font-weight:700; margin-bottom:6px; }
+  .lp-feat-desc { font-size:13px; color:var(--text3); line-height:1.65; }
+
+  /* Section headings */
+  .lp-section-head { text-align:center; padding:80px 0 40px; }
+  .lp-section-head h2 {
+    font-family:'Syne',sans-serif; font-size:clamp(28px,4vw,44px);
+    font-weight:800; letter-spacing:-1.5px; margin-bottom:10px;
+  }
+  .lp-section-head p { font-size:15px; color:var(--text3); }
+
+  /* Samples */
+  .lp-samples {
+    max-width:1100px; margin:0 auto; padding:0 40px 80px;
+    display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
+  }
+  .lp-sample {
+    background:var(--bg2); border:1px solid var(--border);
+    border-radius:14px; overflow:hidden; transition:all .2s;
+  }
+  .lp-sample:hover { border-color:var(--border-hover); transform:translateY(-3px); box-shadow:0 12px 32px rgba(0,0,0,.2); }
+  .lp-sample-preview {
+    height:160px; display:flex; align-items:center; justify-content:center;
+    padding:24px; background:var(--bg3);
+  }
+  .lp-sample-preview svg { max-width:90px; max-height:90px; }
+  .lp-sample-info { padding:14px 16px; border-top:1px solid var(--border); }
+  .lp-sample-prompt { font-size:12px; color:var(--text2); font-weight:500; }
+  .lp-sample-tag { font-size:10px; color:#a292ff; margin-top:3px; text-transform:uppercase; letter-spacing:.5px; }
+
+  /* Steps */
+  .lp-steps {
+    max-width:900px; margin:0 auto; padding:0 40px 80px;
+    display:grid; grid-template-columns:repeat(4,1fr); gap:24px;
+  }
+  .lp-step { text-align:center; padding:0 8px; }
+  .lp-step-num {
+    width:44px; height:44px; border-radius:50%;
+    background:linear-gradient(135deg,#7c6ef7,#f06dba);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Syne',sans-serif; font-size:17px; font-weight:800;
+    color:#fff; margin:0 auto 14px;
+  }
+  .lp-step-title { font-family:'Syne',sans-serif; font-size:14px; font-weight:700; margin-bottom:6px; }
+  .lp-step-desc { font-size:12px; color:var(--text3); line-height:1.6; }
+
+  /* CTA bottom */
+  .lp-cta-bottom {
+    text-align:center; padding:80px 24px 100px;
+    background:linear-gradient(180deg,transparent,rgba(124,110,247,.06));
+    border-top:1px solid var(--border);
+  }
+  .lp-cta-bottom h2 {
+    font-family:'Syne',sans-serif; font-size:clamp(28px,4vw,48px);
+    font-weight:800; letter-spacing:-1.5px; margin-bottom:12px;
+  }
+  .lp-cta-bottom p { font-size:15px; color:var(--text3); margin-bottom:28px; }
+
+  @media(max-width:768px) {
+    .lp-features-grid { grid-template-columns:1fr; }
+    .lp-feat { border-right:none; border-top:1px solid var(--border); }
+    .lp-feat:first-child { border-top:none; }
+    .lp-samples { grid-template-columns:1fr; }
+    .lp-steps { grid-template-columns:1fr 1fr; }
+    .lp-h1 { letter-spacing:-1.5px; }
+  }
+  /* ════════════════════════════════════════════════════════════ */
+
+
+  /* ═══════════════ AUTH MODAL ═══════════════ */
+  .auth-modal-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;}
+  .auth-modal-overlay.show{display:flex;}
+  .auth-modal{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:40px 36px;width:100%;max-width:400px;position:relative;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.5);}
+  .auth-logo{width:52px;height:52px;background:linear-gradient(135deg,#7c6ef7,#f06dba);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 18px;}
+  .auth-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px;color:var(--text);}
+  .auth-sub{font-size:13px;color:var(--text3);margin-bottom:28px;line-height:1.5;}
+  .auth-google-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px 20px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;font-size:14px;font-weight:500;color:var(--text);cursor:pointer;transition:all .2s;margin-bottom:12px;font-family:'DM Sans',sans-serif;}
+  .auth-google-btn:hover{border-color:var(--border-hover);background:var(--bg);}
+  .auth-google-btn svg{width:20px;height:20px;flex-shrink:0;}
+  .auth-divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--text3);font-size:12px;}
+  .auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+  .auth-email-input{width:100%;padding:12px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;box-sizing:border-box;margin-bottom:10px;}
+  .auth-email-input:focus{outline:none;border-color:#7c6ef7;}
+  .auth-email-input::placeholder{color:var(--text3);}
+  .auth-submit-btn{width:100%;padding:13px;background:linear-gradient(135deg,#7c6ef7,#f06dba);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .2s;}
+  .auth-submit-btn:hover{opacity:.88;}
+  .auth-terms{font-size:11px;color:var(--text3);margin-top:16px;line-height:1.5;}
+  .auth-terms a{color:#a292ff;text-decoration:none;}
+  .auth-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;line-height:1;padding:4px;transition:color .2s;}
+  .auth-close:hover{color:var(--text);}
+
+  /* ═══════════════ USER MENU ═══════════════ */
+  .user-avatar{width:34px;height:34px;border-radius:50%;border:2px solid #7c6ef7;cursor:pointer;object-fit:cover;}
+  .user-menu{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:8px;min-width:210px;z-index:1000;box-shadow:0 12px 40px rgba(0,0,0,.4);}
+  .user-menu-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:8px;font-size:13px;color:var(--text2);cursor:pointer;transition:background .15s;}
+  .user-menu-item:hover{background:var(--bg3);color:var(--text);}
+  .user-menu-name{padding:10px 12px;font-size:13px;font-weight:600;color:var(--text);border-bottom:1px solid var(--border);margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;}
+  .user-menu-plan{font-size:10px;color:#a292ff;font-weight:500;background:rgba(124,110,247,.12);padding:2px 8px;border-radius:999px;}
+  .nav-user-wrap{position:relative;}
+
+  /* ═══════════════ BATCH COUNT ═══════════════ */
+  .batch-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .batch-label{font-size:12px;color:var(--text2);font-weight:500;}
+  .batch-btns{display:flex;gap:6px;}
+  .batch-btn{width:32px;height:32px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:'DM Sans',sans-serif;}
+  .batch-btn:hover{border-color:var(--border-hover);color:var(--text);}
+  .batch-btn.active{background:rgba(124,110,247,.15);border-color:#7c6ef7;color:#a292ff;}
+  /* ═══════════════ GEN LIMIT BAR ═══════════════ */
+  .gen-limit-bar{padding:10px 14px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);margin-bottom:8px;}
+  .gen-limit-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:5px;}
+  .gen-limit-track{height:4px;background:var(--border);border-radius:999px;overflow:hidden;}
+  .gen-limit-fill{height:100%;background:linear-gradient(90deg,#7c6ef7,#f06dba);border-radius:999px;transition:width .3s;}
+
+
+  /* ═══════ LANDING FEATURES + SAMPLES (injected) ═══════ */
+  .lp-features-wrap{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px 0;}
+  .lp-features-grid{max-width:1100px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+  .lp-feat{padding:32px;border-right:1px solid var(--border);}
+  .lp-feat:nth-child(3n){border-right:none;}
+  .lp-feat:nth-child(n+4){border-top:1px solid var(--border);}
+  .lp-feat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:14px;}
+  .lp-feat-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:6px;}
+  .lp-feat-desc{font-size:13px;color:var(--text3);line-height:1.65;}
+  .lp-section-head{text-align:center;padding:80px 0 40px;}
+  .lp-section-head h2{font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-1.5px;margin-bottom:10px;}
+  .lp-section-head p{font-size:15px;color:var(--text3);}
+  .lp-samples{max-width:1100px;margin:0 auto;padding:0 40px 80px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .lp-sample{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;}
+  .lp-sample:hover{border-color:var(--border-hover);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.2);}
+  .lp-sample-preview{height:160px;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--bg3);}
+  .lp-sample-preview svg{max-width:90px;max-height:90px;}
+  .lp-sample-info{padding:14px 16px;border-top:1px solid var(--border);}
+  .lp-sample-prompt{font-size:12px;color:var(--text2);font-weight:500;}
+  .lp-sample-tag{font-size:10px;color:#a292ff;margin-top:3px;text-transform:uppercase;letter-spacing:.5px;}
+  .lp-cta-bottom{text-align:center;padding:80px 24px 100px;background:linear-gradient(180deg,transparent,rgba(124,110,247,.06));border-top:1px solid var(--border);}
+  .lp-cta-bottom h2{font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1.5px;margin-bottom:12px;}
+  .lp-cta-bottom p{font-size:15px;color:var(--text3);margin-bottom:28px;}
+  @media(max-width:768px){
+    .lp-features-grid{grid-template-columns:1fr;}
+    .lp-feat{border-right:none;border-top:1px solid var(--border);}
+    .lp-feat:first-child{border-top:none;}
+    .lp-samples{grid-template-columns:1fr 1fr;}
+    .lp-h1{letter-spacing:-1.5px;}
+  }
+  @media(max-width:480px){.lp-samples{grid-template-columns:1fr;}}
+  /* ══════════════════════════════════════════════════════ */
+
+  /* ═══════════════ TICKER ═══════════════ */
+  .lp-ticker-wrap{width:100%;overflow:hidden;padding:32px 0;position:relative;margin-top:0;}
+  .lp-ticker-wrap::before,.lp-ticker-wrap::after{content:'';position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none;}
+  .lp-ticker-wrap::before{left:0;background:linear-gradient(90deg,var(--bg),transparent);}
+  .lp-ticker-wrap::after{right:0;background:linear-gradient(-90deg,var(--bg),transparent);}
+  .lp-ticker{display:flex;gap:16px;animation:ticker-scroll 35s linear infinite;width:max-content;}
+  .lp-ticker:hover{animation-play-state:paused;}
+  @keyframes ticker-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+  .lp-ticker-card{display:flex;align-items:center;gap:12px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:10px 16px;white-space:nowrap;flex-shrink:0;}
+  .lp-ticker-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--bg3);border-radius:8px;}
+  .lp-ticker-text{display:flex;flex-direction:column;gap:2px;}
+  .lp-ticker-prompt{font-size:12px;color:var(--text2);font-weight:500;}
+  .lp-ticker-style{font-size:10px;color:var(--text3);}
+  /* ══════════════════════════════════════ */
 </style>
+<!-- Google Sign-In -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<!-- PptxGenJS for PowerPoint export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PptxGenJS/3.12.0/pptxgen.bundle.js"></script>
 </head>
 <body>
 
+<!-- ═══════════════════════════════════════════════════════
+     SHARED HEADER — always visible
+═══════════════════════════════════════════════════════ -->
 <header>
   <div class="logo"><div class="logo-mark">✦</div>IconAI</div>
   <nav>
-    <a href="#app" class="nav-link">Generator</a>
-    <a href="#gallery" class="nav-link">Gallery</a>
-    <a href="#pricing" class="nav-link">Pricing</a>
-    <button class="btn-primary" onclick="document.getElementById('api-key-input').focus()">Get Started</button>
+    <span id="nav-landing-links" style="display:flex;gap:28px;align-items:center;">
+      <a href="#" class="nav-link" onclick="document.getElementById('lp-how').scrollIntoView({behavior:'smooth'});return false;">How it works</a>
+      <a href="#" class="nav-link" onclick="document.getElementById('lp-pricing').scrollIntoView({behavior:'smooth'});return false;">Pricing</a>
+    </span>
+    <div id="nav-auth-area">
+      <button class="btn-primary" onclick="showAuthModal()">Sign in / Sign up</button>
+    </div>
   </nav>
 </header>
 
-<section class="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-badge">✦ SVG Icons · Scene Illustrations · Infographics · Icon Sets</div>
-  <h1>Create icons, scenes<br><span>&amp; illustrations</span></h1>
-  <p>Describe any scene, icon, or infographic. Get production-ready SVG art — people, objects, environments — instantly.</p>
-</section>
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 1: LANDING  (logged out)
+═══════════════════════════════════════════════════════ -->
+<div id="page-landing">
+
+  <!-- HERO -->
+  <section class="lp-hero">
+    <div class="lp-glow"></div>
+    <div class="lp-badge">✦ SVG Icons &nbsp;·&nbsp; Scene Illustrations &nbsp;·&nbsp; Icon Sets &nbsp;·&nbsp; PPTX Export</div>
+    <h1 class="lp-h1">Create icons &amp; illustrations<br><span>powered by AI</span></h1>
+    <p class="lp-sub">Describe what you need in plain English. Get production-ready SVG icons, flat illustrations, and AI images in seconds. No design skills required.</p>
+    <div class="lp-cta-row">
+      <button class="lp-btn-primary" onclick="showAuthModal()">Get started free →</button>
+      <button class="lp-btn-secondary" onclick="document.getElementById('lp-how').scrollIntoView({behavior:'smooth'})">See how it works</button>
+    </div>
+  </section>
+
+  <!-- ROLLING TICKER -->
+  <div class="lp-ticker-wrap">
+    <div class="lp-ticker">
+      <div class="lp-ticker-card"><div class="lp-ticker-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#7c6ef7" stroke-width="1.5" stroke-linecap="round"><path d="M12 2L4 5v6c0 5 3.5 9.7 8 11 4.5-1.3 8-6 8-11V5z"/><path d="M9 12l2 2 4-4"/></svg></div><div class="lp-ticker-text"><div class="lp-ticker-prompt">"security shield"</div><div class="lp-ticker-style">Duotone · Cool</div></div></div>
+      <div class="lp-ticker-card"><div class="lp-ticker-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#f06dba" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="lp-ticker-text"><div class="lp-ticker-prompt">"clock timer"</div><div class="lp-ticker-style">Minimal · Pink</div></div></div>
+      <div class="lp-ticker-card"><div class="lp-ticker-icon"><svg viewBox="0 0 48 48" width="22" height="22"><rect x="2" y="2" width="44" height="44" rx="12" fill="#22d3a0" fill-opacity=".15" stroke="#22d3a0" stroke-opacity=".5" stroke-width="1"/><path d="M15 28l6 6 12-12" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg></div><div class="lp-ticker-text"><div class="lp-ticker-prompt">"task complete"</div><div class="lp-ticker-style">Glass · Teal</div></div></div>
+      <div class="lp-ticker-card"><div class="lp-ticker-icon"><svg viewBox="0 0 24 24" width="22" height="22"><rect x="2" y="3" width="20" height="14" rx="2" fill="#7c6ef7"/><rect x="5" y="6" width="5" height="4" rx="1" fill="white" fill-opacity=".3"/><rect x="12" y="6" width="7" height="2" rx="1" fill="white" fill-opacity=".35"/></svg></div><div class="lp-ticker-text"><div class="lp-ticker-prompt">"dashboard"</div><div class="lp-ticker-style">Bold Flat · Midnight</div></div></div>
+      <div class="lp-ticker-card"><div class="lp-ticker-icon"><svg viewBox="0 0 64 64" width="22" height="22"><polygon points="32,4 56,17 56,47 32,60 8,47 8,17" fill="#e8855a"/><path d="M20 28l8 9 16-14" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/></svg></div><div class="lp-ticker-text"><div class="lp-ticker-prompt">"award badge"</div><div class="lp-ticker-style">Retro · Warm</div></div></div>
+      <div class="lp-ticker-card"><div class="lp-ticker-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#4fb8f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/></svg></div><div class="lp-ticker-text"><div class="lp-ticker-prompt">"package box"</div><div class="lp-ticker-style">Line Art · Cool</div></div></div>
+      <div class="lp-ticker-card"><div class="lp-ticker-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#a292ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div class="lp-ticker-text"><div class="lp-ticker-prompt">"search"</div><div class="lp-ticker-style">Minimal · Midnight</div></div></div>
+      <div class="lp-ticker-card"><div class="lp-ticker-icon"><svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="10" fill="#f06dba" fill-opacity=".18"/><path d="M8 12h8M12 8l4 4-4 4" stroke="#f06dba" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></div><div class="lp-ticker-text"><div class="lp-ticker-prompt">"next arrow"</div><div class="lp-ticker-style">Duotone · Pink</div></div></div>
+      <div class="lp-ticker-card"><div class="lp-ticker-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#22d3a0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div><div class="lp-ticker-text"><div class="lp-ticker-prompt">"heart favourite"</div><div class="lp-ticker-style">Line Art · Nature</div></div></div>
+      <div class="lp-ticker-card"><div class="lp-ticker-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#f5a623" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="lp-ticker-text"><div class="lp-ticker-prompt">"star rating"</div><div class="lp-ticker-style">Minimal · Gold</div></div></div>
+      <!-- Duplicate set for seamless loop -->
+      <div class="lp-ticker-card"><div class="lp-ticker-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#7c6ef7" stroke-width="1.5" stroke-linecap="round"><path d="M12 2L4 5v6c0 5 3.5 9.7 8 11 4.5-1.3 8-6 8-11V5z"/><path d="M9 12l2 2 4-4"/></svg></div><div class="lp-ticker-text"><div class="lp-ticker-prompt">"security shield"</div><div class="lp-ticker-style">Duotone · Cool</div></div></div>
+      <div class="lp-ticker-card"><div class="lp-ticker-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#f06dba" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="lp-ticker-text"><div class="lp-ticker-prompt">"clock timer"</div><div class="lp-ticker-style">Minimal · Pink</div></div></div>
+      <div class="lp-ticker-card"><div class="lp-ticker-icon"><svg viewBox="0 0 64 64" width="22" height="22"><polygon points="32,4 56,17 56,47 32,60 8,47 8,17" fill="#e8855a"/><path d="M20 28l8 9 16-14" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/></svg></div><div class="lp-ticker-text"><div class="lp-ticker-prompt">"award badge"</div><div class="lp-ticker-style">Retro · Warm</div></div></div>
+      <div class="lp-ticker-card"><div class="lp-ticker-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#a292ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div class="lp-ticker-text"><div class="lp-ticker-prompt">"search"</div><div class="lp-ticker-style">Minimal · Midnight</div></div></div>
+      <div class="lp-ticker-card"><div class="lp-ticker-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#f5a623" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="lp-ticker-text"><div class="lp-ticker-prompt">"star rating"</div><div class="lp-ticker-style">Minimal · Gold</div></div></div>
+    </div>
+  </div>
+
+  <!-- ICON STYLE PILLS -->
+  <div style="padding:24px 24px 60px;display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:700px;margin:0 auto;">
+    <div class="lp-icon-pill"><svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#7c6ef7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg><span>Isometric</span></div>
+    <div class="lp-icon-pill"><svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#f06dba" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>Minimal</span></div>
+    <div class="lp-icon-pill"><svg viewBox="0 0 24 24" width="36" height="36"><circle cx="12" cy="12" r="10" fill="#7c6ef7" fill-opacity=".2"/><path d="M9 12l2 2 4-4" stroke="#7c6ef7" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg><span>Duotone</span></div>
+    <div class="lp-icon-pill"><svg viewBox="0 0 48 48" width="36" height="36"><rect x="2" y="2" width="44" height="44" rx="12" fill="#22d3a0" fill-opacity=".12" stroke="#22d3a0" stroke-opacity=".4" stroke-width="1"/><path d="M16 28l5 5 11-11" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/></svg><span>Glass</span></div>
+    <div class="lp-icon-pill"><svg viewBox="0 0 64 64" width="36" height="36"><polygon points="32,4 56,17 56,47 32,60 8,47 8,17" fill="#e8855a"/><path d="M22 28l6 8 14-12" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg><span>Retro</span></div>
+    <div class="lp-icon-pill"><svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#4fb8f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg><span>Line Art</span></div>
+    <div class="lp-icon-pill"><svg viewBox="0 0 24 24" width="36" height="36"><rect x="2" y="3" width="20" height="14" rx="2" fill="#7c6ef7"/><rect x="5" y="6" width="5" height="4" rx="1" fill="white" fill-opacity=".3"/><rect x="12" y="6" width="7" height="2" rx="1" fill="white" fill-opacity=".35"/></svg><span>Bold Flat</span></div>
+  </div>
 
 
+  <!-- ── HOW IT WORKS ──────────────────────────────────── -->
+  <div id="lp-how" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px 0;">
+    <div style="text-align:center;margin-bottom:56px;">
+      <div class="lp-badge" style="margin:0 auto 16px;">How it works</div>
+      <h2 style="font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-1.5px;margin-bottom:10px;">From prompt to asset in seconds</h2>
+      <p style="font-size:15px;color:var(--text3);">No design skills needed — just describe what you want</p>
+    </div>
+
+    <!-- Step 1 -->
+    <div style="max-width:960px;margin:0 auto 56px;padding:0 40px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(124,110,247,.1);border:1px solid rgba(124,110,247,.25);border-radius:999px;padding:4px 14px;font-size:11px;color:#a292ff;margin-bottom:14px;font-weight:600;">Step 1</div>
+        <h3 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:10px;letter-spacing:-.5px;">Describe what you need</h3>
+        <p style="font-size:14px;color:var(--text3);line-height:1.7;">Type any concept in plain English — "wifi icon", "security shield", "team collaboration scene". Choose Icon, Scene, or AI Image as your output type.</p>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:20px;">
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;">What do you want to create?</div>
+        <div style="background:var(--bg2);border:1px solid #7c6ef7;border-radius:8px;padding:11px 14px;color:var(--text);font-size:13px;margin-bottom:12px;">security shield with checkmark</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px;">
+          <div style="padding:8px;border-radius:8px;text-align:center;background:rgba(124,110,247,.12);border:1px solid #7c6ef7;">
+            <div style="font-size:14px;margin-bottom:2px;">◻</div><div style="font-size:10px;color:#a292ff;font-weight:600;">Icon</div>
+          </div>
+          <div style="padding:8px;border-radius:8px;text-align:center;background:var(--bg2);border:1px solid var(--border);">
+            <div style="font-size:14px;margin-bottom:2px;">🖼</div><div style="font-size:10px;color:var(--text3);">Scene</div>
+          </div>
+          <div style="padding:8px;border-radius:8px;text-align:center;background:var(--bg2);border:1px solid var(--border);">
+            <div style="font-size:14px;margin-bottom:2px;">✦</div><div style="font-size:10px;color:var(--text3);">AI Image</div>
+          </div>
+        </div>
+        <div style="background:linear-gradient(135deg,#7c6ef7,#f06dba);border-radius:8px;padding:10px;text-align:center;color:#fff;font-weight:600;font-size:13px;">✦ Generate</div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div style="max-width:960px;margin:0 auto 56px;padding:0 40px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;">
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:20px;">
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;">Icon style</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;">
+          <div style="padding:5px 12px;border-radius:6px;font-size:11px;border:1px solid var(--border);color:var(--text3);">Minimal</div>
+          <div style="padding:5px 12px;border-radius:6px;font-size:11px;background:rgba(240,109,186,.1);border:1px solid #f06dba;color:#f06dba;">Bold</div>
+          <div style="padding:5px 12px;border-radius:6px;font-size:11px;border:1px solid var(--border);color:var(--text3);">Line Art</div>
+          <div style="padding:5px 12px;border-radius:6px;font-size:11px;border:1px solid var(--border);color:var(--text3);">Isometric</div>
+          <div style="padding:5px 12px;border-radius:6px;font-size:11px;border:1px solid var(--border);color:var(--text3);">Duotone</div>
+          <div style="padding:5px 12px;border-radius:6px;font-size:11px;border:1px solid var(--border);color:var(--text3);">Glass</div>
+          <div style="padding:5px 12px;border-radius:6px;font-size:11px;border:1px solid var(--border);color:var(--text3);">Retro</div>
+        </div>
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;">Color palette</div>
+        <div style="display:flex;gap:8px;">
+          <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#e8855a,#f5a623);border:2px solid white;"></div>
+          <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#7c6ef7,#4fb8f7);"></div>
+          <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#e63946,#f4a261);"></div>
+          <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#2d6a4f,#74c69d);"></div>
+          <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#111,#555);"></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(240,109,186,.1);border:1px solid rgba(240,109,186,.25);border-radius:999px;padding:4px 14px;font-size:11px;color:#f06dba;margin-bottom:14px;font-weight:600;">Step 2</div>
+        <h3 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:10px;letter-spacing:-.5px;">Pick your style &amp; colour</h3>
+        <p style="font-size:14px;color:var(--text3);line-height:1.7;">Choose from 7 icon styles and 8 colour palettes. Every combination produces a completely different aesthetic — from clean minimal strokes to bold retro badge icons.</p>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div style="max-width:960px;margin:0 auto 56px;padding:0 40px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(34,211,160,.1);border:1px solid rgba(34,211,160,.25);border-radius:999px;padding:4px 14px;font-size:11px;color:#22d3a0;margin-bottom:14px;font-weight:600;">Step 3</div>
+        <h3 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:10px;letter-spacing:-.5px;">AI generates in seconds</h3>
+        <p style="font-size:14px;color:var(--text3);line-height:1.7;">Claude AI writes precision SVG code for icons and scenes. GPT Image 1.5 generates photorealistic illustrations. Results appear instantly in your canvas.</p>
+      </div>
+      <!-- 4 icon variants -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <svg viewBox="0 0 24 24" width="48" height="48"><path d="M12 2L4 5v6c0 5 3.5 9.7 8 11 4.5-1.3 8-6 8-11V5z" fill="#7c6ef7" fill-opacity=".2"/><path d="M12 2L4 5v6c0 5 3.5 9.7 8 11 4.5-1.3 8-6 8-11V5z" stroke="#7c6ef7" stroke-width="1.5" fill="none" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#7c6ef7" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+          <span style="font-size:9px;color:#a292ff;text-transform:uppercase;letter-spacing:.4px;">Duotone</span>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <svg viewBox="0 0 48 48" width="48" height="48"><rect x="4" y="4" width="40" height="40" rx="12" fill="#f06dba" fill-opacity=".12" stroke="#f06dba" stroke-opacity=".4" stroke-width="1"/><rect x="4" y="4" width="40" height="20" rx="10" fill="white" fill-opacity=".08"/><path d="M24 14l-10 4v7c0 5 4.5 9.7 10 11 5.5-1.3 10-6 10-11v-7z" fill="white" fill-opacity=".2"/><path d="M19 27l4 4 6-7" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+          <span style="font-size:9px;color:#f06dba;text-transform:uppercase;letter-spacing:.4px;">Glass</span>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <svg viewBox="0 0 64 64" width="48" height="48"><polygon points="32,4 56,17 56,47 32,60 8,47 8,17" fill="#22d3a0"/><polygon points="32,11 50,22 50,42 32,53 14,42 14,22" fill="none" stroke="white" stroke-opacity=".4" stroke-width="1.5"/><path d="M26 33l5 5 7-8" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>
+          <span style="font-size:9px;color:#22d3a0;text-transform:uppercase;letter-spacing:.4px;">Retro</span>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#f5a623" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 5v6c0 5 3.5 9.7 8 11 4.5-1.3 8-6 8-11V5z"/><path d="M9 12l2 2 4-4"/></svg>
+          <span style="font-size:9px;color:#f5a623;text-transform:uppercase;letter-spacing:.4px;">Minimal</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div style="max-width:960px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;">
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:20px;">
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;">Export options</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <div style="padding:8px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text2);">↓ SVG</div>
+          <div style="padding:8px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text2);">↓ PNG</div>
+          <div style="padding:8px 16px;background:linear-gradient(135deg,#7c6ef7,#f06dba);border-radius:8px;font-size:12px;color:#fff;font-weight:500;">⬡ PPTX Slide</div>
+        </div>
+        <div style="margin-top:12px;padding:12px;background:var(--bg2);border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;background:linear-gradient(135deg,#7c6ef7,#f06dba);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;">⬡</div>
+          <div><div style="font-size:12px;font-weight:600;color:var(--text);">Security-Overview.pptx</div><div style="font-size:11px;color:var(--text3);">Warm theme · Ready to present</div></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.25);border-radius:999px;padding:4px 14px;font-size:11px;color:#f5a623;margin-bottom:14px;font-weight:600;">Step 4</div>
+        <h3 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:10px;letter-spacing:-.5px;">Export anywhere</h3>
+        <p style="font-size:14px;color:var(--text3);line-height:1.7;">Download as SVG for infinite scaling, PNG for web and social, or export directly to a styled PowerPoint slide with one click.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PRICING ─────────────────────────────────────────── -->
+  <div id="lp-pricing" style="max-width:960px;margin:0 auto;padding:80px 40px;">
+    <div style="text-align:center;margin-bottom:48px;">
+      <div class="lp-badge" style="margin:0 auto 16px;">Pricing</div>
+      <h2 style="font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-1.5px;margin-bottom:10px;">Simple, transparent pricing</h2>
+      <p style="font-size:15px;color:var(--text3);">Start free. Scale as you grow.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+      <!-- Free -->
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:28px;">
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Free</div>
+        <div style="font-family:'Syne',sans-serif;font-size:36px;font-weight:800;margin-bottom:4px;">$0</div>
+        <div style="font-size:13px;color:var(--text3);margin-bottom:24px;">Forever free</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px;font-size:13px;color:var(--text2);">
+          <li>✓ &nbsp;20 generations / month</li>
+          <li>✓ &nbsp;SVG + PNG export</li>
+          <li>✓ &nbsp;All 7 styles</li>
+          <li style="color:var(--text3);">✗ &nbsp;Variations</li>
+          <li style="color:var(--text3);">✗ &nbsp;Commercial licence</li>
+        </ul>
+        <button onclick="showAuthModal()" style="width:100%;padding:12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text2);font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;" onmouseover="this.style.borderColor='var(--border-hover)'" onmouseout="this.style.borderColor='var(--border)'">Get started free</button>
+      </div>
+      <!-- Pro -->
+      <div style="background:var(--bg2);border:2px solid #7c6ef7;border-radius:16px;padding:28px;position:relative;">
+        <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#7c6ef7,#f06dba);padding:3px 16px;border-radius:999px;font-size:11px;font-weight:600;color:#fff;white-space:nowrap;">Most popular</div>
+        <div style="font-size:11px;color:#a292ff;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Pro</div>
+        <div style="font-family:'Syne',sans-serif;font-size:36px;font-weight:800;margin-bottom:4px;">$12<span style="font-size:16px;color:var(--text2);font-family:'DM Sans',sans-serif;">/mo</span></div>
+        <div style="font-size:13px;color:var(--text3);margin-bottom:24px;">Billed monthly</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px;font-size:13px;color:var(--text2);">
+          <li>✓ &nbsp;Unlimited generations</li>
+          <li>✓ &nbsp;SVG + PNG (4K)</li>
+          <li>✓ &nbsp;Commercial licence</li>
+          <li>✓ &nbsp;3 variations per gen</li>
+          <li>✓ &nbsp;Priority queue</li>
+        </ul>
+        <button onclick="showAuthModal()" class="lp-btn-primary" style="width:100%;padding:12px;">Start free trial</button>
+      </div>
+      <!-- Enterprise -->
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:28px;">
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Enterprise</div>
+        <div style="font-family:'Syne',sans-serif;font-size:36px;font-weight:800;margin-bottom:4px;">$79<span style="font-size:16px;color:var(--text2);font-family:'DM Sans',sans-serif;">/mo</span></div>
+        <div style="font-size:13px;color:var(--text3);margin-bottom:24px;">Per workspace</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px;font-size:13px;color:var(--text2);">
+          <li>✓ &nbsp;Everything in Pro</li>
+          <li>✓ &nbsp;Team brand kits</li>
+          <li>✓ &nbsp;API access</li>
+          <li>✓ &nbsp;SSO / SAML</li>
+          <li>✓ &nbsp;Dedicated support</li>
+        </ul>
+        <button style="width:100%;padding:12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text2);font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;" onmouseover="this.style.borderColor='var(--border-hover)'" onmouseout="this.style.borderColor='var(--border)'">Contact sales</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BOTTOM CTA ──────────────────────────────────────── -->
+  <div style="text-align:center;padding:60px 24px 80px;border-top:1px solid var(--border);background:linear-gradient(180deg,transparent,rgba(124,110,247,.06));">
+    <h2 style="font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,42px);font-weight:800;letter-spacing:-1.5px;margin-bottom:12px;">Start creating today</h2>
+    <p style="font-size:16px;color:var(--text3);margin-bottom:28px;">Join designers, developers &amp; founders using IconAI.<br>Free forever · No credit card needed.</p>
+    <button class="lp-btn-primary" style="font-size:16px;padding:16px 36px;" onclick="showAuthModal()">Create your free account →</button>
+  </div>
+
+  <!-- ── FOOTER ──────────────────────────────────────────── -->
+  <footer style="border-top:1px solid var(--border);padding:32px 40px;">
+    <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:24px;height:24px;background:linear-gradient(135deg,#7c6ef7,#f06dba);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;">✦</div>
+        <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;">IconAI</span>
+        <span style="font-size:12px;color:var(--text3);margin-left:8px;">© 2026 IconAI. All rights reserved.</span>
+      </div>
+      <nav style="display:flex;gap:24px;align-items:center;flex-wrap:wrap;">
+        <a href="#" onclick="showModal('privacy');return false;" style="font-size:13px;color:var(--text2);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">Privacy Policy</a>
+        <a href="#" onclick="showModal('terms');return false;" style="font-size:13px;color:var(--text2);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">Terms of Service</a>
+        <a href="mailto:hello@iconai.app" style="font-size:13px;color:var(--text2);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">hello@iconai.app</a>
+      </nav>
+    </div>
+  </footer>
+
+</div>
+<!-- END PAGE 1 -->
 
 
-
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 2: DASHBOARD  (logged in only)
+═══════════════════════════════════════════════════════ -->
+<div id="page-dashboard">
 <div class="app-container" id="app">
   <aside class="sidebar">
 
@@ -504,6 +999,28 @@
       <div class="dalle-notice" style="margin-top:6px;">GPT Image 1.5 (OpenAI) · ~$0.04–0.12/image · or Recraft V4 (fal.ai) for native SVG</div>
     </div>
 
+    <!-- Generation limit bar (free users) -->
+    <div class="gen-limit-bar" id="gen-limit-wrap">
+      <div class="gen-limit-label">
+        <span>Generations this month</span>
+        <span id="gen-limit-used">0/20</span>
+      </div>
+      <div class="gen-limit-track">
+        <div class="gen-limit-fill" id="gen-limit-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- BATCH COUNT -->
+    <div class="batch-row">
+      <span class="batch-label">Generate how many?</span>
+      <div class="batch-btns">
+        <button class="batch-btn active" data-count="1" onclick="setBatchCount(this,1)">1</button>
+        <button class="batch-btn" data-count="3" onclick="setBatchCount(this,3)">3</button>
+        <button class="batch-btn" data-count="4" onclick="setBatchCount(this,4)">4</button>
+        <button class="batch-btn" data-count="5" onclick="setBatchCount(this,5)">5</button>
+      </div>
+    </div>
+
     <button class="gen-btn" id="gen-btn" onclick="generate()">✦ Generate</button>
     <button class="var-btn" id="var-btn" onclick="generateVariations()" disabled>⊞ Variations</button>
 
@@ -622,120 +1139,13 @@
     </div>
   </div>
 </div>
+</div>
+<!-- END PAGE 2 -->
 
-<!-- PRICING -->
-<section id="pricing" style="max-width:920px;margin:0 auto 100px;padding:0 40px;">
-  <div style="text-align:center;margin-bottom:44px;">
-    <div class="hero-badge" style="margin:0 auto 16px;">Pricing</div>
-    <h2 style="font-family:'Syne',sans-serif;font-size:38px;font-weight:800;letter-spacing:-1px;margin-bottom:10px;">Simple, transparent pricing</h2>
-    <p style="color:var(--text2);font-size:16px;">Start free. Scale as you grow.</p>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:28px;">
-      <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Free</div>
-      <div style="font-family:'Syne',sans-serif;font-size:34px;font-weight:800;margin-bottom:4px;">$0</div>
-      <div style="font-size:13px;color:var(--text3);margin-bottom:22px;">Forever free</div>
-      <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:26px;font-size:13px;color:var(--text2);">
-        <li>✓ &nbsp;20 generations/month</li><li>✓ &nbsp;SVG + PNG export</li><li>✓ &nbsp;All styles</li>
-        <li style="color:var(--text3);">✗ &nbsp;Variations</li><li style="color:var(--text3);">✗ &nbsp;Commercial use</li>
-      </ul>
-      <button class="btn-primary" style="width:100%;background:var(--bg3);color:var(--text2);">Get started</button>
-    </div>
-    <div style="background:var(--bg2);border:2px solid var(--accent);border-radius:var(--radius);padding:28px;position:relative;">
-      <div style="position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--accent);padding:3px 14px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap;">Most popular</div>
-      <div style="font-size:11px;color:var(--accent2);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Pro</div>
-      <div style="font-family:'Syne',sans-serif;font-size:34px;font-weight:800;margin-bottom:4px;">$12<span style="font-size:15px;color:var(--text2)">/mo</span></div>
-      <div style="font-size:13px;color:var(--text3);margin-bottom:22px;">Billed monthly</div>
-      <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:26px;font-size:13px;color:var(--text2);">
-        <li>✓ &nbsp;Unlimited generations</li><li>✓ &nbsp;SVG + PNG (4K)</li><li>✓ &nbsp;Commercial license</li>
-        <li>✓ &nbsp;3 variations per gen</li><li>✓ &nbsp;Priority queue</li>
-      </ul>
-      <button class="btn-primary" style="width:100%;">Start free trial</button>
-    </div>
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:28px;">
-      <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Enterprise</div>
-      <div style="font-family:'Syne',sans-serif;font-size:34px;font-weight:800;margin-bottom:4px;">$79<span style="font-size:15px;color:var(--text2)">/mo</span></div>
-      <div style="font-size:13px;color:var(--text3);margin-bottom:22px;">Per workspace</div>
-      <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:26px;font-size:13px;color:var(--text2);">
-        <li>✓ &nbsp;Everything in Pro</li><li>✓ &nbsp;Team brand kits</li><li>✓ &nbsp;API access</li>
-        <li>✓ &nbsp;SSO / SAML</li><li>✓ &nbsp;Dedicated support</li>
-      </ul>
-      <button class="btn-primary" style="width:100%;background:var(--bg3);color:var(--text2);">Contact sales</button>
-    </div>
-  </div>
-</section>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!-- FOOTER                                                       -->
-<!-- ═══════════════════════════════════════════════════════════ -->
-<footer style="border-top:1px solid var(--border);padding:40px 40px 20px;margin-top:20px;">
-  <div style="max-width:1200px;margin:0 auto;">
-
-    <!-- AI Status collapsible -->
-    <div style="margin-bottom:24px;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
-      <button onclick="toggleAIStatus()" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--bg3);border:none;cursor:pointer;color:var(--text2);">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="display:flex;gap:4px;" id="ai-status-dots">
-            <div style="width:6px;height:6px;border-radius:50%;background:#22d3a0;"></div>
-            <div style="width:6px;height:6px;border-radius:50%;background:#22d3a0;"></div>
-            <div style="width:6px;height:6px;border-radius:50%;background:#22d3a0;"></div>
-          </div>
-          <span style="font-size:12px;font-weight:500;">AI System Status</span>
-          <span style="font-size:11px;color:var(--text3);" id="ai-status-summary">All systems operational</span>
-        </div>
-        <span style="font-size:11px;color:var(--text3);" id="ai-status-toggle-label">▼ Details</span>
-      </button>
-      <div id="ai-status-body" style="display:none;padding:16px 20px;background:var(--bg2);display:none;">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);">
-            <div style="display:flex;align-items:center;gap:7px;">
-              <div style="width:7px;height:7px;border-radius:50%;background:#22d3a0;" id="status-claude-dot"></div>
-              <span style="font-size:12px;color:var(--text2);">Claude</span>
-            </div>
-            <span style="font-size:10px;color:var(--text3);">Primary SVG</span>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);">
-            <div style="display:flex;align-items:center;gap:7px;">
-              <div style="width:7px;height:7px;border-radius:50%;background:#22d3a0;" id="status-gemini-dot"></div>
-              <span style="font-size:12px;color:var(--text2);">Gemini</span>
-            </div>
-            <span style="font-size:10px;color:var(--text3);">Fallback SVG</span>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);">
-            <div style="display:flex;align-items:center;gap:7px;">
-              <div style="width:7px;height:7px;border-radius:50%;background:#22d3a0;" id="status-openai-dot"></div>
-              <span style="font-size:12px;color:var(--text2);">GPT Image 1.5</span>
-            </div>
-            <span style="font-size:10px;color:var(--text3);">Image generator</span>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);">
-            <div style="display:flex;align-items:center;gap:7px;">
-              <div style="width:7px;height:7px;border-radius:50%;background:#22d3a0;" id="status-fal-dot"></div>
-              <span style="font-size:12px;color:var(--text2);">Recraft V4</span>
-            </div>
-            <span style="font-size:10px;color:var(--text3);">SVG export (optional)</span>
-          </div>
-        </div>
-        <div id="error-detail-box" style="margin-top:8px;font-size:11px;color:var(--text3);display:none;"></div>
-      </div>
-    </div>
-
-    <!-- Footer links row -->
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <div style="width:24px;height:24px;background:linear-gradient(135deg,var(--accent),var(--pink));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;">✦</div>
-        <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;">IconAI</span>
-        <span style="font-size:12px;color:var(--text3);margin-left:8px;">© 2026 IconAI. All rights reserved.</span>
-      </div>
-      <nav style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
-        <a href="#" onclick="showModal('privacy')" style="font-size:13px;color:var(--text2);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">Privacy Policy</a>
-        <a href="#" onclick="showModal('terms')" style="font-size:13px;color:var(--text2);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">Terms of Service</a>
-        <a href="mailto:hello@iconai.app" style="font-size:13px;color:var(--text2);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">hello@iconai.app</a>
-      </nav>
-    </div>
-  </div>
-</footer>
-
+<!-- ═══════════════════════════════════════════════════════
+     OVERLAYS (fixed position — always available)
+═══════════════════════════════════════════════════════ -->
 <!-- ═══════════════════════════════════════════════════════════ -->
 <!-- PRIVACY POLICY MODAL                                         -->
 <!-- ═══════════════════════════════════════════════════════════ -->
@@ -892,6 +1302,50 @@
   </div>
 </div>
 
+
+
+<!-- AUTH MODAL -->
+<div class="auth-modal-overlay" id="auth-modal-overlay" onclick="if(event.target===this)closeAuthModal()">
+  <div class="auth-modal">
+    <button class="auth-close" onclick="closeAuthModal()">✕</button>
+    <div class="auth-logo">✦</div>
+    <div class="auth-title">Welcome to IconAI</div>
+    <div class="auth-sub">Create a free account to start generating icons,<br>scenes, and illustrations instantly.</div>
+
+    <!-- Google Sign-In button -->
+    <button class="auth-google-btn" onclick="signInWithGoogle()">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      </svg>
+      Continue with Google
+    </button>
+
+    <div class="auth-divider">or continue with email</div>
+
+    <input type="email" class="auth-email-input" id="auth-email-input" placeholder="you@example.com">
+    <button class="auth-submit-btn" onclick="signInWithEmail()">Continue with email →</button>
+
+    <div class="auth-terms">
+      By signing in you agree to our
+      <a href="#" onclick="closeAuthModal();showModal('terms')">Terms of Service</a> and
+      <a href="#" onclick="closeAuthModal();showModal('privacy')">Privacy Policy</a>
+    </div>
+  </div>
+</div>
+
+<!-- USER DROPDOWN MENU -->
+<div class="user-menu" id="user-menu" style="display:none;position:fixed;top:60px;right:24px;">
+  <div class="user-menu-name" id="user-menu-name">
+    My Account
+    <span class="user-menu-plan" id="user-menu-plan">Free</span>
+  </div>
+  <div class="user-menu-item" onclick="viewHistory()">📁 My generations</div>
+  <div class="user-menu-item" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'});toggleUserMenu()">⭐ Upgrade to Pro</div>
+  <div class="user-menu-item" onclick="signOut()">↩ Sign out</div>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -1649,18 +2103,120 @@ ViewBox: 0 0 ${vw} ${vh}. Background: ${p.bg}. Complexity: ${complexity}/5. ZERO
 // ═══════════════════════════════════════════════════════════
 // GENERATE
 // ═══════════════════════════════════════════════════════════
+let batchCount = 1;
+
+function setBatchCount(el, n) {
+  batchCount = n;
+  document.querySelectorAll('.batch-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  // Update button label
+  const btn = document.getElementById('gen-btn');
+  if (btn) btn.textContent = n === 1 ? '✦ Generate' : `✦ Generate ${n}`;
+}
+
 async function generate() {
+  if (!currentUser) { showAuthModal(); return; }
   const prompt = document.getElementById('prompt-input').value.trim();
   if (!prompt) { toast('Describe what you want to create', false); return; }
+  if (!trackGeneration()) return;
 
-  // Determine mode from active output type button
   const isImage = document.getElementById('otype-dalle')?.classList.contains('active');
-  if (isImage) {
-    currentMode = 'image';
-    await generateImage(prompt);
+
+  if (batchCount === 1) {
+    // Single generation — existing behaviour
+    if (isImage) { currentMode = 'image'; await generateImage(prompt); }
+    else { currentMode = 'svg'; await generateSVG(prompt); }
   } else {
-    currentMode = 'svg';
-    await generateSVG(prompt);
+    // Batch generation
+    await generateBatch(prompt, isImage);
+  }
+}
+
+async function generateBatch(prompt, isImage) {
+  const n = batchCount;
+  const btn = document.getElementById('gen-btn');
+  btn.disabled = true;
+
+  // Show batch grid in canvas area
+  const canvasArea = document.getElementById('canvas-area');
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('svg-output').style.display = 'none';
+  document.getElementById('image-output').style.display = 'none';
+
+  // Build batch grid container
+  let batchGrid = document.getElementById('batch-grid');
+  if (!batchGrid) {
+    batchGrid = document.createElement('div');
+    batchGrid.id = 'batch-grid';
+    batchGrid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;padding:16px;width:100%;box-sizing:border-box;';
+    canvasArea.appendChild(batchGrid);
+  }
+  batchGrid.style.display = 'grid';
+  batchGrid.innerHTML = '';
+
+  // Create placeholder cards
+  for (let i = 0; i < n; i++) {
+    const card = document.createElement('div');
+    card.id = `batch-card-${i}`;
+    card.style.cssText = 'background:var(--bg3);border:1px solid var(--border);border-radius:12px;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden;cursor:pointer;transition:border-color .2s;';
+    card.innerHTML = `<div class="batch-spinner" style="width:24px;height:24px;border:2px solid var(--border);border-top-color:#7c6ef7;border-radius:50%;animation:spin 0.8s linear infinite;"></div><div style="font-size:11px;color:var(--text3);">Generating…</div>`;
+    batchGrid.appendChild(card);
+  }
+
+  setStatus(`Generating ${n} ${isImage ? 'images' : 'icons'}…`, false);
+
+  // Generate all in parallel
+  const tasks = Array.from({length: n}, (_, i) => generateBatchItem(i, prompt, isImage));
+  await Promise.allSettled(tasks);
+
+  btn.disabled = false;
+  setStatus(`${n} ${isImage ? 'images' : 'icons'} ready`, true);
+  toast(`Generated ${n} ${isImage ? 'images' : 'icons'}!`, true);
+}
+
+async function generateBatchItem(idx, prompt, isImage) {
+  const card = document.getElementById(`batch-card-${idx}`);
+  try {
+    if (isImage) {
+      // Image generation
+      const hd = document.getElementById('quality-toggle').checked;
+      const stylePrompt = DALLE_STYLE_PROMPTS[selectedImgStyle] || DALLE_STYLE_PROMPTS['flat-vector'];
+      const fullPrompt = prompt + '. Style: ' + stylePrompt + '. No text, no labels, no watermarks.';
+      const result = await callGPTImage(fullPrompt, '1024x1024', false);
+      const url = result.url || result;
+      if (card) {
+        card.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:11px;">`;
+        card.onclick = () => { showResultImage(url, prompt, true); };
+        card.title = 'Click to load in canvas';
+        card.onmouseover = () => card.style.borderColor = '#7c6ef7';
+        card.onmouseout = () => card.style.borderColor = 'var(--border)';
+      }
+      addToGallery(null, prompt, 'dalle-' + selectedImgStyle, url);
+    } else {
+      // SVG generation
+      const p = PALETTES[selectedPalette] || PALETTES['warm'];
+      const color = p.primary || '#7c6ef7';
+      const { system, user } = buildIconPrompt(prompt, selectedStyle, color);
+      const rawText = await callAPI(system, user, 2000);
+      const [vw, vh] = getDims();
+      const svg = cleanIconSVG(rawText, color, selectedStyle, vw, vh);
+      if (!svg) throw new Error('No SVG');
+      if (card) {
+        let displaySVG = svg.replace(/ width="[^"]*"/, '').replace(/ height="[^"]*"/, '');
+        displaySVG = displaySVG.replace('<svg', '<svg width="100%" height="100%" style="max-width:140px;max-height:140px;display:block;"');
+        card.innerHTML = `<div style="padding:16px;display:flex;align-items:center;justify-content:center;flex:1;">${displaySVG}</div>`;
+        card.onclick = () => { showResultSVG(svg, prompt, selectedStyle, true); };
+        card.title = 'Click to load in canvas';
+        card.onmouseover = () => card.style.borderColor = '#7c6ef7';
+        card.onmouseout = () => card.style.borderColor = 'var(--border)';
+      }
+      addToGallery(svg, prompt, selectedStyle, null);
+    }
+  } catch(err) {
+    if (card) {
+      card.innerHTML = `<div style="font-size:11px;color:var(--text3);text-align:center;padding:8px;">Failed<br><span style="font-size:9px;">${err.message.slice(0,30)}</span></div>`;
+    }
   }
 }
 
@@ -2120,6 +2676,9 @@ function showResultSVG(svg, prompt, style, skipGallery) {
   document.getElementById('image-output').style.display = 'none';
   document.getElementById('empty-state').style.display = 'none';
 
+  // Hide batch grid if showing single result
+  const bg = document.getElementById('batch-grid');
+  if (bg) bg.style.display = 'none';
   const out = document.getElementById('svg-output');
   // Normalise SVG for display: ensure it has a viewBox and scales correctly
   let displaySVG = svg || '';
@@ -2175,6 +2734,10 @@ function showResultImage(url, prompt, skipGallery) {
   // Hide SVG output, show image
   document.getElementById('svg-output').style.display = 'none';
   document.getElementById('empty-state').style.display = 'none';
+
+  // Hide batch grid if showing single result
+  const bgrid = document.getElementById('batch-grid');
+  if (bgrid) bgrid.style.display = 'none';
 
   const img = document.getElementById('image-output');
 
@@ -2624,6 +3187,225 @@ function cropAndDownloadIcon(col, row, cols, rows, iconNum) {
 }
 
 // ═══════════════════════════════════════════════════════════
+// AUTH SYSTEM — Google OAuth + Email magic link
+// ═══════════════════════════════════════════════════════════
+
+// YOUR Google OAuth Client ID — replace this after setup
+// Get it free at: console.cloud.google.com → APIs → Credentials → OAuth 2.0
+const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+
+function showPage(page) {
+  var lp = document.getElementById('page-landing');
+  var dp = document.getElementById('page-dashboard');
+  var navLinks = document.getElementById('nav-landing-links');
+  if (!lp || !dp) { console.error('Page divs not found'); return; }
+  if (page === 'dashboard') {
+    lp.style.display = 'none';
+    dp.style.display = 'block';
+    if (navLinks) navLinks.style.display = 'none';
+    window.scrollTo(0, 0);
+  } else {
+    lp.style.display = 'block';
+    dp.style.display = 'none';
+    if (navLinks) navLinks.style.display = 'flex';
+    window.scrollTo(0, 0);
+  }
+}
+
+let currentUser = null;
+let generationsUsed = 0;
+const FREE_LIMIT = 20;
+
+// ── Init auth on page load ──────────────────────────────────────────────────
+function initAuth() {
+  // Always start on landing — user must actively sign in
+  showPage('landing');
+
+  generationsUsed = parseInt(localStorage.getItem('iconai_gen_count') || '0');
+  updateGenLimitBar();
+
+  // No auto-login — session cleared on each visit
+  localStorage.removeItem('iconai_user');
+  currentUser = null;
+
+  if (window.google && GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: handleGoogleCredential,
+      auto_select: false
+    });
+  }
+}
+
+// ── Show / hide auth modal ──────────────────────────────────────────────────
+function showAuthModal() {
+  document.getElementById('auth-modal-overlay').classList.add('show');
+  setTimeout(() => {
+    const el = document.getElementById('auth-email-input');
+    if (el) el.focus();
+  }, 200);
+}
+
+function closeAuthModal() {
+  document.getElementById('auth-modal-overlay').classList.remove('show');
+}
+
+// ── Google Sign-In ──────────────────────────────────────────────────────────
+function signInWithGoogle() {
+  if (GOOGLE_CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
+    // Demo mode — simulate a Google sign-in for testing
+    const demoUser = {
+      name: 'Demo User',
+      email: 'demo@gmail.com',
+      picture: '',
+      provider: 'google'
+    };
+    setCurrentUser(demoUser);
+    closeAuthModal();
+    toast('Signed in (demo mode) — add your Google Client ID for real auth', true);
+    return;
+  }
+
+  google.accounts.id.prompt((notification) => {
+    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+      // Fallback to popup
+      google.accounts.oauth2.initTokenClient({
+        client_id: GOOGLE_CLIENT_ID,
+        scope: 'email profile',
+        callback: handleGoogleToken
+      }).requestAccessToken();
+    }
+  });
+}
+
+function handleGoogleCredential(response) {
+  // Decode the JWT credential
+  const payload = JSON.parse(atob(response.credential.split('.')[1]));
+  const user = {
+    name: payload.name,
+    email: payload.email,
+    picture: payload.picture,
+    provider: 'google',
+    sub: payload.sub
+  };
+  setCurrentUser(user);
+  closeAuthModal();
+  toast('Welcome, ' + user.name.split(' ')[0] + '!', true);
+}
+
+// ── Email sign-in (magic link simulation) ──────────────────────────────────
+function signInWithEmail() {
+  const email = document.getElementById('auth-email-input').value.trim();
+  if (!email || !email.includes('@')) {
+    toast('Please enter a valid email address', false);
+    return;
+  }
+  // In production: send magic link via your backend
+  // For now: create a user session with just the email
+  const user = {
+    name: email.split('@')[0],
+    email: email,
+    picture: '',
+    provider: 'email'
+  };
+  setCurrentUser(user);
+  closeAuthModal();
+  toast('Welcome! Check your email for a sign-in link.', true);
+}
+
+// ── Set current user + update UI ────────────────────────────────────────────
+function setCurrentUser(user) {
+  currentUser = user;
+  localStorage.setItem('iconai_user', JSON.stringify(user));
+
+  // Update navbar — replace Sign in button with avatar
+  const authArea = document.getElementById('nav-auth-area');
+  if (authArea) {
+    if (user.picture) {
+      authArea.innerHTML = '<div class="nav-user-wrap"><img src="' + user.picture + '" class="user-avatar" onclick="toggleUserMenu()" alt="' + user.name + '"><div class="user-menu-name-tip" style="display:none">' + user.name + '</div></div>';
+    } else {
+      const initials = user.name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
+      authArea.innerHTML = '<div class="nav-user-wrap"><div onclick="toggleUserMenu()" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--pink));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;cursor:pointer;border:2px solid var(--accent);">' + initials + '</div></div>';
+    }
+  }
+
+  // Update user menu
+  const nameEl = document.getElementById('user-menu-name');
+  if (nameEl) nameEl.innerHTML = user.name + ' <span class="user-menu-plan" id="user-menu-plan">Free</span>';
+
+  showPage('dashboard');
+}
+
+// ── Sign out ────────────────────────────────────────────────────────────────
+function signOut() {
+  currentUser = null;
+  localStorage.removeItem('iconai_user');
+  const authArea = document.getElementById('nav-auth-area');
+  if (authArea) authArea.innerHTML = '<button class="btn-primary" id="nav-login-btn" onclick="showAuthModal()">Sign in / Sign up</button>';
+  showPage('landing');
+  toggleUserMenu();
+  toast('Signed out', true);
+}
+
+// ── User menu toggle ────────────────────────────────────────────────────────
+function toggleUserMenu() {
+  const menu = document.getElementById('user-menu');
+  if (!menu) return;
+  menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+  // Close when clicking outside
+  if (menu.style.display === 'block') {
+    setTimeout(() => {
+      document.addEventListener('click', function closeMenu(e) {
+        if (!menu.contains(e.target)) {
+          menu.style.display = 'none';
+          document.removeEventListener('click', closeMenu);
+        }
+      });
+    }, 10);
+  }
+}
+
+// ── Generation tracking ──────────────────────────────────────────────────────
+function trackGeneration() {
+  generationsUsed++;
+  localStorage.setItem('iconai_gen_count', generationsUsed);
+  updateGenLimitBar();
+
+  // Check limit for free users
+  if (!currentUser || currentUser.plan !== 'pro') {
+    if (generationsUsed >= FREE_LIMIT) {
+      toast('Free limit reached: ' + FREE_LIMIT + ' generations/month. Upgrade to Pro for unlimited!', false);
+      setTimeout(() => {
+        document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+      }, 1500);
+      return false; // Block generation
+    }
+  }
+  return true; // Allow generation
+}
+
+function updateGenLimitBar() {
+  const bar = document.getElementById('gen-limit-fill');
+  const label = document.getElementById('gen-limit-used');
+  if (bar) {
+    const pct = Math.min(100, (generationsUsed / FREE_LIMIT) * 100);
+    bar.style.width = pct + '%';
+    bar.style.background = pct >= 80
+      ? 'linear-gradient(90deg,#f09090,#e85454)'
+      : 'linear-gradient(90deg,var(--accent),var(--pink))';
+  }
+  if (label) label.textContent = generationsUsed + '/' + FREE_LIMIT;
+}
+
+function viewHistory() {
+  toggleUserMenu();
+  toast('Generation history coming soon in Pro!', true);
+}
+
+// Kick off auth init
+document.addEventListener('DOMContentLoaded', initAuth);
+
+// ═══════════════════════════════════════════════════════════
 // MODAL SYSTEM — Privacy Policy & Terms of Service
 // ═══════════════════════════════════════════════════════════
 function toggleAIStatus() {
@@ -2667,5 +3449,6 @@ function toast(msg,ok) {
 }
 document.addEventListener('keydown',e=>{ if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){e.preventDefault();generate();} });
 </script>
+
 </body>
 </html>
