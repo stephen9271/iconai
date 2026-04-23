@@ -3300,7 +3300,7 @@ function cropAndDownloadIcon(col, row, cols, rows, iconNum) {
 
 // YOUR Google OAuth Client ID — replace this after setup
 // Get it free at: console.cloud.google.com → APIs → Credentials → OAuth 2.0
-const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = '843630840376-b5hs87t6qdloog20qm1sb5rlo9857r25.apps.googleusercontent.com';
 
 function showPage(page) {
   var lp = document.getElementById('page-landing');
@@ -3336,7 +3336,7 @@ function initAuth() {
   localStorage.removeItem('iconai_user');
   currentUser = null;
 
-  if (window.google && GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
+  if (window.google && GOOGLE_CLIENT_ID !== '843630840376-b5hs87t6qdloog20qm1sb5rlo9857r25.apps.googleusercontent.com') {
     google.accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID,
       callback: handleGoogleCredential,
@@ -3360,7 +3360,7 @@ function closeAuthModal() {
 
 // ── Google Sign-In ──────────────────────────────────────────────────────────
 function signInWithGoogle() {
-  if (GOOGLE_CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
+  if (GOOGLE_CLIENT_ID === '843630840376-b5hs87t6qdloog20qm1sb5rlo9857r25.apps.googleusercontent.com') {
     // Demo mode — simulate a Google sign-in for testing
     const demoUser = {
       name: 'Demo User',
