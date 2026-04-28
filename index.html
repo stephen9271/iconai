@@ -227,7 +227,10 @@
   .empty-state h4{font-family:'Syne',sans-serif;font-size:15px;color:var(--text2);}
   .empty-state p{font-size:13px;color:var(--text3);line-height:1.5;}
 
-  #svg-output{max-width:100%;max-height:440px;z-index:1;filter:drop-shadow(0 12px 40px rgba(0,0,0,0.6));animation:pop 0.35s cubic-bezier(0.34,1.56,0.64,1);display:none;}
+  #svg-output{width:100%;height:100%;max-width:100%;max-height:440px;z-index:1;overflow:hidden;display:none;animation:pop 0.35s cubic-bezier(0.34,1.56,0.64,1);}
+  #svg-output svg{max-width:100%;max-height:440px;width:auto;height:auto;display:block;margin:auto;}
+  #svg-output.anim-preview{display:flex;align-items:center;justify-content:center;background:var(--bg3);border-radius:16px;padding:16px;}
+  #svg-output.anim-preview svg{max-width:320px;max-height:320px;width:320px;height:320px;}
   @keyframes pop{from{opacity:0;transform:scale(0.93)}to{opacity:1;transform:scale(1)}}
 
   .loading-state{z-index:1;display:none;flex-direction:column;align-items:center;gap:16px;text-align:center;}
@@ -2315,7 +2318,9 @@ RULES:
 - Ring color: ${ringColor}, Icon color: ${color}
 - State "${state}": ${state === 'error' ? 'fast aggressive pulse, red tones' : state === 'warning' ? 'medium pulse, orange/amber' : state === 'success' ? 'slow gentle pulse, green' : state === 'active' ? 'medium pulse, brand color' : 'slow breathing, subtle'}
 - Output ONLY the complete SVG. No markdown.`,
-      user: `Create an animated pulse-glow icon for: "${concept}". State: ${state}. Ring color: ${ringColor}. Icon stroke: ${color}. viewBox 120x120. Embed all CSS. Output ONLY the <svg>.`
+      user: `Industrial animated pulse-glow icon for: "${concept}". State: ${state}.
+Dark background #0a0a0f. Outer pulsing rings color ${ringColor} with glow filter. Central icon must be DETAILED and clearly show the actual "${concept}" — draw it with 8+ elements using stroke="${color}" fill="none" stroke-width="2" stroke-linecap="round".
+viewBox="0 0 120 120". Embed ALL CSS animations in <style>. Output ONLY the complete <svg>.`
     };
   },
 
@@ -2368,40 +2373,85 @@ Output ONLY the complete SVG.`,
   }),
 
   'warning': (concept, color, state) => ({
-    system: `Create an animated WARNING state SVG icon — aggressive red pulsing, like a system alert. viewBox="0 0 120 120".
+    system: `You are an expert SVG animation engineer creating industrial-grade animated warning icons, like targeting reticles from sci-fi HUDs or industrial monitoring systems.
 
-STRUCTURE:
-<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+REFERENCE STYLE: Dark background, glowing concentric rings, spinning arc segments that look like a targeting/radar reticle, pulsing glow effects, and a clear icon at center. Colors: deep red #ff2222 for warning rings, golden #ffd700 for the icon itself.
+
+CREATE THIS EXACT STRUCTURE (viewBox="0 0 200 200"):
+
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="glow-red">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-gold">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
   <style>
-    @keyframes warn-pulse { 0%,100%{opacity:1;r:50} 50%{opacity:0.15;r:56} }
-    @keyframes warn-pulse2 { 0%,100%{opacity:0.6;r:42} 50%{opacity:0.05;r:48} }
-    @keyframes warn-flash { 0%,100%{opacity:1} 45%,55%{opacity:0.2} }
-    @keyframes warn-rotate { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
-    .ring1{animation:warn-pulse .7s ease-in-out infinite;transform-origin:60px 60px;}
-    .ring2{animation:warn-pulse2 .7s ease-in-out infinite .35s;transform-origin:60px 60px;}
-    .icon-flash{animation:warn-flash .7s ease-in-out infinite;}
-    .arc-spin{animation:warn-rotate 2s linear infinite;transform-origin:60px 60px;}
+    @keyframes spin-cw  { from{transform:rotate(0deg)}   to{transform:rotate(360deg)} }
+    @keyframes spin-ccw { from{transform:rotate(0deg)}   to{transform:rotate(-360deg)} }
+    @keyframes pulse-r  { 0%,100%{opacity:0.9;stroke-width:2.5} 50%{opacity:0.2;stroke-width:1} }
+    @keyframes pulse-r2 { 0%,100%{opacity:0.6} 50%{opacity:0.05} }
+    @keyframes flash    { 0%,100%{opacity:1} 40%,60%{opacity:0.3} }
+    @keyframes glow-pulse { 0%,100%{filter:url(#glow-red) opacity(1)} 50%{filter:url(#glow-red) opacity(0.3)} }
+    .arc-outer { animation:spin-cw 3s linear infinite; transform-origin:100px 100px; }
+    .arc-inner { animation:spin-ccw 2s linear infinite; transform-origin:100px 100px; }
+    .ring-1    { animation:pulse-r 0.8s ease-in-out infinite; }
+    .ring-2    { animation:pulse-r2 0.8s ease-in-out infinite 0.4s; }
+    .icon-g    { animation:flash 0.8s ease-in-out infinite; }
   </style>
-  <circle cx="60" cy="60" r="58" fill="#0a0a0f"/>
-  <!-- Spinning arc segments (like the image reference) -->
-  <g class="arc-spin">
-    <path d="M60 10 A50 50 0 0 1 110 60" fill="none" stroke="#ff3333" stroke-width="4" stroke-linecap="round"/>
-    <path d="M60 110 A50 50 0 0 1 10 60" fill="none" stroke="#ff3333" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Dark background -->
+  <circle cx="100" cy="100" r="99" fill="#060d1a"/>
+
+  <!-- Outer spinning arc segments (4 arcs with gaps — targeting reticle look) -->
+  <g class="arc-outer" filter="url(#glow-red)">
+    <path d="M100 8 A92 92 0 0 1 192 100" fill="none" stroke="#ff2222" stroke-width="3" stroke-linecap="round"/>
+    <path d="M192 100 A92 92 0 0 1 100 192" fill="none" stroke="#ff2222" stroke-width="3" stroke-linecap="round"/>
+    <path d="M100 192 A92 92 0 0 1 8 100" fill="none" stroke="#ff4444" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+    <path d="M8 100 A92 92 0 0 1 100 8" fill="none" stroke="#ff4444" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
   </g>
-  <!-- Pulsing rings -->
-  <circle class="ring1" cx="60" cy="60" r="50" fill="none" stroke="#ff3333" stroke-width="2.5"/>
-  <circle class="ring2" cx="60" cy="60" r="42" fill="none" stroke="#ff4444" stroke-width="1.5"/>
-  <!-- Inner steady ring -->
-  <circle cx="60" cy="60" r="34" fill="none" stroke="#ff3333" stroke-width="1" opacity="0.4"/>
-  <!-- Concept icon flashing (stroke #ffcc00 or white for visibility) -->
-  <g class="icon-flash">
-    <!-- Draw "${concept}" centered at 60,60 within radius 22, stroke="#ffd700" fill="none" stroke-width="2.5" stroke-linecap="round" -->
+
+  <!-- Inner spinning arc segments (counter-rotate) -->
+  <g class="arc-inner" filter="url(#glow-red)">
+    <path d="M100 25 A75 75 0 0 1 175 100" fill="none" stroke="#ff3333" stroke-width="4" stroke-linecap="round"/>
+    <path d="M100 175 A75 75 0 0 1 25 100" fill="none" stroke="#ff3333" stroke-width="4" stroke-linecap="round"/>
+    <!-- Small tick marks -->
+    <line x1="100" y1="25" x2="100" y2="18" stroke="#ff2222" stroke-width="2"/>
+    <line x1="175" y1="100" x2="182" y2="100" stroke="#ff2222" stroke-width="2"/>
+    <line x1="100" y1="175" x2="100" y2="182" stroke="#ff2222" stroke-width="2"/>
+    <line x1="25" y1="100" x2="18" y2="100" stroke="#ff2222" stroke-width="2"/>
   </g>
+
+  <!-- Pulsing concentric rings -->
+  <circle class="ring-1" cx="100" cy="100" r="88" fill="none" stroke="#ff2222" stroke-width="2.5" filter="url(#glow-red)"/>
+  <circle class="ring-2" cx="100" cy="100" r="68" fill="none" stroke="#ff3333" stroke-width="1.5"/>
+  <circle cx="100" cy="100" r="55" fill="none" stroke="#ff2222" stroke-width="0.8" opacity="0.4"/>
+
+  <!-- Center icon — draw the ACTUAL "${concept}" concept here -->
+  <!-- Icon centered at (100,100), fits within radius 40, stroke="#ffd700" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow-gold)" -->
+  <g class="icon-g" filter="url(#glow-gold)">
+    <!-- DRAW THE ACTUAL "${concept}" ICON HERE IN DETAIL using stroke="#ffd700" -->
+    <!-- For a robotic arm: base platform, lower arm, upper arm, joint circles, gripper claws -->
+    <!-- For a server: rack unit rectangles with indicator lights -->
+    <!-- For a network: nodes connected by lines -->
+    <!-- Make it DETAILED — 8-15 path/line/circle elements -->
+  </g>
+
+  <!-- Center dot -->
+  <circle cx="100" cy="100" r="4" fill="#ff2222" filter="url(#glow-red)"/>
 </svg>
 
-This should look like the robotic arm reference — spinning red arcs + concentric pulsing rings + flashing icon.
-Output ONLY the complete SVG with the actual concept icon drawn.`,
-    user: `Animated WARNING alert icon for: "${concept}". Red spinning arcs + pulsing rings + flashing icon. Based on industrial warning indicator style. viewBox 120x120. Output ONLY complete <svg>.`
+CRITICAL: You MUST draw the actual "${concept}" icon inside the .icon-g group. It must be detailed and recognisable. Use stroke="#ffd700" stroke-width="3" fill="none" stroke-linecap="round". Center everything at (100,100) within radius 40.
+
+Output ONLY the complete raw SVG. No markdown, no explanation.`,
+    user: (prompt) => `Industrial warning animated icon for: "${prompt}". 
+Dark background #060d1a, spinning red arc reticle rings (outer spins CW, inner spins CCW), pulsing red rings, golden glowing icon at center showing the actual "${prompt}" concept in detail.
+viewBox="0 0 200 200". Embed all CSS animations. Draw the actual icon clearly.
+Output ONLY the complete <svg>.`
   }),
 
   'success': (concept, color, state) => ({
@@ -2548,17 +2598,22 @@ async function generateAnimated(prompt) {
     }
     let svg = svgMatch[0];
 
-    // Ensure it has proper dimensions
-    if (!svg.includes('width=')) {
-      svg = svg.replace('<svg', '<svg width="300" height="300"');
+    // Strip any huge width/height from the SVG and let CSS control sizing
+    svg = svg.replace(/(<svg[^>]*)\s+width="[^"]*"/g, '$1');
+    svg = svg.replace(/(<svg[^>]*)\s+height="[^"]*"/g, '$1');
+    // Add viewBox if missing
+    if (!svg.includes('viewBox')) {
+      svg = svg.replace('<svg', '<svg viewBox="0 0 120 120"');
     }
+    // Set controlled dimensions
+    svg = svg.replace('<svg', '<svg width="320" height="320" style="max-width:100%;max-height:100%;"');
 
     // Show result
     if (loadingEl) loadingEl.style.display = 'none';
     const out = document.getElementById('svg-output');
     out.innerHTML = svg;
-    out.style.cssText = 'display:flex;align-items:center;justify-content:center;width:100%;height:100%;';
-    out.classList.add('anim-preview');
+    out.className = 'anim-preview';
+    out.style.display = 'flex';
 
     currentSVG = svg;
     currentMode = 'svg';
@@ -3972,59 +4027,3 @@ function updateGenLimitBar() {
   }
   if (label) label.textContent = generationsUsed + '/' + FREE_LIMIT;
 }
-
-function viewHistory() {
-  toggleUserMenu();
-  toast('Generation history coming soon in Pro!', true);
-}
-
-// Kick off auth init
-document.addEventListener('DOMContentLoaded', initAuth);
-
-// ═══════════════════════════════════════════════════════════
-// MODAL SYSTEM — Privacy Policy & Terms of Service
-// ═══════════════════════════════════════════════════════════
-function toggleAIStatus() {
-  const body = document.getElementById('ai-status-body');
-  const label = document.getElementById('ai-status-toggle-label');
-  if (!body) return;
-  const isHidden = body.style.display === 'none' || !body.style.display;
-  body.style.display = isHidden ? 'block' : 'none';
-  if (label) label.textContent = isHidden ? '▲ Hide' : '▼ Details';
-}
-
-function showModal(name) {
-  const el = document.getElementById('modal-' + name);
-  if (el) {
-    el.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-  }
-  return false;
-}
-
-function closeModal(name) {
-  const el = document.getElementById('modal-' + name);
-  if (el) {
-    el.style.display = 'none';
-    document.body.style.overflow = '';
-  }
-}
-
-// Close modals on Escape key
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    closeModal('privacy');
-    closeModal('terms');
-  }
-});
-
-function toast(msg,ok) {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.className='toast '+(ok?'ok':''); t.style.display='block';
-  clearTimeout(window._tt); window._tt=setTimeout(()=>t.style.display='none',3500);
-}
-document.addEventListener('keydown',e=>{ if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){e.preventDefault();generate();} });
-</script>
-
-</body>
-</html>
