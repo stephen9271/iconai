@@ -637,6 +637,33 @@
   .lp-ticker-prompt{font-size:12px;color:var(--text2);font-weight:500;}
   .lp-ticker-style{font-size:10px;color:var(--text3);}
   /* ══════════════════════════════════════ */
+
+  /* ═══════════════ ANIMATED OUTPUT TYPE ═══════════════ */
+  #otype-animated.active {
+    background:rgba(255,80,80,.12);
+    border-color:#ff6b6b;
+    color:#ff9090;
+  }
+  .anim-style-btn {
+    padding:5px 11px; border-radius:6px; font-size:11px; font-weight:500;
+    background:var(--bg3); border:1px solid var(--border); color:var(--text2);
+    cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s;
+    white-space:nowrap;
+  }
+  .anim-style-btn:hover { border-color:var(--border-hover); color:var(--text); }
+  .anim-style-btn.active { background:rgba(255,107,107,.12); border-color:#ff6b6b; color:#ff9090; }
+  .anim-state-btn {
+    padding:4px 10px; border-radius:6px; font-size:11px; font-weight:500;
+    background:var(--bg3); border:1px solid var(--border); color:var(--text3);
+    cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s;
+  }
+  .anim-state-btn.active { background:rgba(124,110,247,.12); border-color:#7c6ef7; color:#a292ff; }
+  /* Animated icon canvas preview styling */
+  #svg-output.anim-preview {
+    background:var(--bg3);
+    border-radius:16px;
+    padding:24px;
+  }
 </style>
 <!-- Google Sign-In -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -966,7 +993,7 @@
     <!-- OUTPUT MODE: SVG Icon vs Scene Illustration vs Icon Set -->
     <div class="section">
       <label>Output type</label>
-      <div class="output-type-tabs" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+      <div class="output-type-tabs" style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;">
         <div class="output-type-tab active" id="otype-svg-icon" onclick="setOutputTypeMain('svg-icon')">
           <div style="font-size:16px;margin-bottom:2px;">◻</div>
           <div style="font-size:11px;font-weight:500;">Icon</div>
@@ -981,6 +1008,12 @@
           <div style="font-size:16px;margin-bottom:2px;">✦</div>
           <div style="font-size:11px;font-weight:500;">AI Image</div>
           <div style="font-size:9px;color:var(--text3);">GPT Image 1.5</div>
+        </div>
+        <div class="output-type-tab" id="otype-animated" onclick="setOutputTypeMain('animated')" style="border-color:rgba(255,80,80,.3);position:relative;">
+          <div style="font-size:16px;margin-bottom:2px;">⚡</div>
+          <div style="font-size:11px;font-weight:500;">Animated</div>
+          <div style="font-size:9px;color:#ff6b6b;">SVG+CSS</div>
+          <div style="position:absolute;top:4px;right:4px;background:#ff6b6b;color:#fff;font-size:8px;font-weight:700;padding:1px 4px;border-radius:3px;line-height:1.4;">NEW</div>
         </div>
       </div>
     </div>
@@ -1090,11 +1123,7 @@
     </div>
 
     <!-- Generation limit bar (free users) -->
-    <div class="gen-limit-bar" id="gen-limit-wrap">
-      <div class="gen-limit-label">
-        <span>Generations this month</span>
-        <span id="gen-limit-used">0/20</span>
-      </div>
+    <div style="padding:8px 14px;background:rgba(34,211,160,.08);border:1px solid rgba(34,211,160,.2);border-radius:8px;margin-bottom:8px;display:flex;align-items:center;gap:8px;"><div style="width:7px;height:7px;border-radius:50%;background:#22d3a0;box-shadow:0 0 6px #22d3a0;flex-shrink:0;"></div><span style="font-size:11px;color:#22d3a0;font-weight:500;">Beta — Unlimited generations</span></div>
       <div class="gen-limit-track">
         <div class="gen-limit-fill" id="gen-limit-fill" style="width:0%"></div>
       </div>
@@ -1713,24 +1742,27 @@ const BLUEPRINTS = {
 // MODE SWITCHING — SVG vs Image
 // ═══════════════════════════════════════════════════════════
 function setOutputTypeMain(type) {
-  // type: 'svg-icon' | 'svg-scene' | 'dalle'
-  const tabs = ['svg-icon','svg-scene','dalle'];
+  // type: 'svg-icon' | 'svg-scene' | 'dalle' | 'animated'
+  const tabs = ['svg-icon','svg-scene','dalle','animated'];
   tabs.forEach(t => {
     const el = document.getElementById('otype-' + t);
     if (el) el.classList.toggle('active', t === type);
   });
 
-  const isSVG = type !== 'dalle';
+  const isAnimated = type === 'animated';
+  const isSVG = type !== 'dalle' && !isAnimated;
   const isIcon = type === 'svg-icon';
   const isDalle = type === 'dalle';
 
-  // Switch the internal mode
+  // Switch internal mode
   currentMode = isDalle ? 'image' : 'svg';
 
-  // Show/hide style section
+  // Show/hide sections
   document.getElementById('style-section').style.display = isSVG ? '' : 'none';
-  document.getElementById('color-section').style.display = isSVG ? '' : 'none';
+  document.getElementById('color-section').style.display = (isSVG || isAnimated) ? '' : 'none';
   document.getElementById('dalle-options-section').style.display = isDalle ? '' : 'none';
+  const animSection = document.getElementById('anim-style-section');
+  if (animSection) animSection.style.display = isAnimated ? '' : 'none';
 
   // For scenes, show flat-illustration style tab and auto-select it
   const flatTab = document.getElementById('tab-flat-illus');
@@ -1757,13 +1789,17 @@ function setOutputTypeMain(type) {
   const ta = document.getElementById('prompt-input');
   if (type === 'svg-icon') ta.placeholder = 'e.g. settings gear, wifi, shopping cart, security shield…';
   else if (type === 'svg-scene') ta.placeholder = 'e.g. A woman and child receiving blankets from a volunteer…';
+  else if (type === 'animated') ta.placeholder = 'e.g. robotic arm, server, network, heartbeat, rocket launch…';
   else ta.placeholder = 'e.g. team collaboration, donation scene, office workers…';
 
   // Update generate button color
   const btn = document.getElementById('gen-btn');
-  if (btn) btn.style.background = isDalle
-    ? 'linear-gradient(135deg,#22d3a0,#4fb8f7)'
-    : 'linear-gradient(135deg,var(--accent),var(--pink))';
+  if (btn) {
+    if (isDalle) btn.style.background = 'linear-gradient(135deg,#22d3a0,#4fb8f7)';
+    else if (isAnimated) btn.style.background = 'linear-gradient(135deg,#ff6b6b,#ff4444)';
+    else btn.style.background = 'linear-gradient(135deg,var(--accent),var(--pink))';
+    btn.textContent = isAnimated ? '⚡ Generate Animated' : (batchCount > 1 ? `✦ Generate ${batchCount}` : '✦ Generate');
+  }
 
   // Reset canvas
   document.getElementById('svg-output').style.display = 'none';
@@ -1874,24 +1910,27 @@ function pickShowcaseStyle(style) {
 // MODE SWITCHING — SVG vs Image
 // ═══════════════════════════════════════════════════════════
 function setOutputTypeMain(type) {
-  // type: 'svg-icon' | 'svg-scene' | 'dalle'
-  const tabs = ['svg-icon','svg-scene','dalle'];
+  // type: 'svg-icon' | 'svg-scene' | 'dalle' | 'animated'
+  const tabs = ['svg-icon','svg-scene','dalle','animated'];
   tabs.forEach(t => {
     const el = document.getElementById('otype-' + t);
     if (el) el.classList.toggle('active', t === type);
   });
 
-  const isSVG = type !== 'dalle';
+  const isAnimated = type === 'animated';
+  const isSVG = type !== 'dalle' && !isAnimated;
   const isIcon = type === 'svg-icon';
   const isDalle = type === 'dalle';
 
-  // Switch the internal mode
+  // Switch internal mode
   currentMode = isDalle ? 'image' : 'svg';
 
-  // Show/hide style section
+  // Show/hide sections
   document.getElementById('style-section').style.display = isSVG ? '' : 'none';
-  document.getElementById('color-section').style.display = isSVG ? '' : 'none';
+  document.getElementById('color-section').style.display = (isSVG || isAnimated) ? '' : 'none';
   document.getElementById('dalle-options-section').style.display = isDalle ? '' : 'none';
+  const animSection = document.getElementById('anim-style-section');
+  if (animSection) animSection.style.display = isAnimated ? '' : 'none';
 
   // For scenes, show flat-illustration style tab and auto-select it
   const flatTab = document.getElementById('tab-flat-illus');
@@ -1918,13 +1957,17 @@ function setOutputTypeMain(type) {
   const ta = document.getElementById('prompt-input');
   if (type === 'svg-icon') ta.placeholder = 'e.g. settings gear, wifi, shopping cart, security shield…';
   else if (type === 'svg-scene') ta.placeholder = 'e.g. A woman and child receiving blankets from a volunteer…';
+  else if (type === 'animated') ta.placeholder = 'e.g. robotic arm, server, network, heartbeat, rocket launch…';
   else ta.placeholder = 'e.g. team collaboration, donation scene, office workers…';
 
   // Update generate button color
   const btn = document.getElementById('gen-btn');
-  if (btn) btn.style.background = isDalle
-    ? 'linear-gradient(135deg,#22d3a0,#4fb8f7)'
-    : 'linear-gradient(135deg,var(--accent),var(--pink))';
+  if (btn) {
+    if (isDalle) btn.style.background = 'linear-gradient(135deg,#22d3a0,#4fb8f7)';
+    else if (isAnimated) btn.style.background = 'linear-gradient(135deg,#ff6b6b,#ff4444)';
+    else btn.style.background = 'linear-gradient(135deg,var(--accent),var(--pink))';
+    btn.textContent = isAnimated ? '⚡ Generate Animated' : (batchCount > 1 ? `✦ Generate ${batchCount}` : '✦ Generate');
+  }
 
   // Reset canvas
   document.getElementById('svg-output').style.display = 'none';
@@ -2155,8 +2198,9 @@ async function callBackendGenerate(system, user, tokens, preferredProvider) {
 // FAILOVER CALL — Claude → Gemini → GPT-4o
 // ═══════════════════════════════════════════════════════════
 async function callAPI(system, user, maxTok) {
-  const quality = document.getElementById('quality-toggle').checked;
-  const tokens = quality ? 4000 : (maxTok || 2000);
+  const qualityEl = document.getElementById('quality-toggle');
+  const quality = qualityEl ? qualityEl.checked : false;
+  const tokens = quality ? 4000 : (maxTok || 3000);
   return await callBackendGenerate(system, user, tokens, 'auto');
 }
 
@@ -2209,6 +2253,338 @@ ViewBox: 0 0 ${vw} ${vh}. Background: ${p.bg}. Complexity: ${complexity}/5. ZERO
 // ═══════════════════════════════════════════════════════════
 // GENERATE
 // ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// ANIMATED SVG SYSTEM
+// ═══════════════════════════════════════════════════════════
+
+let selectedAnimStyle = 'pulse-glow';
+let selectedAnimState = 'idle';
+
+function setAnimStyle(el, style) {
+  selectedAnimStyle = style;
+  document.querySelectorAll('.anim-style-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function setAnimState(el, state) {
+  selectedAnimState = state;
+  document.querySelectorAll('.anim-state-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Animation system prompts — each returns a full SVG with embedded CSS animations
+const ANIM_PROMPTS = {
+
+  'pulse-glow': (concept, color, state) => {
+    const ringColor = state === 'error' ? '#ff4444' : state === 'warning' ? '#ff9900' : state === 'success' ? '#22d3a0' : state === 'active' ? color : '#888';
+    const speed = state === 'error' ? '0.6s' : state === 'warning' ? '1s' : '2s';
+    return {
+      system: `You are an expert animated SVG icon designer. Create a self-contained animated SVG icon with embedded CSS animations.
+
+THE ICON MUST HAVE:
+1. A central icon symbol (the concept) — clean, minimal stroke icon centered in the viewBox
+2. An outer pulsating ring/circle that glows — this is the animation
+3. Embedded <style> block with @keyframes inside the SVG
+
+EXACT STRUCTURE:
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @keyframes pulse-ring { 0%,100%{r:48;opacity:0.8;stroke-width:3} 50%{r:54;opacity:0.2;stroke-width:1} }
+    @keyframes pulse-glow { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .ring1 { animation: pulse-ring ${speed} ease-in-out infinite; }
+    .ring2 { animation: pulse-ring ${speed} ease-in-out infinite ${parseFloat(speed)/2}s; }
+    .icon  { animation: pulse-glow ${speed} ease-in-out infinite; }
+  </style>
+  <!-- Background dark circle -->
+  <circle cx="60" cy="60" r="58" fill="#0a0a0f"/>
+  <!-- Outer pulsating ring 1 -->
+  <circle class="ring1" cx="60" cy="60" r="48" fill="none" stroke="${ringColor}" stroke-width="3" opacity="0.8"/>
+  <!-- Outer pulsating ring 2 (offset) -->
+  <circle class="ring2" cx="60" cy="60" r="48" fill="none" stroke="${ringColor}" stroke-width="1.5" opacity="0.4"/>
+  <!-- Inner steady ring -->
+  <circle cx="60" cy="60" r="40" fill="none" stroke="${ringColor}" stroke-width="1" opacity="0.3"/>
+  <!-- Icon symbol (draw the concept here centered at 60,60 within radius ~26) -->
+  <g class="icon" transform="translate(60,60)">
+    <!-- REPLACE: Draw the "${concept}" icon here using stroke="${color}" fill="none" stroke-width="2" stroke-linecap="round" centered at origin -->
+  </g>
+</svg>
+
+RULES:
+- viewBox="0 0 120 120", all animations embedded in <style>
+- The concept icon centered at (60,60), fits within radius 28
+- Ring color: ${ringColor}, Icon color: ${color}
+- State "${state}": ${state === 'error' ? 'fast aggressive pulse, red tones' : state === 'warning' ? 'medium pulse, orange/amber' : state === 'success' ? 'slow gentle pulse, green' : state === 'active' ? 'medium pulse, brand color' : 'slow breathing, subtle'}
+- Output ONLY the complete SVG. No markdown.`,
+      user: `Create an animated pulse-glow icon for: "${concept}". State: ${state}. Ring color: ${ringColor}. Icon stroke: ${color}. viewBox 120x120. Embed all CSS. Output ONLY the <svg>.`
+    };
+  },
+
+  'spin': (concept, color, state) => ({
+    system: `Create an animated SVG icon with a spinning element. viewBox="0 0 120 120".
+
+STRUCTURE:
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    @keyframes spin-reverse { from{transform:rotate(360deg)} to{transform:rotate(0deg)} }
+    .spin-outer { animation:spin 3s linear infinite; transform-origin:60px 60px; }
+    .spin-inner { animation:spin-reverse 2s linear infinite; transform-origin:60px 60px; }
+    .icon-center { animation:spin 8s linear infinite; transform-origin:60px 60px; }
+  </style>
+  <circle cx="60" cy="60" r="58" fill="#0a0a0f"/>
+  <!-- Spinning dashed outer ring -->
+  <circle class="spin-outer" cx="60" cy="60" r="50" fill="none" stroke="${color}" stroke-width="2" stroke-dasharray="8 6" opacity="0.5"/>
+  <!-- Spinning inner ring (reverse) -->
+  <circle class="spin-inner" cx="60" cy="60" r="38" fill="none" stroke="${color}" stroke-width="1.5" stroke-dasharray="4 10" opacity="0.3"/>
+  <!-- Static concept icon centered at 60,60 radius 22 -->
+</svg>
+
+Draw the "${concept}" icon centered at (60,60) within radius 22. Stroke: ${color}. viewBox 120x120. All animations in <style>. Output ONLY complete SVG.`,
+    user: `Animated spin icon for: "${concept}". Color: ${color}. Two spinning dashed rings + static centered icon. viewBox 120x120. Output ONLY the <svg>.`
+  }),
+
+  'draw': (concept, color, state) => ({
+    system: `Create an animated "draw-on" SVG icon where the icon path draws itself. viewBox="0 0 120 120".
+
+STRUCTURE:
+- Dark background circle
+- The concept icon drawn with stroke-dasharray/stroke-dashoffset animation (draw-on effect)
+- Use pathLength="1" trick or estimate the path length
+- After drawing, the icon glows
+
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @keyframes draw { from{stroke-dashoffset:1} to{stroke-dashoffset:0} }
+    @keyframes glow-in { 0%,80%{filter:none;opacity:0.8} 100%{filter:drop-shadow(0 0 8px ${color});opacity:1} }
+    .draw-path { stroke-dasharray:1; stroke-dashoffset:1; pathLength:1; animation:draw 2s ease-in-out forwards, glow-in 2.5s ease forwards; }
+  </style>
+  <circle cx="60" cy="60" r="58" fill="#0a0a0f"/>
+  <!-- Draw the ${concept} icon here using class="draw-path", stroke="${color}", fill="none", stroke-width="3", stroke-linecap="round", centered at 60,60 within radius 30 -->
+</svg>
+
+IMPORTANT: Use pathLength="1" on each path, stroke-dasharray="1" stroke-dashoffset="1". Animation draws each path sequentially.
+Output ONLY the complete SVG.`,
+    user: `Animated draw-on icon for: "${concept}". Paths draw themselves using dashoffset animation. Color: ${color}. Centered at 60,60. viewBox 120x120. Output ONLY the <svg>.`
+  }),
+
+  'warning': (concept, color, state) => ({
+    system: `Create an animated WARNING state SVG icon — aggressive red pulsing, like a system alert. viewBox="0 0 120 120".
+
+STRUCTURE:
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @keyframes warn-pulse { 0%,100%{opacity:1;r:50} 50%{opacity:0.15;r:56} }
+    @keyframes warn-pulse2 { 0%,100%{opacity:0.6;r:42} 50%{opacity:0.05;r:48} }
+    @keyframes warn-flash { 0%,100%{opacity:1} 45%,55%{opacity:0.2} }
+    @keyframes warn-rotate { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+    .ring1{animation:warn-pulse .7s ease-in-out infinite;transform-origin:60px 60px;}
+    .ring2{animation:warn-pulse2 .7s ease-in-out infinite .35s;transform-origin:60px 60px;}
+    .icon-flash{animation:warn-flash .7s ease-in-out infinite;}
+    .arc-spin{animation:warn-rotate 2s linear infinite;transform-origin:60px 60px;}
+  </style>
+  <circle cx="60" cy="60" r="58" fill="#0a0a0f"/>
+  <!-- Spinning arc segments (like the image reference) -->
+  <g class="arc-spin">
+    <path d="M60 10 A50 50 0 0 1 110 60" fill="none" stroke="#ff3333" stroke-width="4" stroke-linecap="round"/>
+    <path d="M60 110 A50 50 0 0 1 10 60" fill="none" stroke="#ff3333" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <!-- Pulsing rings -->
+  <circle class="ring1" cx="60" cy="60" r="50" fill="none" stroke="#ff3333" stroke-width="2.5"/>
+  <circle class="ring2" cx="60" cy="60" r="42" fill="none" stroke="#ff4444" stroke-width="1.5"/>
+  <!-- Inner steady ring -->
+  <circle cx="60" cy="60" r="34" fill="none" stroke="#ff3333" stroke-width="1" opacity="0.4"/>
+  <!-- Concept icon flashing (stroke #ffcc00 or white for visibility) -->
+  <g class="icon-flash">
+    <!-- Draw "${concept}" centered at 60,60 within radius 22, stroke="#ffd700" fill="none" stroke-width="2.5" stroke-linecap="round" -->
+  </g>
+</svg>
+
+This should look like the robotic arm reference — spinning red arcs + concentric pulsing rings + flashing icon.
+Output ONLY the complete SVG with the actual concept icon drawn.`,
+    user: `Animated WARNING alert icon for: "${concept}". Red spinning arcs + pulsing rings + flashing icon. Based on industrial warning indicator style. viewBox 120x120. Output ONLY complete <svg>.`
+  }),
+
+  'success': (concept, color, state) => ({
+    system: `Create an animated SUCCESS state SVG icon — smooth green checkmark animation. viewBox="0 0 120 120".
+
+STRUCTURE:
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @keyframes success-ring { 0%{stroke-dashoffset:314;opacity:0} 70%{stroke-dashoffset:0;opacity:1} 100%{stroke-dashoffset:0;opacity:1} }
+    @keyframes check-draw { 0%,40%{stroke-dashoffset:60} 100%{stroke-dashoffset:0} }
+    @keyframes success-glow { 0%,60%{filter:none} 100%{filter:drop-shadow(0 0 12px #22d3a0)} }
+    .success-ring{stroke-dasharray:314;stroke-dashoffset:314;animation:success-ring 1.2s ease-out forwards;}
+    .check{stroke-dasharray:60;stroke-dashoffset:60;animation:check-draw 1.5s ease-out forwards;}
+    .glow-g{animation:success-glow 1.5s ease-out forwards;}
+  </style>
+  <circle cx="60" cy="60" r="58" fill="#0a0a0f"/>
+  <g class="glow-g">
+    <circle class="success-ring" cx="60" cy="60" r="50" fill="none" stroke="#22d3a0" stroke-width="3" stroke-linecap="round"/>
+    <!-- The concept icon + checkmark overlay -->
+    <g class="check">
+      <!-- Draw "${concept}" centered at 60,60 radius 22, stroke="#22d3a0" fill="none" stroke-width="2.5" -->
+    </g>
+  </g>
+</svg>
+Output ONLY the complete SVG with actual concept icon drawn inside.`,
+    user: `Animated SUCCESS icon for: "${concept}". Ring draws on, then icon appears. Green #22d3a0. viewBox 120x120. Output ONLY complete <svg>.`
+  }),
+
+  'bounce': (concept, color, state) => ({
+    system: `Create a bouncing animated SVG icon. viewBox="0 0 120 120".
+The icon bounces up and down with a shadow that scales. Use transform translateY animation.
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @keyframes bounce-up { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    @keyframes shadow-pulse { 0%,100%{rx:18;ry:5;opacity:0.4} 50%{rx:14;ry:3;opacity:0.15} }
+    .icon-group { animation:bounce-up 1.2s cubic-bezier(.36,.07,.19,.97) infinite; }
+    .shadow { animation:shadow-pulse 1.2s ease-in-out infinite; }
+  </style>
+  <circle cx="60" cy="60" r="58" fill="#0a0a0f"/>
+  <ellipse class="shadow" cx="60" cy="95" rx="18" ry="5" fill="${color}" opacity="0.3"/>
+  <g class="icon-group">
+    <!-- Draw "${concept}" centered at (60,55) within radius 28, stroke="${color}" fill="none" stroke-width="2.5" stroke-linecap="round" -->
+  </g>
+</svg>
+Output ONLY the complete SVG with the actual concept icon.`,
+    user: `Animated bounce icon for: "${concept}". Icon bounces up/down with shadow. Color: ${color}. viewBox 120x120. Output ONLY complete <svg>.`
+  }),
+
+  'loading': (concept, color, state) => ({
+    system: `Create an animated loading/processing SVG icon. viewBox="0 0 120 120".
+Spinning progress arc around the concept icon.
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @keyframes spin-arc { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    @keyframes arc-dash { 0%{stroke-dashoffset:280} 50%{stroke-dashoffset:80} 100%{stroke-dashoffset:280} }
+    @keyframes icon-fade { 0%,100%{opacity:0.6} 50%{opacity:1} }
+    .spin-group { animation:spin-arc 1.4s linear infinite; transform-origin:60px 60px; }
+    .arc-path { stroke-dasharray:300; animation:arc-dash 1.4s ease-in-out infinite; }
+    .icon-center { animation:icon-fade 1.4s ease-in-out infinite; }
+  </style>
+  <circle cx="60" cy="60" r="58" fill="#0a0a0f"/>
+  <!-- Track ring -->
+  <circle cx="60" cy="60" r="48" fill="none" stroke="${color}" stroke-width="2" opacity="0.1"/>
+  <!-- Spinning arc -->
+  <g class="spin-group">
+    <circle class="arc-path" cx="60" cy="60" r="48" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <!-- Spinning dots -->
+  <g class="spin-group">
+    <circle cx="60" cy="12" r="3" fill="${color}"/>
+    <circle cx="108" cy="60" r="2" fill="${color}" opacity="0.6"/>
+    <circle cx="60" cy="108" r="1.5" fill="${color}" opacity="0.3"/>
+  </g>
+  <!-- Centered concept icon -->
+  <g class="icon-center">
+    <!-- Draw "${concept}" centered at 60,60 radius 22, stroke="${color}" fill="none" stroke-width="2.5" -->
+  </g>
+</svg>
+Output ONLY the complete SVG with the actual concept icon drawn inside.`,
+    user: `Animated loading icon for: "${concept}". Spinning arc + trailing dots + pulsing concept icon. Color: ${color}. viewBox 120x120. Output ONLY complete <svg>.`
+  }),
+
+  'morph': (concept, color, state) => ({
+    system: `Create an animated morphing SVG icon where shapes smoothly transform. viewBox="0 0 120 120".
+Use SMIL animate/animateTransform or CSS to morph between states.
+The icon pulses between two visual states — e.g. icon expands/contracts, geometric shapes morph.
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @keyframes morph-scale { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+    @keyframes morph-opacity { 0%,100%{opacity:1} 50%{opacity:0.5} }
+    @keyframes morph-rotate { 0%{transform:rotate(0deg) scale(1)} 50%{transform:rotate(180deg) scale(0.8)} 100%{transform:rotate(360deg) scale(1)} }
+    .morph-outer { animation:morph-rotate 4s ease-in-out infinite; transform-origin:60px 60px; }
+    .morph-inner { animation:morph-scale 2s ease-in-out infinite; transform-origin:60px 60px; }
+    .morph-icon  { animation:morph-opacity 2s ease-in-out infinite; }
+  </style>
+  <circle cx="60" cy="60" r="58" fill="#0a0a0f"/>
+  <g class="morph-outer">
+    <rect x="18" y="18" width="84" height="84" rx="20" fill="none" stroke="${color}" stroke-width="1.5" opacity="0.3"/>
+    <rect x="28" y="28" width="64" height="64" rx="14" fill="none" stroke="${color}" stroke-width="1" opacity="0.2"/>
+  </g>
+  <circle class="morph-inner" cx="60" cy="60" r="36" fill="none" stroke="${color}" stroke-width="1.5" opacity="0.4"/>
+  <g class="morph-icon">
+    <!-- Draw "${concept}" centered at 60,60 radius 22, stroke="${color}" fill="${color}" fill-opacity="0.15" stroke-width="2" -->
+  </g>
+</svg>
+Output ONLY the complete SVG.`,
+    user: `Animated morph icon for: "${concept}". Rotating squares + scaling ring + morphing concept icon. Color: ${color}. viewBox 120x120. Output ONLY complete <svg>.`
+  }),
+};
+
+async function generateAnimated(prompt) {
+  const p = PALETTES[selectedPalette] || PALETTES['warm'];
+  const color = p.primary || '#7c6ef7';
+  const animDef = ANIM_PROMPTS[selectedAnimStyle];
+  if (!animDef) { toast('Unknown animation style', false); return; }
+
+  const { system, user } = animDef(prompt, color, selectedAnimState);
+
+  // Manually show loading state (don't use setLoading which resets too much)
+  const btn = document.getElementById('gen-btn');
+  if (btn) btn.disabled = true;
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('svg-output').style.display = 'none';
+  document.getElementById('image-output').style.display = 'none';
+  const loadingEl = document.getElementById('loading-state');
+  if (loadingEl) loadingEl.style.display = 'flex';
+  setStatus('Generating animated icon…', false);
+  setLoadingSub(selectedAnimStyle + ' · ' + selectedAnimState + '…');
+
+  try {
+    const rawText = await callAPI(system, user, 4000);
+    console.log('Animated raw response length:', rawText.length);
+
+    // Extract SVG — handle both with and without code fences
+    let svgMatch = rawText.match(/<svg[\s\S]*?<\/svg>/i);
+    if (!svgMatch) {
+      // Try stripping markdown fences
+      const stripped = rawText.replace(/```[\w]*/gi, '').trim();
+      svgMatch = stripped.match(/<svg[\s\S]*?<\/svg>/i);
+    }
+    if (!svgMatch) {
+      console.error('No SVG found. Raw:', rawText.slice(0, 500));
+      throw new Error('No SVG returned — try a different prompt or style');
+    }
+    let svg = svgMatch[0];
+
+    // Ensure it has proper dimensions
+    if (!svg.includes('width=')) {
+      svg = svg.replace('<svg', '<svg width="300" height="300"');
+    }
+
+    // Show result
+    if (loadingEl) loadingEl.style.display = 'none';
+    const out = document.getElementById('svg-output');
+    out.innerHTML = svg;
+    out.style.cssText = 'display:flex;align-items:center;justify-content:center;width:100%;height:100%;';
+    out.classList.add('anim-preview');
+
+    currentSVG = svg;
+    currentMode = 'svg';
+
+    // Enable download buttons
+    ['btn-copy','btn-svg','btn-png'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.disabled = false;
+    });
+
+    setStatus('⚡ Animated icon ready', true);
+    addToGallery(svg, prompt, 'animated-' + selectedAnimStyle, null);
+    toast('Animated icon ready!', true);
+
+  } catch(err) {
+    if (loadingEl) loadingEl.style.display = 'none';
+    document.getElementById('empty-state').style.display = 'flex';
+    const errMsg = err.message || 'Unknown error';
+    setStatus('Generation failed: ' + errMsg, false);
+    toast('Error: ' + errMsg, false);
+    console.error('generateAnimated error:', err);
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
 let batchCount = 1;
 
 function setBatchCount(el, n) {
@@ -2231,6 +2607,12 @@ async function generate() {
   }
 
   const isImage = document.getElementById('otype-dalle')?.classList.contains('active');
+  const isAnimated = document.getElementById('otype-animated')?.classList.contains('active');
+
+  if (isAnimated) {
+    await generateAnimated(prompt);
+    return;
+  }
 
   if (batchCount === 1) {
     if (isImage) { currentMode = 'image'; await generateImage(prompt); }
@@ -3300,7 +3682,7 @@ function cropAndDownloadIcon(col, row, cols, rows, iconNum) {
 
 // YOUR Google OAuth Client ID — replace this after setup
 // Get it free at: console.cloud.google.com → APIs → Credentials → OAuth 2.0
-const GOOGLE_CLIENT_ID = '843630840376-b5hs87t6qdloog20qm1sb5rlo9857r25.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
 
 function showPage(page) {
   var lp = document.getElementById('page-landing');
@@ -3336,7 +3718,7 @@ function initAuth() {
   localStorage.removeItem('iconai_user');
   currentUser = null;
 
-  if (window.google && GOOGLE_CLIENT_ID !== '843630840376-b5hs87t6qdloog20qm1sb5rlo9857r25.apps.googleusercontent.com') {
+  if (window.google && GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
     google.accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID,
       callback: handleGoogleCredential,
@@ -3360,8 +3742,8 @@ function closeAuthModal() {
 
 // ── Google Sign-In ──────────────────────────────────────────────────────────
 function signInWithGoogle() {
-  if (GOOGLE_CLIENT_ID === '843630840376-b5hs87t6qdloog20qm1sb5rlo9857r25.apps.googleusercontent.com') {
-    // Demo mode — simulate a Google sign-in for testing
+  if (GOOGLE_CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
+    // Demo mode — simulate Google sign-in
     const demoUser = {
       name: 'Demo User',
       email: 'demo@gmail.com',
@@ -3370,20 +3752,50 @@ function signInWithGoogle() {
     };
     setCurrentUser(demoUser);
     closeAuthModal();
-    toast('Signed in (demo mode) — add your Google Client ID for real auth', true);
+    toast('Welcome! (Demo mode — real Google auth needs a Client ID)', true);
     return;
   }
 
-  google.accounts.id.prompt((notification) => {
-    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-      // Fallback to popup
-      google.accounts.oauth2.initTokenClient({
-        client_id: GOOGLE_CLIENT_ID,
-        scope: 'email profile',
-        callback: handleGoogleToken
-      }).requestAccessToken();
-    }
-  });
+  // Real Google One Tap / popup flow
+  if (window.google) {
+    google.accounts.id.prompt((notification) => {
+      if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+        // One Tap blocked — try token client popup
+        try {
+          google.accounts.oauth2.initTokenClient({
+            client_id: GOOGLE_CLIENT_ID,
+            scope: 'email profile openid',
+            callback: (tokenResponse) => {
+              if (tokenResponse.access_token) {
+                // Fetch user info with the token
+                fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                  headers: { Authorization: 'Bearer ' + tokenResponse.access_token }
+                })
+                .then(r => r.json())
+                .then(info => {
+                  const user = {
+                    name: info.name || info.email,
+                    email: info.email,
+                    picture: info.picture || '',
+                    provider: 'google',
+                    sub: info.sub
+                  };
+                  setCurrentUser(user);
+                  closeAuthModal();
+                  toast('Welcome, ' + user.name.split(' ')[0] + '!', true);
+                })
+                .catch(() => toast('Google sign-in failed — try email instead', false));
+              }
+            }
+          }).requestAccessToken();
+        } catch(e) {
+          toast('Google sign-in unavailable — try email instead', false);
+        }
+      }
+    });
+  } else {
+    toast('Google sign-in not loaded yet — try email instead', false);
+  }
 }
 
 function handleGoogleCredential(response) {
@@ -3478,18 +3890,7 @@ function trackGeneration() {
   generationsUsed++;
   localStorage.setItem('iconai_gen_count', generationsUsed);
   updateGenLimitBar();
-
-  // Check limit for free users
-  if (!currentUser || currentUser.plan !== 'pro') {
-    if (generationsUsed > FREE_LIMIT) {
-      showUpgradeModal();
-      return false;
-    }
-    if (generationsUsed === FREE_LIMIT) {
-      // Last generation — warn after
-      setTimeout(() => showUpgradeModal(), 3000);
-    }
-  }
+  // Limit disabled during beta — all users generate freely
   return true;
 }
 
