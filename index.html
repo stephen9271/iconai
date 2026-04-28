@@ -4027,3 +4027,59 @@ function updateGenLimitBar() {
   }
   if (label) label.textContent = generationsUsed + '/' + FREE_LIMIT;
 }
+
+function viewHistory() {
+  toggleUserMenu();
+  toast('Generation history coming soon in Pro!', true);
+}
+
+// Kick off auth init
+document.addEventListener('DOMContentLoaded', initAuth);
+
+// ═══════════════════════════════════════════════════════════
+// MODAL SYSTEM — Privacy Policy & Terms of Service
+// ═══════════════════════════════════════════════════════════
+function toggleAIStatus() {
+  const body = document.getElementById('ai-status-body');
+  const label = document.getElementById('ai-status-toggle-label');
+  if (!body) return;
+  const isHidden = body.style.display === 'none' || !body.style.display;
+  body.style.display = isHidden ? 'block' : 'none';
+  if (label) label.textContent = isHidden ? '▲ Hide' : '▼ Details';
+}
+
+function showModal(name) {
+  const el = document.getElementById('modal-' + name);
+  if (el) {
+    el.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+  return false;
+}
+
+function closeModal(name) {
+  const el = document.getElementById('modal-' + name);
+  if (el) {
+    el.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+}
+
+// Close modals on Escape key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeModal('privacy');
+    closeModal('terms');
+  }
+});
+
+function toast(msg,ok) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast '+(ok?'ok':''); t.style.display='block';
+  clearTimeout(window._tt); window._tt=setTimeout(()=>t.style.display='none',3500);
+}
+document.addEventListener('keydown',e=>{ if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){e.preventDefault();generate();} });
+</script>
+
+</body>
+</html>
