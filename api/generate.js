@@ -6,13 +6,16 @@
 export const config = { maxDuration: 30 };
 
 export default async function handler(req, res) {
-  // CORS headers — allow requests from your frontend only
+  // CORS headers — must be set before anything else
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  // Wrap everything in try-catch so CORS headers are always sent
+  try {
 
   const { system, user, maxTokens = 4000, provider = 'auto' } = req.body;
 
@@ -52,7 +55,7 @@ export default async function handler(req, res) {
             'anthropic-version': '2023-06-01'
           },
           body: JSON.stringify({
-            model: 'claude-sonnet-4-20250514',
+            model: 'claude-sonnet-4-5',
             max_tokens: maxTokens,
             system,
             messages: [{ role: 'user', content: user }]
@@ -142,4 +145,9 @@ export default async function handler(req, res) {
     error: 'All AI providers are currently unavailable. Please try again in a moment.',
     details: lastError?.message
   });
+
+  } catch (fatalErr) {
+    console.error('Fatal handler error:', fatalErr);
+    return res.status(500).json({ error: 'Internal server error: ' + fatalErr.message });
+  }
 }
