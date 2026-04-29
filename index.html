@@ -1617,6 +1617,22 @@
 
 <script>
 // ═══════════════════════════════════════════════════════════
+// GLOBAL ERROR HANDLER
+// ═══════════════════════════════════════════════════════════
+window.onerror = function(msg, src, line, col, err) {
+  console.error('JS ERROR:', msg, 'at line', line);
+  // Show visible error on page for debugging
+  const div = document.createElement('div');
+  div.style.cssText = 'position:fixed;bottom:60px;left:50%;transform:translateX(-50%);background:#ff4444;color:white;padding:12px 20px;border-radius:8px;z-index:99999;font-size:13px;font-family:monospace;max-width:90vw;';
+  div.textContent = 'JS Error (line ' + line + '): ' + msg;
+  document.body?.appendChild(div);
+  setTimeout(() => div.remove(), 10000);
+};
+window.addEventListener('unhandledrejection', function(e) {
+  console.error('Unhandled promise rejection:', e.reason);
+});
+
+// ═══════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════
 // API keys are stored securely on the server as environment variables.
@@ -1639,7 +1655,7 @@ let gallery = [];
 let canvasBg = 'transparent';
 
 // Keys are managed server-side — no client-side key storage needed
-updateFailoverChain();
+// updateFailoverChain called in initAuth after DOM ready
 
 // ═══════════════════════════════════════════════════════════
 // PALETTE DEFINITIONS
@@ -1900,12 +1916,14 @@ const BLUEPRINTS = {
 
 
 
-document.querySelectorAll('#style-tabs .style-tab').forEach(t => {
-  t.addEventListener('click', () => {
-    document.querySelectorAll('#style-tabs .style-tab').forEach(x => x.classList.remove('active'));
-    t.classList.add('active');
-    selectedStyle = t.dataset.style;
-    syncShowcase(selectedStyle);
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('#style-tabs .style-tab').forEach(t => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('#style-tabs .style-tab').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      selectedStyle = t.dataset.style;
+      if (typeof syncShowcase === 'function') syncShowcase(selectedStyle);
+    });
   });
 });
 
@@ -3842,6 +3860,9 @@ function initAuth() {
   localStorage.removeItem('iconai_user');
   currentUser = null;
 
+  // Update AI status indicators now DOM is ready
+  if (typeof updateFailoverChain === 'function') updateFailoverChain();
+
   if (window.google && GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
     google.accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID,
@@ -3853,7 +3874,11 @@ function initAuth() {
 
 // ── Show / hide auth modal ──────────────────────────────────────────────────
 function showAuthModal() {
-  document.getElementById('auth-modal-overlay').classList.add('show');
+  console.log('showAuthModal called');
+  const overlay = document.getElementById('auth-modal-overlay');
+  console.log('overlay element:', overlay);
+  if (!overlay) { console.error('AUTH MODAL NOT FOUND IN DOM!'); return; }
+  overlay.classList.add('show');
   setTimeout(() => {
     const el = document.getElementById('auth-email-input');
     if (el) el.focus();
