@@ -1888,152 +1888,17 @@ const BLUEPRINTS = {
 // ═══════════════════════════════════════════════════════════
 // MODE SWITCHING — SVG vs Image
 // ═══════════════════════════════════════════════════════════
-function setOutputTypeMain(type) {
-  // type: 'svg-icon' | 'svg-scene' | 'dalle' | 'animated'
-  const tabs = ['svg-icon','svg-scene','dalle','animated'];
-  tabs.forEach(t => {
-    const el = document.getElementById('otype-' + t);
-    if (el) el.classList.toggle('active', t === type);
-  });
 
-  const isAnimated = type === 'animated';
-  const isSVG = type !== 'dalle' && !isAnimated;
-  const isIcon = type === 'svg-icon';
-  const isDalle = type === 'dalle';
 
-  // Switch internal mode
-  currentMode = isDalle ? 'image' : 'svg';
 
-  // Show/hide sections
-  document.getElementById('style-section').style.display = isSVG ? '' : 'none';
-  document.getElementById('color-section').style.display = (isSVG || isAnimated) ? '' : 'none';
-  document.getElementById('dalle-options-section').style.display = isDalle ? '' : 'none';
-  const animSection = document.getElementById('anim-style-section');
-  if (animSection) animSection.style.display = isAnimated ? '' : 'none';
 
-  // For scenes, show flat-illustration style tab and auto-select it
-  const flatTab = document.getElementById('tab-flat-illus');
-  if (flatTab) {
-    if (!isIcon) {
-      flatTab.style.display = '';
-      if (type === 'svg-scene') {
-        document.querySelectorAll('#style-tabs .style-tab').forEach(t2 => t2.classList.remove('active'));
-        flatTab.classList.add('active');
-        selectedStyle = 'flat-illustration';
-      }
-    } else {
-      flatTab.style.display = 'none';
-      if (selectedStyle === 'flat-illustration') {
-        selectedStyle = 'minimal';
-        document.querySelectorAll('#style-tabs .style-tab').forEach(t2 => {
-          t2.classList.toggle('active', t2.dataset.style === 'minimal');
-        });
-      }
-    }
-  }
 
-  // Update prompt placeholder
-  const ta = document.getElementById('prompt-input');
-  if (type === 'svg-icon') ta.placeholder = 'e.g. settings gear, wifi, shopping cart, security shield…';
-  else if (type === 'svg-scene') ta.placeholder = 'e.g. A woman and child receiving blankets from a volunteer…';
-  else if (type === 'animated') ta.placeholder = 'e.g. robotic arm, server, network, heartbeat, rocket launch…';
-  else ta.placeholder = 'e.g. team collaboration, donation scene, office workers…';
 
-  // Update generate button color
-  const btn = document.getElementById('gen-btn');
-  if (btn) {
-    if (isDalle) btn.style.background = 'linear-gradient(135deg,#22d3a0,#4fb8f7)';
-    else if (isAnimated) btn.style.background = 'linear-gradient(135deg,#ff6b6b,#ff4444)';
-    else btn.style.background = 'linear-gradient(135deg,var(--accent),var(--pink))';
-    btn.textContent = isAnimated ? '⚡ Generate Animated' : (batchCount > 1 ? `✦ Generate ${batchCount}` : '✦ Generate');
-  }
 
-  // Reset canvas
-  document.getElementById('svg-output').style.display = 'none';
-  document.getElementById('image-output').style.display = 'none';
-  document.getElementById('empty-state').style.display = 'flex';
-  document.getElementById('bg-row').style.display = 'none';
-  setStatus('Ready to generate', false);
-}
 
-function setDalleType(type) {
-  selectedOutputType = type;
-  document.getElementById('dtype-scene').classList.toggle('active', type === 'scene');
-  document.getElementById('dtype-iconset').classList.toggle('active', type === 'iconset');
-  const sub = document.getElementById('iconset-sub');
-  if (sub) sub.style.display = type === 'iconset' ? 'flex' : 'none';
-  const ta = document.getElementById('prompt-input');
-  if (ta) ta.placeholder = type === 'iconset'
-    ? 'e.g. artificial intelligence, data science, machine learning, automation…'
-    : 'e.g. A woman and child receiving blankets from a volunteer at a donation table…';
-}
 
-function toggleKeySection() {
-  const body = document.getElementById('api-key-body');
-  const btn  = document.getElementById('key-collapse-btn');
-  if (!body || !btn) return;
-  const collapsed = body.style.display === 'none';
-  body.style.display = collapsed ? '' : 'none';
-  btn.textContent = collapsed ? '▲ Hide' : '▼ Show';
-}
 
-function setMode(mode) {
-  currentMode = mode;
-  const isSVG = mode === 'svg';
 
-  // Mode buttons
-  document.getElementById('mode-svg').className   = 'mode-btn' + (isSVG ? ' active' : '');
-  document.getElementById('mode-image').className = 'mode-btn' + (!isSVG ? ' active-image' : '');
-
-  // Show/hide SVG-only panels
-  document.querySelectorAll('.svg-only').forEach(el => {
-    el.classList.toggle('hidden', !isSVG);
-  });
-
-  // Show/hide image controls
-  document.querySelectorAll('.image-controls').forEach(el => {
-    el.classList.toggle('show', !isSVG);
-  });
-
-  // Update generate button
-  const btn = document.getElementById('gen-btn');
-  btn.style.background = isSVG
-    ? 'linear-gradient(135deg,var(--accent),var(--pink))'
-    : 'linear-gradient(135deg,#22d3a0,#4fb8f7)';
-
-  // Update toolbar buttons
-  document.getElementById('btn-copy').textContent = isSVG ? '⎘ Copy SVG' : '⎘ Copy URL';
-  document.getElementById('btn-svg').style.display = isSVG ? '' : 'none';
-
-  // Update quality label
-  const ql = document.getElementById('quality-label'); if(ql) ql.textContent = isSVG ? 'High quality mode' : 'HD quality (1792×1024)';
-  const qs = document.getElementById('quality-sub');   if(qs) qs.textContent = isSVG ? '4× more tokens · richer detail' : 'Larger image size · higher cost';
-
-  // Update var btn
-  document.getElementById('var-btn').textContent = isSVG ? '⊞ Generate 3 variations' : '⊞ Generate 3 image variations';
-  document.getElementById('var-btn').disabled = true;
-
-  // Reset canvas
-  document.getElementById('svg-output').style.display = 'none';
-  document.getElementById('image-output').style.display = 'none';
-  document.getElementById('empty-state').style.display = 'flex';
-  document.getElementById('bg-row').style.display = 'none';
-  document.getElementById('svg-info-bar').className = 'svg-info-bar';
-  document.getElementById('quality-badge').className = 'quality-badge';
-  setStatus('Ready to generate', false);
-}
-
-function setImgStyle(el, style) {
-  document.querySelectorAll('.img-style-card').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  selectedImgStyle = style;
-}
-
-function setImgSize(el, size) {
-  document.querySelectorAll('.img-size-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  selectedImgSize = size;
-}
 
 document.querySelectorAll('#style-tabs .style-tab').forEach(t => {
   t.addEventListener('click', () => {
@@ -3114,20 +2979,6 @@ async function callGPTImage(fullPrompt, size, hd) {
     return { url: URL.createObjectURL(blob), type: 'blob' };
   }
   return { url: d.url, type: 'url' };
-}
-
-async function callRecraft(fullPrompt, outputFormat) {
-  const r = await fetch('/api/image', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt: fullPrompt, size: '1024x1024', provider: 'recraft', outputFormat: outputFormat || 'png' })
-  });
-  if (!r.ok) {
-    const e = await r.json().catch(() => ({}));
-    throw new Error(e?.error || ('Recraft error ' + r.status));
-  }
-  const d = await r.json();
-  return { url: d.url, type: 'url', isSVG: outputFormat === 'svg' };
 }
 
 async function callDallE(fullPrompt, size, hd) {
