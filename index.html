@@ -3311,60 +3311,8 @@ const LOADING_MSGS = {
   'retro': ['Stamping the badge…','Adding ornaments…','Ageing the details…','Finalising…']
 };
 
-function setLoadingSub(msg) {
-  const el = document.getElementById('loading-sub');
-  if (el) el.textContent = msg;
-}
 
-function setLoading(on, mode) {
-  document.getElementById('gen-btn').disabled = on;
-  document.getElementById('empty-state').style.display = 'none';
-  document.getElementById('loading-state').style.display = on ? 'flex' : 'none';
-  document.getElementById('svg-output').style.display = 'none';
-  document.getElementById('image-output').style.display = 'none';
-  document.getElementById('status-dot').className = 'status-dot '+(on?'loading':'');
-  document.getElementById('status-label').textContent = on ? 'Generating…' : 'Ready';
-  document.getElementById('quality-badge').className = 'quality-badge';
-  document.getElementById('svg-info-bar').className = 'svg-info-bar';
-  // Reset export panel
-  const ep = document.getElementById('export-panel');
-  if (ep) ep.classList.remove('show');
-  const io = document.getElementById('icon-grid-overlay');
-  if (io) { io.classList.remove('show'); io.innerHTML=''; }
-  document.getElementById('icon-download-note').style.display='none';
-  const expBtn = document.getElementById('btn-export');
-  if (expBtn) expBtn.disabled = true;
-  if (on) {
-    const isImg = mode === 'image';
-    const isIconSet = isImg && selectedOutputType === 'iconset';
-    const msgs = isIconSet
-      ? ['Designing icons…','Arranging the grid…','Applying colour scheme…','Polishing the set…']
-      : isImg
-      ? ['Sending to DALL-E 3…','AI is painting your scene…','Rendering illustration…','Almost ready…']
-      : (LOADING_MSGS[selectedStyle]||['Generating…','Composing…','Refining…','Finalising…']);
-    let i=0;
-    const subs = ['Composing scene elements','Applying palette colours','Building SVG paths','Quality checking'];
-    document.getElementById('loading-label').textContent = msgs[0];
-    document.getElementById('loading-sub').textContent = subs[0];
-    // reset progress bar
-    const bar = document.getElementById('loading-bar');
-    bar.style.animation = 'none';
-    void bar.offsetWidth;
-    bar.style.animation = 'progress-anim 8s ease-in-out forwards';
-    window._li = setInterval(()=>{
-      i=(i+1)%msgs.length;
-      document.getElementById('loading-label').textContent=msgs[i];
-      document.getElementById('loading-sub').textContent=subs[i%subs.length];
-    }, 1600);
-  } else {
-    clearInterval(window._li);
-  }
-}
 
-function setStatus(msg, ready) {
-  document.getElementById('status-dot').className='status-dot '+(ready?'ready':'');
-  document.getElementById('status-label').textContent=msg;
-}
 
 function scoreSVG(svg) {
   let s=0;
