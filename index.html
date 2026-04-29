@@ -132,7 +132,165 @@
   .showcase-pill:hover,.showcase-pill.active{border-color:var(--accent);color:var(--accent2);background:rgba(124,110,247,0.08);}
   .showcase-pill .dot{width:8px;height:8px;border-radius:50%;}
 
-  .app-container{max-width:1240px;margin:0 auto;padding:0 40px 80px;display:grid;grid-template-columns:380px 1fr;gap:28px;align-items:start;}
+  /* NEW DASHBOARD LAYOUT */
+  .app-container{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    grid-template-rows:1fr;
+    height:calc(100vh - 61px);
+    overflow:hidden;
+    gap:0;
+  }
+  /* Controls panel — left sidebar, scrollable */
+  .dash-controls{
+    background:var(--bg2);
+    border-right:1px solid var(--border);
+    display:flex;
+    flex-direction:column;
+    overflow-y:auto;
+    overflow-x:hidden;
+  }
+  .dash-controls::-webkit-scrollbar{width:4px;}
+  .dash-controls::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+  /* Canvas + chat column */
+  .dash-main{
+    display:grid;
+    grid-template-rows:1fr auto;
+    overflow:hidden;
+    background:var(--bg);
+  }
+  /* Canvas area — fills available space */
+  .dash-canvas{
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+  /* Canvas top bar */
+  .canvas-topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 20px;
+    border-bottom:1px solid var(--border);
+    background:var(--bg2);
+    flex-shrink:0;
+  }
+  /* Result display area */
+  .canvas-result{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    position:relative;
+    background:var(--bg);
+  }
+  .canvas-result svg{max-width:100%;max-height:100%;width:auto;height:auto;}
+  /* Gallery strip */
+  .gallery-strip{
+    padding:10px 16px;
+    border-top:1px solid var(--border);
+    background:var(--bg2);
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    flex-shrink:0;
+    min-height:72px;
+    align-items:center;
+  }
+  .gallery-strip::-webkit-scrollbar{height:3px;}
+  .gallery-strip::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+  .gallery-thumb{
+    width:52px;height:52px;border-radius:8px;
+    background:var(--bg3);border:1px solid var(--border);
+    flex-shrink:0;cursor:pointer;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+    transition:border-color .2s;
+  }
+  .gallery-thumb:hover{border-color:var(--accent);}
+  .gallery-thumb svg,.gallery-thumb img{width:100%;height:100%;object-fit:contain;}
+  /* Chat refinement bar */
+  .dash-chat{
+    border-top:1px solid var(--border);
+    background:var(--bg2);
+    padding:12px 16px;
+    flex-shrink:0;
+  }
+  .chat-history{
+    max-height:160px;
+    overflow-y:auto;
+    margin-bottom:10px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .chat-history:empty{display:none;}
+  .chat-msg{
+    display:flex;
+    gap:8px;
+    align-items:flex-start;
+    font-size:12px;
+    line-height:1.4;
+  }
+  .chat-msg.user .chat-bubble{
+    background:rgba(124,110,247,.15);
+    border:1px solid rgba(124,110,247,.3);
+    color:var(--text);
+    margin-left:auto;
+    border-radius:10px 10px 2px 10px;
+  }
+  .chat-msg.ai .chat-bubble{
+    background:var(--bg3);
+    border:1px solid var(--border);
+    color:var(--text2);
+    border-radius:10px 10px 10px 2px;
+  }
+  .chat-bubble{padding:7px 12px;max-width:85%;}
+  .chat-avatar{
+    width:22px;height:22px;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;
+  }
+  .chat-avatar.user-av{background:linear-gradient(135deg,var(--accent),var(--pink));color:#fff;}
+  .chat-avatar.ai-av{background:var(--bg3);border:1px solid var(--border);color:var(--text3);}
+  .chat-input-row{
+    display:flex;gap:8px;align-items:flex-end;
+  }
+  .chat-input{
+    flex:1;padding:10px 14px;
+    background:var(--bg3);border:1px solid var(--border);
+    border-radius:10px;color:var(--text);font-size:13px;
+    font-family:'DM Sans',sans-serif;resize:none;
+    line-height:1.4;min-height:40px;max-height:100px;
+    transition:border-color .2s;
+    overflow-y:auto;
+  }
+  .chat-input:focus{outline:none;border-color:var(--accent);}
+  .chat-input::placeholder{color:var(--text3);}
+  .chat-send-btn{
+    width:38px;height:38px;border-radius:10px;
+    background:linear-gradient(135deg,var(--accent),var(--pink));
+    border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;transition:opacity .2s;font-size:14px;
+  }
+  .chat-send-btn:hover{opacity:.85;}
+  .chat-send-btn:disabled{opacity:.4;cursor:not-allowed;}
+  .chat-hint{font-size:10px;color:var(--text3);margin-bottom:6px;}
+  /* Controls panel sections */
+  .ctrl-section{padding:16px 20px;border-bottom:1px solid var(--border);}
+  .ctrl-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;}
+  /* Status bar */
+  .dash-status{
+    display:flex;align-items:center;gap:6px;
+    font-size:11px;color:var(--text3);
+  }
+  .status-dot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0;}
+  .status-dot.ready{background:#22d3a0;box-shadow:0 0 4px #22d3a0;}
+  .status-dot.loading{background:#f5a623;animation:pulse-dot 1s ease-in-out infinite;}
+  .status-dot.error{background:#ff4444;}
+  @keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
+  /* Keep old sidebar class working */
+  .sidebar{background:var(--bg2);}
 
   /* SIDEBAR */
   .sidebar{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;display:flex;flex-direction:column;gap:18px;position:sticky;top:85px;}
@@ -972,30 +1130,13 @@
 ═══════════════════════════════════════════════════════ -->
 <div id="page-dashboard">
 <div class="app-container" id="app">
-  <aside class="sidebar">
 
-    <!-- PROMPT -->
-    <div class="section">
-      <label>What do you want to create?</label>
-      <textarea id="prompt-input" class="prompt-area" placeholder="e.g. settings gear, donation scene, wifi signal, shopping cart…"></textarea>
-      <!-- Quick picks -->
-      <div class="suggestions" id="suggestions">
-        <span class="suggestion-pill" onclick="setPrompt('settings gear')">⚙ Settings</span>
-        <span class="suggestion-pill" onclick="setPrompt('wifi signal')">📶 Wifi</span>
-        <span class="suggestion-pill" onclick="setPrompt('user profile')">👤 Profile</span>
-        <span class="suggestion-pill" onclick="setPrompt('security shield')">🔒 Security</span>
-        <span class="suggestion-pill" onclick="setPrompt('analytics chart')">📊 Analytics</span>
-        <span class="suggestion-pill" onclick="setPrompt('notification bell')">🔔 Bell</span>
-        <span class="suggestion-pill" onclick="setPrompt('A woman and child receiving blankets from a volunteer at a donation table')">🤝 Donation</span>
-        <span class="suggestion-pill" onclick="setPrompt('team collaborating around a laptop in a modern office')">💼 Team</span>
-      </div>
-    </div>
+  <!-- ── LEFT: CONTROLS PANEL ─────────────────────────────── -->
+  <div class="dash-controls">
 
-    <hr class="divider">
-
-    <!-- OUTPUT MODE: SVG Icon vs Scene Illustration vs Icon Set -->
-    <div class="section">
-      <label>Output type</label>
+    <!-- Output type -->
+    <div class="ctrl-section">
+      <div class="ctrl-label">Output type</div>
       <div class="output-type-tabs" style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;">
         <div class="output-type-tab active" id="otype-svg-icon" onclick="setOutputTypeMain('svg-icon')">
           <div style="font-size:16px;margin-bottom:2px;">◻</div>
@@ -1018,11 +1159,14 @@
           <div style="font-size:9px;color:#ff6b6b;">SVG+CSS</div>
           <div style="position:absolute;top:4px;right:4px;background:#ff6b6b;color:#fff;font-size:8px;font-weight:700;padding:1px 4px;border-radius:3px;line-height:1.4;">NEW</div>
         </div>
-      </div>
+      </div
     </div>
 
-    <!-- STYLE (shown for icon + scene) -->
-    <div class="section" id="style-section">
+    <!-- Animation style (shown when Animated selected) -->
+    
+
+    <!-- Icon style -->
+    <div class="ctrl-section" id="style-section">
       <label id="style-label">Icon style</label>
       <div class="style-tabs" id="style-tabs">
         <div class="style-tab active" data-style="minimal"><div class="style-tab-dot" style="background:#7c6ef7"></div>Minimal</div>
@@ -1036,9 +1180,9 @@
       </div>
     </div>
 
-    <!-- COLOR PALETTE -->
-    <div class="section" id="color-section">
-      <label>Color</label>
+    <!-- Color -->
+    <div class="ctrl-section" id="color-section">
+      <div class="ctrl-label">Color</div>
       <div class="palette-grid" id="palette-grid">
         <div class="palette-card active" data-palette="warm" onclick="setPalette(this,'warm')">
           <div class="palette-swatches"><div class="palette-dot" style="background:#e8855a"></div><div class="palette-dot" style="background:#f5a623"></div><div class="palette-dot" style="background:#c4614a"></div></div>
@@ -1075,8 +1219,8 @@
       </div>
     </div>
 
-    <!-- DALL-E SPECIFIC OPTIONS (hidden unless dalle mode) -->
-    <div class="section" id="dalle-options-section" style="display:none;">
+    <!-- AI Image options -->
+    <div class="ctrl-section" id="dalle-options-section" style="display:none;">
       <label>Image style</label>
       <div class="img-style-grid" id="img-style-grid">
         <div class="img-style-card active" data-img-style="flat-vector" onclick="setImgStyle(this,'flat-vector')">
@@ -1125,141 +1269,141 @@
       <div class="dalle-notice" style="margin-top:6px;">GPT Image 1.5 (OpenAI) · ~$0.04–0.12/image · or Recraft V4 (fal.ai) for native SVG</div>
     </div>
 
-    <!-- Generation limit bar (free users) -->
-    <div style="padding:8px 14px;background:rgba(34,211,160,.08);border:1px solid rgba(34,211,160,.2);border-radius:8px;margin-bottom:8px;display:flex;align-items:center;gap:8px;"><div style="width:7px;height:7px;border-radius:50%;background:#22d3a0;box-shadow:0 0 6px #22d3a0;flex-shrink:0;"></div><span style="font-size:11px;color:#22d3a0;font-weight:500;">Beta — Unlimited generations</span></div>
-      <div class="gen-limit-track">
-        <div class="gen-limit-fill" id="gen-limit-fill" style="width:0%"></div>
+    <!-- Beta badge -->
+    <div class="ctrl-section">
+      <div style="padding:8px 12px;background:rgba(34,211,160,.08);border:1px solid rgba(34,211,160,.2);border-radius:8px;display:flex;align-items:center;gap:8px;">
+        <div style="width:6px;height:6px;border-radius:50%;background:#22d3a0;box-shadow:0 0 5px #22d3a0;flex-shrink:0;"></div>
+        <span style="font-size:11px;color:#22d3a0;font-weight:500;">Beta — Unlimited generations</span>
       </div>
     </div>
 
-    <!-- BATCH COUNT -->
-    <div class="batch-row">
-      <span class="batch-label">Generate how many?</span>
-      <div class="batch-btns">
-        <button class="batch-btn active" data-count="1" onclick="setBatchCount(this,1)">1</button>
-        <button class="batch-btn" data-count="3" onclick="setBatchCount(this,3)">3</button>
-        <button class="batch-btn" data-count="4" onclick="setBatchCount(this,4)">4</button>
-        <button class="batch-btn" data-count="5" onclick="setBatchCount(this,5)">5</button>
-      </div>
+    <!-- Hidden compatibility elements -->
+    <div style="display:none;">
+      <input type="checkbox" id="quality-toggle">
+      <input id="img-style-select">
+      <span id="ai-used-badge"></span>
+      <span id="gen-limit-used">0/20</span>
+      <div id="gen-limit-fill"></div>
     </div>
 
-    <button class="gen-btn" id="gen-btn" onclick="generate()">✦ Generate</button>
-    <button class="var-btn" id="var-btn" onclick="generateVariations()" disabled>⊞ Variations</button>
+  </div>
+  <!-- END CONTROLS PANEL -->
 
-    <!-- Hidden compatibility elements (used by JS) -->
-    <div style="display:none">
-      <input type="checkbox" id="quality-toggle" checked>
-      <input type="range" id="complexity" min="1" max="5" value="3">
-      <span id="complexity-val">3</span>
-      <select id="size-select"><option value="512">512</option><option value="800x600" selected>800x600</option></select>
-      <span id="quality-label"></span>
-      <span id="quality-sub"></span>
-      <div id="type-scene"></div>
-      <div id="type-iconset"></div>
-      <div id="image-style-section"></div>
-      <div id="iconset-controls"></div>
-    </div>
+  <!-- ── RIGHT: CANVAS + CHAT ──────────────────────────────── -->
+  <div class="dash-main">
 
-  </aside>
+    <!-- Canvas area -->
+    <div class="dash-canvas">
 
-  <!-- CANVAS -->
-  <div class="canvas-panel">
-    <div class="preview-card">
-      <div class="preview-toolbar">
-        <div class="preview-toolbar-left">
+      <!-- Top bar: status + actions -->
+      <div class="canvas-topbar">
+        <div class="dash-status">
           <div class="status-dot" id="status-dot"></div>
-          <span id="status-label">Ready to generate</span>
+          <span id="status-text">Ready to generate</span>
         </div>
-        <div class="preview-actions">
+        <div style="display:flex;gap:8px;align-items:center;">
+          <!-- Batch count -->
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span style="font-size:11px;color:var(--text3);">Count:</span>
+            <div class="batch-btns">
+              <button class="batch-btn active" data-count="1" onclick="setBatchCount(this,1)">1</button>
+              <button class="batch-btn" data-count="3" onclick="setBatchCount(this,3)">3</button>
+              <button class="batch-btn" data-count="4" onclick="setBatchCount(this,4)">4</button>
+              <button class="batch-btn" data-count="5" onclick="setBatchCount(this,5)">5</button>
+            </div>
+          </div>
+          <div style="width:1px;height:20px;background:var(--border);"></div>
           <button class="action-btn" id="btn-copy" onclick="copyAction()" disabled>⎘ Copy SVG</button>
           <button class="action-btn dl" id="btn-svg" onclick="downloadSVG()" disabled>↓ SVG</button>
           <button class="action-btn dl" id="btn-png" onclick="downloadPNG()" disabled>↓ PNG</button>
           <button class="action-btn export" id="btn-export" onclick="toggleExportPanel()" disabled>⬡ PPTX</button>
         </div>
-        <div class="ai-used-badge" id="ai-used-badge" style="display:none;"></div>
       </div>
 
-      <div class="canvas-area" id="canvas-area">
-        <div class="canvas-bg-dots"></div>
-        <div class="quality-badge" id="quality-badge"></div>
-
-        <div class="empty-state" id="empty-state">
-          <div class="empty-preview">🎨</div>
-          <h4>Your illustration appears here</h4>
-          <p>Choose a style, pick a scene starter or write your own description, then hit Generate</p>
-        </div>
-
-        <div class="loading-state" id="loading-state">
-          <div class="spinner-ring"></div>
-          <div class="loading-label" id="loading-label">Building your illustration…</div>
-          <div class="loading-sub" id="loading-sub">Composing scene elements</div>
+      <!-- Result display -->
+      <div class="canvas-result" id="canvas-area">
+        <!-- Loading state -->
+        <div id="loading-state" style="display:none;flex-direction:column;align-items:center;gap:16px;">
+          <div class="loading-ring"></div>
+          <div style="font-size:13px;color:var(--text2);" id="loading-sub-text">Generating…</div>
           <div class="loading-progress"><div class="loading-bar" id="loading-bar"></div></div>
         </div>
-
-        <div id="svg-output"></div>
-        <img id="image-output" alt="AI generated illustration">
-        <!-- Icon grid overlay — clickable cells over icon set image -->
-        <div class="icon-grid-overlay" id="icon-grid-overlay"></div>
+        <!-- Empty state -->
+        <div id="empty-state" style="display:flex;flex-direction:column;align-items:center;gap:12px;opacity:.5;">
+          <svg viewBox="0 0 64 64" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".4">
+            <rect x="8" y="8" width="48" height="48" rx="12"/><path d="M24 32h16M32 24v16"/>
+          </svg>
+          <div style="font-size:14px;color:var(--text2);font-weight:500;">Your illustration appears here</div>
+          <div style="font-size:12px;color:var(--text3);text-align:center;max-width:280px;">Type a prompt below and press Generate — or pick a quick prompt</div>
+        </div>
+        <!-- SVG output -->
+        <div id="svg-output" style="display:none;width:100%;height:100%;align-items:center;justify-content:center;"></div>
+        <!-- Image output -->
+        <img id="image-output" alt="AI generated illustration" style="display:none;max-width:100%;max-height:100%;object-fit:contain;">
+        <!-- Batch grid -->
+        <div id="batch-grid" style="display:none;width:100%;height:100%;overflow-y:auto;"></div>
+        <!-- PPTX export panel -->
+        <div id="export-panel" style="display:none;position:absolute;top:12px;right:12px;z-index:10;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;min-width:220px;"></div>
+        <!-- Icon grid overlay -->
+        <div class="icon-grid-overlay" id="icon-grid-overlay" style="display:none;"></div>
       </div>
 
-      <div class="svg-info-bar" id="svg-info-bar">
-        <span id="svg-info-text">—</span>
-        <span id="svg-info-type" style="color:var(--text3)">SVG · Scalable to any size</span>
+      <!-- Gallery strip -->
+      <div class="gallery-strip" id="gallery-strip">
+        <div style="font-size:11px;color:var(--text3);white-space:nowrap;padding:0 4px;">Gallery</div>
+        <div id="gallery-grid" style="display:flex;gap:8px;flex:1;overflow-x:auto;"></div>
       </div>
 
-      <div class="bg-row" id="bg-row" style="display:none">
-        <span class="bg-label">Background:</span>
-        <div class="bg-dot active" data-bg="transparent" style="background:repeating-conic-gradient(#222 0% 25%,#2e2e2e 0% 50%) 0 0/10px 10px;" title="Transparent" onclick="setBg(this,'transparent')"></div>
-        <div class="bg-dot" data-bg="#f5ede0" style="background:#f5ede0;" onclick="setBg(this,'#f5ede0')"></div>
-        <div class="bg-dot" data-bg="#ffffff" style="background:#ffffff;" onclick="setBg(this,'#ffffff')"></div>
-        <div class="bg-dot" data-bg="#0a0a0f" style="background:#0a0a0f;border:1px solid #333;" onclick="setBg(this,'#0a0a0f')"></div>
-        <div class="bg-dot" data-bg="#e8f4fd" style="background:#e8f4fd;" onclick="setBg(this,'#e8f4fd')"></div>
-        <div class="bg-dot" data-bg="#d8f3dc" style="background:#d8f3dc;" onclick="setBg(this,'#d8f3dc')"></div>
+    </div>
+    <!-- END CANVAS -->
+
+    <!-- ── CHAT REFINEMENT BAR ──────────────────────────── -->
+    <div class="dash-chat">
+      <!-- Quick prompt chips -->
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;" id="quick-chips">
+        <button class="prompt-chip" onclick="useChip(this,'settings gear')">⚙ Settings</button>
+        <button class="prompt-chip" onclick="useChip(this,'wifi signal')">📶 Wifi</button>
+        <button class="prompt-chip" onclick="useChip(this,'user profile')">👤 Profile</button>
+        <button class="prompt-chip" onclick="useChip(this,'security shield')">🔒 Security</button>
+        <button class="prompt-chip" onclick="useChip(this,'analytics dashboard')">📊 Analytics</button>
+        <button class="prompt-chip" onclick="useChip(this,'notification bell')">🔔 Bell</button>
+        <button class="prompt-chip" onclick="useChip(this,'donation heart')">💛 Donation</button>
+        <button class="prompt-chip" onclick="useChip(this,'team collaboration')">👥 Team</button>
       </div>
 
-      <!-- PPTX EXPORT PANEL -->
-      <div class="export-panel" id="export-panel">
-        <div class="export-panel-title">Export to PowerPoint</div>
-        <div class="export-row">
-          <input class="export-input export-input-full" id="pptx-title" placeholder="Slide title  e.g. Blanket Distribution Initiative – India" />
-        </div>
-        <div class="export-row">
-          <input class="export-input" id="pptx-subtitle" placeholder="Sub-heading (optional)" />
-          <input class="export-input" id="pptx-org" placeholder="Organisation name" />
-        </div>
-        <div class="export-row export-input-full">
-          <input class="export-input export-input-full" id="pptx-body" placeholder="Body text / bullet points  (one per line)" style="height:56px;" />
-        </div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">Slide theme</div>
-        <div class="slide-theme-row" id="slide-theme-row">
-          <div class="slide-theme-btn active" data-theme="warm" onclick="setSlideTheme(this,'warm')">Warm</div>
-          <div class="slide-theme-btn" data-theme="midnight" onclick="setSlideTheme(this,'midnight')">Midnight</div>
-          <div class="slide-theme-btn" data-theme="clean" onclick="setSlideTheme(this,'clean')">Clean White</div>
-          <div class="slide-theme-btn" data-theme="navy" onclick="setSlideTheme(this,'navy')">Navy</div>
-          <div class="slide-theme-btn" data-theme="forest" onclick="setSlideTheme(this,'forest')">Forest</div>
-          <div class="slide-theme-btn" data-theme="charcoal" onclick="setSlideTheme(this,'charcoal')">Charcoal</div>
-        </div>
-        <div class="export-action-row">
-          <button class="export-btn pptx" id="pptx-generate-btn" onclick="exportToPPTX()">⬡ Download .pptx slide</button>
-        </div>
-      </div>
+      <!-- Chat history -->
+      <div class="chat-history" id="chat-history"></div>
 
-      <!-- ICON INDIVIDUAL DOWNLOAD NOTE -->
-      <div id="icon-download-note" style="display:none;padding:10px 20px;border-top:1px solid var(--border);font-size:12px;color:var(--text2);">
-        ✦ Click any icon in the set above to download it individually as PNG
+      <!-- Input row -->
+      <div class="chat-input-row">
+        <div style="position:relative;flex:1;">
+          <textarea
+            class="chat-input"
+            id="prompt-input"
+            placeholder="Describe what you want, or refine your last result…"
+            rows="1"
+            onkeydown="if((event.metaKey||event.ctrlKey)&&event.key==='Enter'){event.preventDefault();generate();}else if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();generate();}"
+            oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px';"
+          ></textarea>
+        </div>
+        <button class="chat-send-btn" id="gen-btn" onclick="generate()" title="Generate (Cmd+Enter)">
+          <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="10" y1="16" x2="10" y2="4"/><polyline points="4,10 10,4 16,10"/>
+          </svg>
+        </button>
       </div>
-
-      <div class="var-panel" id="var-panel">
-        <div class="var-panel-title">Variations — click to use</div>
-        <div class="var-grid" id="var-grid"></div>
+      <div style="font-size:10px;color:var(--text3);margin-top:5px;text-align:center;">
+        ↵ Enter to generate &nbsp;·&nbsp; Shift+Enter for new line &nbsp;·&nbsp; After generating, type to refine
       </div>
     </div>
+    <!-- END CHAT BAR -->
 
-    <div class="gallery-wrap" id="gallery">
-      <h3><span>Gallery</span><span id="gal-count" style="font-size:12px;color:var(--text3);font-family:'DM Sans',sans-serif;font-weight:400;"></span></h3>
-      <div class="gallery-grid" id="gallery-grid"></div>
-    </div>
   </div>
+  <!-- END MAIN -->
+
+  <!-- Hidden: var-btn for compatibility -->
+  <button id="var-btn" style="display:none;" onclick="generateVariations()"></button>
+
 </div>
 </div>
 <!-- END PAGE 2 -->
@@ -2654,26 +2798,49 @@ function setBatchCount(el, n) {
 async function generate() {
   if (!currentUser) { showAuthModal(); return; }
   const prompt = document.getElementById('prompt-input').value.trim();
-  if (!prompt) { toast('Describe what you want to create', false); return; }
+  if (!prompt) {
+    const input = document.getElementById('prompt-input');
+    if (input) { input.style.borderColor = '#ff4444'; setTimeout(() => input.style.borderColor = '', 1000); }
+    return;
+  }
 
-  // Track ALL generations in the batch upfront
+  // Build refined prompt if this is a follow-up
+  const effectivePrompt = chatHistory.length > 1 ? buildRefinementPrompt(prompt) : prompt;
+
+  // Show in chat
+  onGenerationStart(prompt);
+
+  // Clear input
+  const inputEl = document.getElementById('prompt-input');
+  if (inputEl) { inputEl.value = ''; inputEl.style.height = 'auto'; }
+
+  // Track generation
   for (let i = 0; i < batchCount; i++) {
-    if (!trackGeneration()) return; // stops if limit hit mid-batch
+    if (!trackGeneration()) return;
   }
 
   const isImage = document.getElementById('otype-dalle')?.classList.contains('active');
   const isAnimated = document.getElementById('otype-animated')?.classList.contains('active');
 
   if (isAnimated) {
-    await generateAnimated(prompt);
+    await generateAnimated(effectivePrompt);
+    onGenerationSuccess(prompt, '⚡ Animated icon ready — type to refine the style or concept');
     return;
   }
 
   if (batchCount === 1) {
-    if (isImage) { currentMode = 'image'; await generateImage(prompt); }
-    else { currentMode = 'svg'; await generateSVG(prompt); }
+    if (isImage) {
+      currentMode = 'image';
+      await generateImage(effectivePrompt);
+      onGenerationSuccess(prompt, '🖼 Image generated — describe changes to refine it');
+    } else {
+      currentMode = 'svg';
+      await generateSVG(effectivePrompt);
+      onGenerationSuccess(prompt, '✓ Icon ready — try: "make it bolder", "change to glass style", "add a glow effect"');
+    }
   } else {
-    await generateBatch(prompt, isImage);
+    await generateBatch(effectivePrompt, isImage);
+    onGenerationSuccess(prompt, `✓ ${batchCount} variants generated — click any to select, then refine`);
   }
 }
 
@@ -3738,6 +3905,109 @@ function cropAndDownloadIcon(col, row, cols, rows, iconNum) {
 // YOUR Google OAuth Client ID — replace this after setup
 // Get it free at: console.cloud.google.com → APIs → Credentials → OAuth 2.0
 const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+
+// ═══════════════════════════════════════════════════════════
+// CHAT REFINEMENT SYSTEM
+// ═══════════════════════════════════════════════════════════
+
+let chatHistory = [];        // [{role:'user'|'ai', text, svg, imageUrl}]
+let lastGeneratedSVG = null;
+let lastGeneratedPrompt = '';
+
+function addChatMessage(role, text, isLoading=false) {
+  const history = document.getElementById('chat-history');
+  if (!history) return;
+  const msg = document.createElement('div');
+  msg.className = 'chat-msg ' + role;
+  const initials = role === 'user'
+    ? (currentUser?.name?.split(' ').map(n=>n[0]).join('').slice(0,2) || 'U')
+    : '✦';
+  msg.innerHTML = `
+    <div class="chat-avatar ${role === 'user' ? 'user-av' : 'ai-av'}">${initials}</div>
+    <div class="chat-bubble">${isLoading ? '<span class="chat-loading">Generating<span>...</span></span>' : text}</div>
+  `;
+  msg.id = isLoading ? 'chat-loading-msg' : '';
+  history.appendChild(msg);
+  history.scrollTop = history.scrollHeight;
+  chatHistory.push({role, text});
+
+  // Show chat history section
+  history.style.display = 'flex';
+  return msg;
+}
+
+function removeChatLoading() {
+  const el = document.getElementById('chat-loading-msg');
+  if (el) el.remove();
+}
+
+function useChip(el, prompt) {
+  const input = document.getElementById('prompt-input');
+  if (input) {
+    input.value = prompt;
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+    input.focus();
+  }
+  // Hide chips after use
+  const chips = document.getElementById('quick-chips');
+  if (chips) chips.style.display = 'none';
+}
+
+// Override setStatus for new layout
+function setStatus(text, ok) {
+  const dot = document.getElementById('status-dot');
+  const txt = document.getElementById('status-text');
+  if (dot) {
+    dot.className = 'status-dot ' + (ok ? 'ready' : text.includes('fail') || text.includes('Error') ? 'error' : 'loading');
+  }
+  if (txt) txt.textContent = text;
+}
+
+// Override setLoading for new layout
+function setLoading(on) {
+  const btn = document.getElementById('gen-btn');
+  const loadingEl = document.getElementById('loading-state');
+  const emptyEl = document.getElementById('empty-state');
+  if (btn) btn.disabled = on;
+  if (on) {
+    if (emptyEl) emptyEl.style.display = 'none';
+    if (loadingEl) loadingEl.style.display = 'flex';
+  } else {
+    if (loadingEl) loadingEl.style.display = 'none';
+  }
+}
+
+function setLoadingSub(text) {
+  const el = document.getElementById('loading-sub-text');
+  if (el) el.textContent = text;
+}
+
+// Build a refined prompt from chat history
+function buildRefinementPrompt(newUserText) {
+  if (!lastGeneratedPrompt || chatHistory.length < 2) return newUserText;
+  const ctx = chatHistory.slice(-4).map(function(m) {
+    return (m.role === 'user' ? 'User: ' : 'AI: ') + m.text;
+  }).join(' | ');
+  return 'Original: "' + lastGeneratedPrompt + '". Refine: "' + newUserText + '". Context: ' + ctx + '. Improve based on refinement while keeping core concept.';
+}
+
+// After a successful generation, update chat
+function onGenerationSuccess(prompt, resultDescription) {
+  removeChatLoading();
+  addChatMessage('ai', resultDescription || '✓ Done — type to refine, or change settings and generate again');
+  lastGeneratedPrompt = prompt;
+  // Hide quick chips after first generation
+  const chips = document.getElementById('quick-chips');
+  if (chips) chips.style.display = 'none';
+}
+
+function onGenerationStart(prompt) {
+  // Add user message to chat
+  addChatMessage('user', prompt);
+  // Add loading indicator
+  addChatMessage('ai', '', true);
+}
 
 function showPage(page) {
   var lp = document.getElementById('page-landing');
