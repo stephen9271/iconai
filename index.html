@@ -837,15 +837,17 @@
 <!-- ═══════════════════════════════════════════════════════
      SHARED HEADER — always visible
 ═══════════════════════════════════════════════════════ -->
-<header>
+<header style="cursor:default;">
   <div class="logo"><div class="logo-mark">✦</div>IconAI</div>
   <nav>
     <span id="nav-landing-links" style="display:flex;gap:28px;align-items:center;">
       <a href="#" class="nav-link" onclick="document.getElementById('lp-how').scrollIntoView({behavior:'smooth'});return false;">How it works</a>
       <a href="#" class="nav-link" onclick="document.getElementById('lp-pricing').scrollIntoView({behavior:'smooth'});return false;">Pricing</a>
     </span>
-    <div id="nav-auth-area">
-      <button class="btn-primary" onclick="showAuthModal()">Sign in / Sign up</button>
+    <div id="nav-auth-area" style="position:relative;z-index:99999;">
+      <button class="btn-primary" id="signin-btn" 
+        style="position:relative;z-index:99999;cursor:pointer;"
+        onmousedown="showAuthModal()">Sign in / Sign up</button>
     </div>
   </nav>
 </header>
@@ -3854,6 +3856,29 @@ function initAuth() {
   // Always start on landing — user must actively sign in
   showPage('landing');
 
+  // Wire up sign-in button with addEventListener (more reliable than onclick)
+  const signinBtn = document.getElementById('signin-btn');
+  if (signinBtn) {
+    signinBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      showAuthModal();
+    });
+    console.log('Sign-in button wired ✓');
+  } else {
+    console.error('Sign-in button NOT FOUND');
+  }
+
+  // Also wire "Get started free" button
+  document.querySelectorAll('.lp-btn-primary').forEach(btn => {
+    if (btn.textContent.includes('Get started') || btn.textContent.includes('free account') || btn.textContent.includes('Start free') || btn.textContent.includes('Create your')) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        showAuthModal();
+      });
+    }
+  });
+
   generationsUsed = parseInt(localStorage.getItem('iconai_gen_count') || '0');
   updateGenLimitBar();
 
@@ -4140,6 +4165,19 @@ function viewHistory() {
 
 // Kick off auth init
 document.addEventListener('DOMContentLoaded', initAuth);
+
+// Ultimate fallback: intercept ALL clicks and check if near sign-in button
+document.addEventListener('click', function(e) {
+  const btn = document.getElementById('signin-btn');
+  if (!btn) return;
+  const rect = btn.getBoundingClientRect();
+  // Check if click is within button bounds (with 10px tolerance)
+  if (e.clientX >= rect.left - 10 && e.clientX <= rect.right + 10 &&
+      e.clientY >= rect.top - 10 && e.clientY <= rect.bottom + 10) {
+    console.log('Global click intercepted near signin button, showing modal');
+    showAuthModal();
+  }
+}, true); // useCapture=true to run before any other handler
 
 // ═══════════════════════════════════════════════════════════
 // MODAL SYSTEM — Privacy Policy & Terms of Service
