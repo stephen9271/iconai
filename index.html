@@ -136,7 +136,8 @@
     display:grid;
     grid-template-columns:320px 1fr;
     grid-template-rows:1fr;
-    height:calc(100vh - 61px);
+    height:100%;
+    width:100%;
     overflow:hidden;
     gap:0;
   }
@@ -164,6 +165,7 @@
     display:flex;
     flex-direction:column;
     position:relative;
+    height:100%;
   }
   /* Canvas top bar */
   .canvas-topbar{
@@ -184,6 +186,7 @@
     overflow:hidden;
     position:relative;
     background:var(--bg);
+    min-height:0;
   }
   .canvas-result svg{max-width:100%;max-height:100%;width:auto;height:auto;}
   /* Gallery strip */
@@ -289,7 +292,7 @@
   .status-dot.error{background:#ff4444;}
   @keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
   /* Keep old sidebar class working */
-  .sidebar{background:var(--bg2);}
+  .sidebar{background:var(--bg2);} /* legacy */
 
   /* SIDEBAR */
   .sidebar{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;display:flex;flex-direction:column;gap:18px;position:sticky;top:85px;}
@@ -495,8 +498,8 @@
 
   /* ═══════════════════════ LANDING PAGE ═══════════════════════ */
   /* Page visibility controlled by showPage() JS function */
-  #page-landing { display:block; padding-top:0; }
-  #page-dashboard { display:none; }
+  #page-landing { display:block; }
+  #page-dashboard { display:none; height:calc(100vh - 61px); overflow:hidden; }
   /* Ensure header sits above ALL page content for pointer events */
   header { position:sticky; top:0; z-index:10000; pointer-events:all; isolation:isolate; }
   header * { pointer-events:all; }
