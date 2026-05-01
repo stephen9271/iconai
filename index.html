@@ -495,8 +495,12 @@
 
   /* ═══════════════════════ LANDING PAGE ═══════════════════════ */
   /* Page visibility controlled by showPage() JS function */
-  #page-landing { display:block; }
+  #page-landing { display:block; padding-top:0; }
   #page-dashboard { display:none; }
+  /* Ensure header sits above ALL page content for pointer events */
+  header { position:sticky; top:0; z-index:10000; pointer-events:all; isolation:isolate; }
+  header * { pointer-events:all; }
+  header button { pointer-events:all !important; cursor:pointer !important; }
 
   .lp-section { max-width:1100px; margin:0 auto; padding:0 40px; }
 
@@ -537,6 +541,8 @@
     padding:10px;
     animation:mosaic-scroll 30s linear infinite;
     width:max-content;
+    will-change:transform;
+    isolation:isolate;
   }
   .lp-mosaic:hover { animation-play-state:paused; }
   .lp-mosaic-cell {
@@ -709,6 +715,7 @@
   /* ═══════════════ AUTH MODAL ═══════════════ */
   .auth-modal-overlay{position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,.82);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;}
   .auth-modal-overlay.show{display:flex!important;}
+  .auth-modal-overlay:target{display:flex!important;position:fixed!important;inset:0!important;z-index:999999!important;background:rgba(0,0,0,0.82)!important;align-items:center!important;justify-content:center!important;}
   .auth-modal-overlay.show{display:flex;}
   .auth-modal{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:40px 36px;width:100%;max-width:400px;position:relative;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.5);}
   .auth-logo{width:52px;height:52px;background:linear-gradient(135deg,#7c6ef7,#f06dba);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 18px;}
@@ -845,9 +852,9 @@
       <a href="#" class="nav-link" onclick="document.getElementById('lp-pricing').scrollIntoView({behavior:'smooth'});return false;">Pricing</a>
     </span>
     <div id="nav-auth-area" style="position:relative;z-index:99999;">
-      <button class="btn-primary" id="signin-btn" 
-        style="position:relative;z-index:99999;cursor:pointer;"
-        onmousedown="showAuthModal()">Sign in / Sign up</button>
+      <a href="#auth-modal" class="btn-primary" id="signin-btn" 
+        style="position:relative;z-index:99999;cursor:pointer;text-decoration:none;display:inline-block;"
+        onclick="event.preventDefault();showAuthModal();">Sign in / Sign up</a>
     </div>
   </nav>
 </header>
@@ -896,7 +903,7 @@
     <h1 class="lp-h1">Create icons &amp; illustrations<br><span>powered by AI</span></h1>
     <p class="lp-sub">Describe what you need in plain English. Get production-ready SVG icons, flat illustrations, and AI images in seconds. No design skills required.</p>
     <div class="lp-cta-row">
-      <button class="lp-btn-primary" onclick="showAuthModal()">Get started free →</button>
+      <button class="lp-btn-primary" onclick="showAuthModal();" href="#auth-modal">Get started free →</button>
       <button class="lp-btn-secondary" onclick="document.getElementById('lp-how').scrollIntoView({behavior:'smooth'})">See how it works</button>
     </div>
   </section>
@@ -1574,7 +1581,7 @@
 
 
 <!-- AUTH MODAL -->
-<div class="auth-modal-overlay" id="auth-modal-overlay" onclick="if(event.target===this)closeAuthModal()">
+<div class="auth-modal-overlay" id="auth-modal" onclick="if(event.target===this){closeAuthModal();history.pushState('','',window.location.pathname);}">
   <div class="auth-modal">
     <button class="auth-close" onclick="closeAuthModal()">✕</button>
     <div class="auth-logo">✦</div>
@@ -1634,6 +1641,35 @@ window.onerror = function(msg, src, line, col, err) {
 window.addEventListener('unhandledrejection', function(e) {
   console.error('Unhandled promise rejection:', e.reason);
 });
+// ═══════════════════════════════════════════════════════════
+// CRITICAL FUNCTIONS — hoisted to top so they're always available
+// ═══════════════════════════════════════════════════════════
+function showAuthModal() {
+  const overlay = document.getElementById('auth-modal');
+  if (!overlay) return;
+  // Use direct inline style — bypasses all CSS specificity issues
+  overlay.style.display = 'flex';
+  overlay.style.position = 'fixed';
+  overlay.style.inset = '0';
+  overlay.style.zIndex = '999999';
+  overlay.style.background = 'rgba(0,0,0,0.82)';
+  overlay.style.alignItems = 'center';
+  overlay.style.justifyContent = 'center';
+  overlay.style.backdropFilter = 'blur(8px)';
+  overlay.classList.add('show');
+  setTimeout(() => {
+    const el = document.getElementById('auth-email-input');
+    if (el) el.focus();
+  }, 200);
+}
+
+function closeAuthModal() {
+  const overlay = document.getElementById('auth-modal');
+  if (!overlay) return;
+  overlay.style.display = 'none';
+  overlay.classList.remove('show');
+}
+
 
 // ═══════════════════════════════════════════════════════════
 // STATE
@@ -3900,7 +3936,7 @@ function initAuth() {
 
 // ── Show / hide auth modal ──────────────────────────────────────────────────
 function showAuthModal() {
-  const overlay = document.getElementById('auth-modal-overlay');
+  const overlay = document.getElementById('auth-modal');
   if (!overlay) return;
   // Use direct inline style — bypasses all CSS specificity issues
   overlay.style.display = 'flex';
@@ -3919,7 +3955,7 @@ function showAuthModal() {
 }
 
 function closeAuthModal() {
-  const overlay = document.getElementById('auth-modal-overlay');
+  const overlay = document.getElementById('auth-modal');
   if (!overlay) return;
   overlay.style.display = 'none';
   overlay.classList.remove('show');
