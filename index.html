@@ -835,6 +835,363 @@
     border-radius:16px;
     padding:24px;
   }
+
+  /* ═══════════════════════════════════════════════════
+     CLAUDE-STYLE DASHBOARD LAYOUT
+  ═══════════════════════════════════════════════════ */
+  #page-dashboard {
+    display: none;
+    height: calc(100vh - 61px);
+    background: var(--bg);
+    position: relative;
+  }
+
+  /* Main layout: sidebar left, content right */
+  .studio-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* ── LEFT SIDEBAR ── */
+  .studio-sidebar {
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .studio-sidebar::-webkit-scrollbar { width: 3px; }
+  .studio-sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .sidebar-section {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 10px;
+  }
+
+  /* Output type grid */
+  .otype-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .otype-btn {
+    padding: 8px 6px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .otype-btn:hover { border-color: var(--border-hover); }
+  .otype-btn.active {
+    background: rgba(124,110,247,0.12);
+    border-color: var(--accent);
+  }
+  .otype-btn.active-anim {
+    background: rgba(255,107,107,0.1);
+    border-color: #ff6b6b;
+  }
+  .otype-icon { font-size: 16px; margin-bottom: 2px; }
+  .otype-name { font-size: 11px; font-weight: 600; color: var(--text2); }
+  .otype-sub  { font-size: 9px; color: var(--text3); }
+  .otype-new-badge {
+    position: absolute; top: 3px; right: 3px;
+    background: #ff6b6b; color: #fff;
+    font-size: 7px; font-weight: 700;
+    padding: 1px 4px; border-radius: 3px;
+  }
+
+  /* Style pills */
+  .style-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+  .style-pill {
+    padding: 4px 10px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .style-pill:hover { border-color: var(--border-hover); color: var(--text); }
+  .style-pill.active {
+    background: rgba(124,110,247,0.12);
+    border-color: var(--accent);
+    color: var(--accent2);
+  }
+  .style-pill .pill-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: currentColor; flex-shrink: 0;
+  }
+
+  /* Color swatches */
+  .color-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+  .color-swatch {
+    padding: 6px 8px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    display: flex; flex-direction: column; gap: 4px;
+    transition: border-color 0.15s;
+  }
+  .color-swatch:hover { border-color: var(--border-hover); }
+  .color-swatch.active { border-color: var(--accent); }
+  .swatch-dots { display: flex; gap: 3px; }
+  .swatch-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .swatch-name { font-size: 9px; color: var(--text3); }
+
+  /* ── RIGHT: CONTENT AREA ── */
+  .studio-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Canvas — fills available space */
+  .studio-canvas {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: var(--bg);
+    overflow: hidden;
+  }
+
+  /* Canvas top bar */
+  .studio-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    gap: 12px;
+  }
+  .topbar-status { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text3); }
+  .topbar-status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text3); flex-shrink: 0; transition: background 0.3s; }
+  .topbar-status-dot.ready { background: #22d3a0; box-shadow: 0 0 5px #22d3a0; }
+  .topbar-status-dot.loading { background: #f5a623; animation: dot-pulse 1s ease-in-out infinite; }
+  .topbar-status-dot.error { background: #ff4444; }
+  @keyframes dot-pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .topbar-actions { display: flex; align-items: center; gap: 6px; }
+  .topbar-count-row { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text3); }
+
+  /* Gallery strip */
+  .studio-gallery {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-top: 1px solid var(--border);
+    background: var(--bg2);
+    overflow-x: auto;
+    flex-shrink: 0;
+    min-height: 60px;
+  }
+  .studio-gallery::-webkit-scrollbar { height: 3px; }
+  .studio-gallery::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  .gallery-label { font-size: 10px; color: var(--text3); white-space: nowrap; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .studio-thumb {
+    width: 44px; height: 44px;
+    border-radius: 8px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    cursor: pointer; flex-shrink: 0;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.2s;
+  }
+  .studio-thumb:hover { border-color: var(--accent); }
+  .studio-thumb svg, .studio-thumb img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+  /* ── CHAT BAR (bottom, full width) ── */
+  .studio-chat {
+    border-top: 1px solid var(--border);
+    background: var(--bg2);
+    padding: 12px 20px 14px;
+    flex-shrink: 0;
+  }
+  .chat-messages {
+    max-height: 120px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .chat-messages:empty { display: none; }
+  .chat-messages::-webkit-scrollbar { width: 3px; }
+  .chat-msg-row { display: flex; gap: 8px; align-items: flex-start; }
+  .chat-msg-avatar {
+    width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+    font-size: 10px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .chat-msg-avatar.user { background: linear-gradient(135deg, var(--accent), var(--pink)); color: #fff; }
+  .chat-msg-avatar.ai { background: var(--bg3); border: 1px solid var(--border); color: var(--text3); }
+  .chat-msg-bubble {
+    padding: 6px 11px;
+    border-radius: 10px;
+    font-size: 12px;
+    line-height: 1.4;
+    max-width: 80%;
+  }
+  .chat-msg-row.user .chat-msg-bubble {
+    background: rgba(124,110,247,0.15);
+    border: 1px solid rgba(124,110,247,0.3);
+    color: var(--text);
+    border-radius: 10px 10px 3px 10px;
+    margin-left: auto;
+  }
+  .chat-msg-row.ai .chat-msg-bubble {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    border-radius: 10px 10px 10px 3px;
+  }
+  /* Input row */
+  .chat-input-area {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 10px 14px;
+    transition: border-color 0.2s;
+  }
+  .chat-input-area:focus-within { border-color: var(--accent); }
+  .chat-textarea {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    resize: none;
+    line-height: 1.5;
+    max-height: 120px;
+    overflow-y: auto;
+    padding: 0;
+  }
+  .chat-textarea::placeholder { color: var(--text3); }
+  .chat-input-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .chat-count-pills { display: flex; gap: 4px; }
+  .chat-count-pill {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--text3);
+    font-size: 12px; font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .chat-count-pill:hover { border-color: var(--border-hover); color: var(--text); }
+  .chat-count-pill.active { background: rgba(124,110,247,0.12); border-color: var(--accent); color: var(--accent2); }
+  .chat-send-btn {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--pink));
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+  }
+  .chat-send-btn:hover { opacity: 0.85; }
+  .chat-send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .chat-send-btn svg { width: 16px; height: 16px; }
+  .chat-hint {
+    font-size: 10px; color: var(--text3);
+    text-align: center; margin-top: 6px;
+  }
+  /* Empty canvas state */
+  .canvas-empty {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 12px; opacity: 0.4; text-align: center;
+  }
+  .canvas-empty svg { opacity: 0.4; }
+  .canvas-empty-title { font-size: 15px; color: var(--text2); font-weight: 500; }
+  .canvas-empty-sub { font-size: 12px; color: var(--text3); max-width: 280px; line-height: 1.5; }
+  /* Loading ring */
+  .canvas-loading {
+    display: none; flex-direction: column;
+    align-items: center; justify-content: center; gap: 14px;
+  }
+  .loading-ring-new {
+    width: 40px; height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin-ring 0.8s linear infinite;
+  }
+  @keyframes spin-ring { to { transform: rotate(360deg); } }
+  .loading-text-new { font-size: 13px; color: var(--text2); }
+  /* SVG output */
+  #studio-svg-output {
+    display: none;
+    width: 100%; height: 100%;
+    align-items: center; justify-content: center;
+    padding: 24px; box-sizing: border-box;
+  }
+  #studio-svg-output svg { max-width: 100%; max-height: 100%; }
+  #studio-img-output {
+    display: none;
+    max-width: 100%; max-height: 100%;
+    object-fit: contain;
+  }
+  #studio-batch-grid {
+    display: none;
+    width: 100%; height: 100%;
+    overflow-y: auto;
+    padding: 16px;
+    box-sizing: border-box;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    align-content: start;
+  }
+  .batch-cell {
+    aspect-ratio: 1;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; overflow: hidden;
+    transition: border-color 0.2s;
+    padding: 12px; box-sizing: border-box;
+  }
+  .batch-cell:hover { border-color: var(--accent); }
+  .batch-cell svg { max-width: 100%; max-height: 100%; }
 </style>
 <!-- Google Sign-In -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -1141,284 +1498,225 @@
      PAGE 2: DASHBOARD  (logged in only)
 ═══════════════════════════════════════════════════════ -->
 <div id="page-dashboard">
-<div class="app-container" id="app">
+<div class="studio-layout">
 
-  <!-- ── LEFT: CONTROLS PANEL ─────────────────────────────── -->
-  <div class="dash-controls">
+  <!-- ═══ LEFT SIDEBAR ═══ -->
+  <aside class="studio-sidebar">
 
     <!-- Output type -->
-    <div class="ctrl-section">
-      <div class="ctrl-label">Output type</div>
-      <div class="output-type-tabs" style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;">
-        <div class="output-type-tab active" id="otype-svg-icon" onclick="setOutputTypeMain('svg-icon')">
-          <div style="font-size:16px;margin-bottom:2px;">◻</div>
-          <div style="font-size:11px;font-weight:500;">Icon</div>
-          <div style="font-size:9px;color:var(--text3);">SVG</div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Output type</div>
+      <div class="otype-grid">
+        <div class="otype-btn active" id="otype-svg-icon" onclick="setOutputTypeMain('svg-icon')">
+          <div class="otype-icon">◻</div>
+          <div class="otype-name">Icon</div>
+          <div class="otype-sub">SVG</div>
         </div>
-        <div class="output-type-tab" id="otype-svg-scene" onclick="setOutputTypeMain('svg-scene')">
-          <div style="font-size:16px;margin-bottom:2px;">🖼</div>
-          <div style="font-size:11px;font-weight:500;">Scene</div>
-          <div style="font-size:9px;color:var(--text3);">SVG</div>
+        <div class="otype-btn" id="otype-svg-scene" onclick="setOutputTypeMain('svg-scene')">
+          <div class="otype-icon">🖼</div>
+          <div class="otype-name">Scene</div>
+          <div class="otype-sub">SVG</div>
         </div>
-        <div class="output-type-tab" id="otype-dalle" onclick="setOutputTypeMain('dalle')">
-          <div style="font-size:16px;margin-bottom:2px;">✦</div>
-          <div style="font-size:11px;font-weight:500;">AI Image</div>
-          <div style="font-size:9px;color:var(--text3);">GPT Image 1.5</div>
+        <div class="otype-btn" id="otype-dalle" onclick="setOutputTypeMain('dalle')">
+          <div class="otype-icon">✦</div>
+          <div class="otype-name">AI Image</div>
+          <div class="otype-sub">GPT Image</div>
         </div>
-        <div class="output-type-tab" id="otype-animated" onclick="setOutputTypeMain('animated')" style="border-color:rgba(255,80,80,.3);position:relative;">
-          <div style="font-size:16px;margin-bottom:2px;">⚡</div>
-          <div style="font-size:11px;font-weight:500;">Animated</div>
-          <div style="font-size:9px;color:#ff6b6b;">SVG+CSS</div>
-          <div style="position:absolute;top:4px;right:4px;background:#ff6b6b;color:#fff;font-size:8px;font-weight:700;padding:1px 4px;border-radius:3px;line-height:1.4;">NEW</div>
+        <div class="otype-btn" id="otype-animated" onclick="setOutputTypeMain('animated')">
+          <div class="otype-icon">⚡</div>
+          <div class="otype-name">Animated</div>
+          <div class="otype-sub">SVG+CSS</div>
+          <div class="otype-new-badge">NEW</div>
         </div>
-      </div
+      </div>
     </div>
 
-    <!-- Animation style (shown when Animated selected) -->
-    
+    <!-- Animation style (hidden by default) -->
+    <div class="sidebar-section" id="anim-style-section" style="display:none;">
+      <div class="sidebar-section-label">Animation style</div>
+      <div class="style-pills">
+        <div class="style-pill active" onclick="setAnimStyle(this,'pulse-glow')"><span class="pill-dot"></span>Pulse Glow</div>
+        <div class="style-pill" onclick="setAnimStyle(this,'spin')"><span class="pill-dot"></span>Spin</div>
+        <div class="style-pill" onclick="setAnimStyle(this,'draw')"><span class="pill-dot"></span>Draw On</div>
+        <div class="style-pill" onclick="setAnimStyle(this,'warning')"><span class="pill-dot"></span>Warning</div>
+        <div class="style-pill" onclick="setAnimStyle(this,'success')"><span class="pill-dot"></span>Success</div>
+        <div class="style-pill" onclick="setAnimStyle(this,'bounce')"><span class="pill-dot"></span>Bounce</div>
+        <div class="style-pill" onclick="setAnimStyle(this,'loading')"><span class="pill-dot"></span>Loading</div>
+        <div class="style-pill" onclick="setAnimStyle(this,'morph')"><span class="pill-dot"></span>Morph</div>
+      </div>
+      <div class="sidebar-section-label" style="margin-top:10px;">State</div>
+      <div class="style-pills">
+        <div class="style-pill active" onclick="setAnimState(this,'idle')"><span class="pill-dot"></span>Idle</div>
+        <div class="style-pill" onclick="setAnimState(this,'active')"><span class="pill-dot"></span>Active</div>
+        <div class="style-pill" onclick="setAnimState(this,'warning')"><span class="pill-dot"></span>Warning</div>
+        <div class="style-pill" onclick="setAnimState(this,'error')"><span class="pill-dot"></span>Error</div>
+        <div class="style-pill" onclick="setAnimState(this,'success')"><span class="pill-dot"></span>Success</div>
+      </div>
+    </div>
 
     <!-- Icon style -->
-    <div class="ctrl-section" id="style-section">
-      <label id="style-label">Icon style</label>
-      <div class="style-tabs" id="style-tabs">
-        <div class="style-tab active" data-style="minimal"><div class="style-tab-dot" style="background:#7c6ef7"></div>Minimal</div>
-        <div class="style-tab" data-style="bold-flat"><div class="style-tab-dot" style="background:#f06dba"></div>Bold</div>
-        <div class="style-tab" data-style="line-art"><div class="style-tab-dot" style="background:#4fb8f7"></div>Line Art</div>
-        <div class="style-tab" data-style="isometric"><div class="style-tab-dot" style="background:#22d3a0"></div>Isometric</div>
-        <div class="style-tab" data-style="duotone"><div class="style-tab-dot" style="background:#a292ff"></div>Duotone</div>
-        <div class="style-tab" data-style="glassmorphism"><div class="style-tab-dot" style="background:#c8c0ff"></div>Glass</div>
-        <div class="style-tab" data-style="retro"><div class="style-tab-dot" style="background:#e85454"></div>Retro</div>
-        <div class="style-tab" data-style="flat-illustration" id="tab-flat-illus" style="display:none"><div class="style-tab-dot" style="background:#f5a623"></div>Flat</div>
+    <div class="sidebar-section" id="style-section">
+      <div class="sidebar-section-label">Icon style</div>
+      <div class="style-pills" id="style-tabs">
+        <div class="style-pill active" data-style="minimal" onclick="setStyleFromPill(this,'minimal')"><span class="pill-dot"></span>Minimal</div>
+        <div class="style-pill" data-style="bold-flat" onclick="setStyleFromPill(this,'bold-flat')"><span class="pill-dot"></span>Bold</div>
+        <div class="style-pill" data-style="line-art" onclick="setStyleFromPill(this,'line-art')"><span class="pill-dot"></span>Line Art</div>
+        <div class="style-pill" data-style="isometric" onclick="setStyleFromPill(this,'isometric')"><span class="pill-dot"></span>Isometric</div>
+        <div class="style-pill" data-style="duotone" onclick="setStyleFromPill(this,'duotone')"><span class="pill-dot"></span>Duotone</div>
+        <div class="style-pill" data-style="glassmorphism" onclick="setStyleFromPill(this,'glassmorphism')"><span class="pill-dot"></span>Glass</div>
+        <div class="style-pill" data-style="retro" onclick="setStyleFromPill(this,'retro')"><span class="pill-dot"></span>Retro</div>
       </div>
     </div>
 
     <!-- Color -->
-    <div class="ctrl-section" id="color-section">
-      <div class="ctrl-label">Color</div>
-      <div class="palette-grid" id="palette-grid">
-        <div class="palette-card active" data-palette="warm" onclick="setPalette(this,'warm')">
-          <div class="palette-swatches"><div class="palette-dot" style="background:#e8855a"></div><div class="palette-dot" style="background:#f5a623"></div><div class="palette-dot" style="background:#c4614a"></div></div>
-          <div class="palette-name">Warm</div>
-        </div>
-        <div class="palette-card" data-palette="cool" onclick="setPalette(this,'cool')">
-          <div class="palette-swatches"><div class="palette-dot" style="background:#7c6ef7"></div><div class="palette-dot" style="background:#4fb8f7"></div><div class="palette-dot" style="background:#22d3a0"></div></div>
-          <div class="palette-name">Cool</div>
-        </div>
-        <div class="palette-card" data-palette="bold" onclick="setPalette(this,'bold')">
-          <div class="palette-swatches"><div class="palette-dot" style="background:#e63946"></div><div class="palette-dot" style="background:#f4a261"></div><div class="palette-dot" style="background:#2a9d8f"></div></div>
-          <div class="palette-name">Bold</div>
-        </div>
-        <div class="palette-card" data-palette="earth" onclick="setPalette(this,'earth')">
-          <div class="palette-swatches"><div class="palette-dot" style="background:#8b6f47"></div><div class="palette-dot" style="background:#c8a97e"></div><div class="palette-dot" style="background:#d4956a"></div></div>
-          <div class="palette-name">Earth</div>
-        </div>
-        <div class="palette-card" data-palette="midnight" onclick="setPalette(this,'midnight')">
-          <div class="palette-swatches"><div class="palette-dot" style="background:#7c6ef7"></div><div class="palette-dot" style="background:#1e1e3a"></div><div class="palette-dot" style="background:#a292ff"></div></div>
-          <div class="palette-name">Midnight</div>
-        </div>
-        <div class="palette-card" data-palette="nature" onclick="setPalette(this,'nature')">
-          <div class="palette-swatches"><div class="palette-dot" style="background:#2d6a4f"></div><div class="palette-dot" style="background:#74c69d"></div><div class="palette-dot" style="background:#52b788"></div></div>
-          <div class="palette-name">Nature</div>
-        </div>
-        <div class="palette-card" data-palette="pastel" onclick="setPalette(this,'pastel')">
-          <div class="palette-swatches"><div class="palette-dot" style="background:#ffd6e0"></div><div class="palette-dot" style="background:#c8e6c9"></div><div class="palette-dot" style="background:#e1bee7"></div></div>
-          <div class="palette-name">Pastel</div>
-        </div>
-        <div class="palette-card" data-palette="mono" onclick="setPalette(this,'mono')">
-          <div class="palette-swatches"><div class="palette-dot" style="background:#111111"></div><div class="palette-dot" style="background:#555555"></div><div class="palette-dot" style="background:#aaaaaa"></div></div>
-          <div class="palette-name">Mono</div>
-        </div>
+    <div class="sidebar-section" id="color-section">
+      <div class="sidebar-section-label">Color</div>
+      <div class="color-grid" id="color-grid-new">
+        <div class="color-swatch active" onclick="setPalette(this,'warm')"><div class="swatch-dots"><div class="swatch-dot" style="background:#e8855a"></div><div class="swatch-dot" style="background:#f5a623"></div><div class="swatch-dot" style="background:#e8c44a"></div></div><div class="swatch-name">Warm</div></div>
+        <div class="color-swatch" onclick="setPalette(this,'cool')"><div class="swatch-dots"><div class="swatch-dot" style="background:#4fb8f7"></div><div class="swatch-dot" style="background:#7c6ef7"></div><div class="swatch-dot" style="background:#22d3a0"></div></div><div class="swatch-name">Cool</div></div>
+        <div class="color-swatch" onclick="setPalette(this,'bold')"><div class="swatch-dots"><div class="swatch-dot" style="background:#e63946"></div><div class="swatch-dot" style="background:#f4a261"></div><div class="swatch-dot" style="background:#e76f51"></div></div><div class="swatch-name">Bold</div></div>
+        <div class="color-swatch" onclick="setPalette(this,'earth')"><div class="swatch-dots"><div class="swatch-dot" style="background:#8b7355"></div><div class="swatch-dot" style="background:#a0856c"></div><div class="swatch-dot" style="background:#c4a882"></div></div><div class="swatch-name">Earth</div></div>
+        <div class="color-swatch" onclick="setPalette(this,'midnight')"><div class="swatch-dots"><div class="swatch-dot" style="background:#7c6ef7"></div><div class="swatch-dot" style="background:#9b6ef7"></div></div><div class="swatch-name">Midnight</div></div>
+        <div class="color-swatch" onclick="setPalette(this,'nature')"><div class="swatch-dots"><div class="swatch-dot" style="background:#2d6a4f"></div><div class="swatch-dot" style="background:#74c69d"></div><div class="swatch-dot" style="background:#52b788"></div></div><div class="swatch-name">Nature</div></div>
+        <div class="color-swatch" onclick="setPalette(this,'pastel')"><div class="swatch-dots"><div class="swatch-dot" style="background:#f9c6d0"></div><div class="swatch-dot" style="background:#c6def9"></div><div class="swatch-dot" style="background:#d4f9c6"></div></div><div class="swatch-name">Pastel</div></div>
+        <div class="color-swatch" onclick="setPalette(this,'mono')"><div class="swatch-dots"><div class="swatch-dot" style="background:#888"></div><div class="swatch-dot" style="background:#555"></div></div><div class="swatch-name">Mono</div></div>
       </div>
     </div>
 
     <!-- AI Image options -->
-    <div class="ctrl-section" id="dalle-options-section" style="display:none;">
-      <label>Image style</label>
-      <div class="img-style-grid" id="img-style-grid">
-        <div class="img-style-card active" data-img-style="flat-vector" onclick="setImgStyle(this,'flat-vector')">
-          <div class="img-style-card-name">Flat vector</div>
-          <div class="img-style-card-desc">Canva-style scenes</div>
-        </div>
-        <div class="img-style-card" data-img-style="cartoon" onclick="setImgStyle(this,'cartoon')">
-          <div class="img-style-card-name">Cartoon</div>
-          <div class="img-style-card-desc">Expressive characters</div>
-        </div>
-        <div class="img-style-card" data-img-style="3d-render" onclick="setImgStyle(this,'3d-render')">
-          <div class="img-style-card-name">3D render</div>
-          <div class="img-style-card-desc">Glossy 3D</div>
-        </div>
-        <div class="img-style-card" data-img-style="watercolor" onclick="setImgStyle(this,'watercolor')">
-          <div class="img-style-card-name">Watercolour</div>
-          <div class="img-style-card-desc">Painted textures</div>
-        </div>
+    <div class="sidebar-section" id="dalle-options-section" style="display:none;">
+      <div class="sidebar-section-label">Image style</div>
+      <div class="style-pills" id="img-style-pills">
+        <div class="style-pill active" onclick="setImgStyle(this,'flat-vector')"><span class="pill-dot"></span>Flat vector</div>
+        <div class="style-pill" onclick="setImgStyle(this,'canva-scene')"><span class="pill-dot"></span>Canva scene</div>
+        <div class="style-pill" onclick="setImgStyle(this,'cartoon')"><span class="pill-dot"></span>Cartoon</div>
+        <div class="style-pill" onclick="setImgStyle(this,'3d-render')"><span class="pill-dot"></span>3D render</div>
+        <div class="style-pill" onclick="setImgStyle(this,'watercolour')"><span class="pill-dot"></span>Watercolour</div>
       </div>
-      <label style="margin-top:6px;">Output type</label>
-      <div class="output-type-tabs" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
-        <div class="output-type-tab active" id="dtype-scene" onclick="setDalleType('scene')" style="text-align:center;padding:8px;">Scene</div>
-        <div class="output-type-tab" id="dtype-iconset" onclick="setDalleType('iconset')" style="text-align:center;padding:8px;">Icon set</div>
-      </div>
-      <!-- Icon set sub-options -->
-      <div id="iconset-sub" style="display:none;flex-direction:column;gap:8px;margin-top:6px;">
-        <label>Color scheme</label>
-        <div class="color-scheme-grid" id="color-scheme-grid">
-          <div class="color-scheme-card active" data-scheme="navy-blue" onclick="setColorScheme(this,'navy-blue')"><div class="cs-swatches"><div class="cs-dot" style="background:#1a3a6b"></div><div class="cs-dot" style="background:#4a90d9"></div></div><div class="cs-name">Navy</div></div>
-          <div class="color-scheme-card" data-scheme="purple" onclick="setColorScheme(this,'purple')"><div class="cs-swatches"><div class="cs-dot" style="background:#4a1d96"></div><div class="cs-dot" style="background:#8b5cf6"></div></div><div class="cs-name">Purple</div></div>
-          <div class="color-scheme-card" data-scheme="teal" onclick="setColorScheme(this,'teal')"><div class="cs-swatches"><div class="cs-dot" style="background:#065f46"></div><div class="cs-dot" style="background:#10b981"></div></div><div class="cs-name">Teal</div></div>
-          <div class="color-scheme-card" data-scheme="orange" onclick="setColorScheme(this,'orange')"><div class="cs-swatches"><div class="cs-dot" style="background:#9a3412"></div><div class="cs-dot" style="background:#f97316"></div></div><div class="cs-name">Orange</div></div>
-          <div class="color-scheme-card" data-scheme="mono" onclick="setColorScheme(this,'mono')"><div class="cs-swatches"><div class="cs-dot" style="background:#1f2937"></div><div class="cs-dot" style="background:#6b7280"></div></div><div class="cs-name">Mono</div></div>
-          <div class="color-scheme-card" data-scheme="red" onclick="setColorScheme(this,'red')"><div class="cs-swatches"><div class="cs-dot" style="background:#991b1b"></div><div class="cs-dot" style="background:#ef4444"></div></div><div class="cs-name">Red</div></div>
-          <div class="color-scheme-card" data-scheme="gold" onclick="setColorScheme(this,'gold')"><div class="cs-swatches"><div class="cs-dot" style="background:#92400e"></div><div class="cs-dot" style="background:#f59e0b"></div></div><div class="cs-name">Gold</div></div>
-          <div class="color-scheme-card" data-scheme="pink" onclick="setColorScheme(this,'pink')"><div class="cs-swatches"><div class="cs-dot" style="background:#9d174d"></div><div class="cs-dot" style="background:#ec4899"></div></div><div class="cs-name">Pink</div></div>
-        </div>
-        <label>Icon count</label>
-        <div class="icon-count-row">
-          <div class="icon-count-btn" data-count="4" onclick="setIconCount(this,4)">4</div>
-          <div class="icon-count-btn active" data-count="6" onclick="setIconCount(this,6)">6</div>
-          <div class="icon-count-btn" data-count="9" onclick="setIconCount(this,9)">9</div>
-          <div class="icon-count-btn" data-count="12" onclick="setIconCount(this,12)">12</div>
-        </div>
-      </div>
-      <div class="dalle-notice" style="margin-top:6px;">GPT Image 1.5 (OpenAI) · ~$0.04–0.12/image · or Recraft V4 (fal.ai) for native SVG</div>
     </div>
 
     <!-- Beta badge -->
-    <div class="ctrl-section">
-      <div style="padding:8px 12px;background:rgba(34,211,160,.08);border:1px solid rgba(34,211,160,.2);border-radius:8px;display:flex;align-items:center;gap:8px;">
+    <div class="sidebar-section">
+      <div style="padding:7px 10px;background:rgba(34,211,160,.08);border:1px solid rgba(34,211,160,.2);border-radius:8px;display:flex;align-items:center;gap:7px;">
         <div style="width:6px;height:6px;border-radius:50%;background:#22d3a0;box-shadow:0 0 5px #22d3a0;flex-shrink:0;"></div>
         <span style="font-size:11px;color:#22d3a0;font-weight:500;">Beta — Unlimited generations</span>
       </div>
     </div>
 
-    <!-- Hidden compatibility elements -->
+    <!-- Hidden compat -->
     <div style="display:none;">
       <input type="checkbox" id="quality-toggle">
       <input id="img-style-select">
       <span id="ai-used-badge"></span>
       <span id="gen-limit-used"></span>
       <div id="gen-limit-fill"></div>
+      <div id="api-section"></div>
+      <div id="iconset-controls-section"></div>
     </div>
 
-  </div>
-  <!-- END CONTROLS PANEL -->
+  </aside>
 
-  <!-- ── RIGHT: CANVAS + CHAT ──────────────────────────────── -->
-  <div class="dash-main">
+  <!-- ═══ RIGHT: CANVAS + CHAT ═══ -->
+  <div class="studio-content">
 
-    <!-- Canvas area -->
-    <div class="dash-canvas">
-
-      <!-- Top bar: status + actions -->
-      <div class="canvas-topbar">
-        <div class="dash-status">
-          <div class="status-dot" id="status-dot"></div>
-          <span id="status-text">Ready to generate</span>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <!-- Batch count -->
-          <div style="display:flex;align-items:center;gap:6px;">
-            <span style="font-size:11px;color:var(--text3);">Count:</span>
-            <div class="batch-btns">
-              <button class="batch-btn active" data-count="1" onclick="setBatchCount(this,1)">1</button>
-              <button class="batch-btn" data-count="3" onclick="setBatchCount(this,3)">3</button>
-              <button class="batch-btn" data-count="4" onclick="setBatchCount(this,4)">4</button>
-              <button class="batch-btn" data-count="5" onclick="setBatchCount(this,5)">5</button>
-            </div>
+    <!-- Top bar -->
+    <div class="studio-topbar">
+      <div class="topbar-status">
+        <div class="topbar-status-dot" id="status-dot"></div>
+        <span id="status-label">Ready to generate</span>
+      </div>
+      <div class="topbar-actions">
+        <div class="topbar-count-row">
+          <span style="font-size:11px;color:var(--text3);">Count:</span>
+          <div class="chat-count-pills">
+            <button class="chat-count-pill active" data-count="1" onclick="setBatchCount(this,1)">1</button>
+            <button class="chat-count-pill" data-count="3" onclick="setBatchCount(this,3)">3</button>
+            <button class="chat-count-pill" data-count="4" onclick="setBatchCount(this,4)">4</button>
+            <button class="chat-count-pill" data-count="5" onclick="setBatchCount(this,5)">5</button>
           </div>
-          <div style="width:1px;height:20px;background:var(--border);"></div>
-          <button class="action-btn" id="btn-copy" onclick="copyAction()" disabled>⎘ Copy SVG</button>
-          <button class="action-btn dl" id="btn-svg" onclick="downloadSVG()" disabled>↓ SVG</button>
-          <button class="action-btn dl" id="btn-png" onclick="downloadPNG()" disabled>↓ PNG</button>
-          <button class="action-btn export" id="btn-export" onclick="toggleExportPanel()" disabled>⬡ PPTX</button>
         </div>
-      </div>
-
-      <!-- Result display -->
-      <div class="canvas-result" id="canvas-area">
-        <!-- Loading state -->
-        <div id="loading-state" style="display:none;flex-direction:column;align-items:center;gap:16px;">
-          <div class="loading-ring"></div>
-          <div style="font-size:13px;color:var(--text2);" id="loading-sub-text">Generating…</div>
-          <div class="loading-progress"><div class="loading-bar" id="loading-bar"></div></div>
-        </div>
-        <!-- Empty state -->
-        <div id="empty-state" style="display:flex;flex-direction:column;align-items:center;gap:12px;opacity:.5;">
-          <svg viewBox="0 0 64 64" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".4">
-            <rect x="8" y="8" width="48" height="48" rx="12"/><path d="M24 32h16M32 24v16"/>
-          </svg>
-          <div style="font-size:14px;color:var(--text2);font-weight:500;">Your illustration appears here</div>
-          <div style="font-size:12px;color:var(--text3);text-align:center;max-width:280px;">Type a prompt below and press Generate — or pick a quick prompt</div>
-        </div>
-        <!-- SVG output -->
-        <div id="svg-output" style="display:none;width:100%;height:100%;align-items:center;justify-content:center;"></div>
-        <!-- Image output -->
-        <img id="image-output" alt="AI generated illustration" style="display:none;max-width:100%;max-height:100%;object-fit:contain;">
-        <!-- Batch grid -->
-        <div id="batch-grid" style="display:none;width:100%;height:100%;overflow-y:auto;"></div>
-        <!-- PPTX export panel -->
-        <div id="export-panel" style="display:none;position:absolute;top:12px;right:12px;z-index:10;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;min-width:220px;"></div>
-        <!-- Icon grid overlay -->
-        <div class="icon-grid-overlay" id="icon-grid-overlay" style="display:none;"></div>
-      </div>
-
-      <!-- Gallery strip -->
-      <div class="gallery-strip" id="gallery-strip">
-        <div style="font-size:11px;color:var(--text3);white-space:nowrap;padding:0 4px;">Gallery</div>
-        <div id="gallery-grid" style="display:flex;gap:8px;flex:1;overflow-x:auto;"></div>
-      </div>
-
-    </div>
-    <!-- END CANVAS -->
-
-    <!-- ── CHAT REFINEMENT BAR ──────────────────────────── -->
-    <div class="dash-chat">
-      <!-- Quick prompt chips -->
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;" id="quick-chips">
-        <button class="prompt-chip" onclick="useChip(this,'settings gear')">⚙ Settings</button>
-        <button class="prompt-chip" onclick="useChip(this,'wifi signal')">📶 Wifi</button>
-        <button class="prompt-chip" onclick="useChip(this,'user profile')">👤 Profile</button>
-        <button class="prompt-chip" onclick="useChip(this,'security shield')">🔒 Security</button>
-        <button class="prompt-chip" onclick="useChip(this,'analytics dashboard')">📊 Analytics</button>
-        <button class="prompt-chip" onclick="useChip(this,'notification bell')">🔔 Bell</button>
-        <button class="prompt-chip" onclick="useChip(this,'donation heart')">💛 Donation</button>
-        <button class="prompt-chip" onclick="useChip(this,'team collaboration')">👥 Team</button>
-      </div>
-
-      <!-- Chat history -->
-      <div class="chat-history" id="chat-history"></div>
-
-      <!-- Input row -->
-      <div class="chat-input-row">
-        <div style="position:relative;flex:1;">
-          <textarea
-            class="chat-input"
-            id="prompt-input"
-            placeholder="Describe what you want, or refine your last result…"
-            rows="1"
-            onkeydown="if((event.metaKey||event.ctrlKey)&&event.key==='Enter'){event.preventDefault();generate();}else if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();generate();}"
-            oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px';"
-          ></textarea>
-        </div>
-        <button class="chat-send-btn" id="gen-btn" onclick="generate()" title="Generate (Cmd+Enter)">
-          <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="10" y1="16" x2="10" y2="4"/><polyline points="4,10 10,4 16,10"/>
-          </svg>
-        </button>
-      </div>
-      <div style="font-size:10px;color:var(--text3);margin-top:5px;text-align:center;">
-        ↵ Enter to generate &nbsp;·&nbsp; Shift+Enter for new line &nbsp;·&nbsp; After generating, type to refine
+        <div style="width:1px;height:20px;background:var(--border);margin:0 4px;"></div>
+        <button class="action-btn" id="btn-copy" onclick="copyAction()" disabled>⎘ Copy SVG</button>
+        <button class="action-btn dl" id="btn-svg" onclick="downloadSVG()" disabled>↓ SVG</button>
+        <button class="action-btn dl" id="btn-png" onclick="downloadPNG()" disabled>↓ PNG</button>
+        <button class="action-btn export" id="btn-export" onclick="toggleExportPanel()" disabled>⬡ PPTX</button>
       </div>
     </div>
-    <!-- END CHAT BAR -->
 
-  </div>
-  <!-- END MAIN -->
+    <!-- Canvas -->
+    <div class="studio-canvas" id="canvas-area">
+      <!-- Empty state -->
+      <div class="canvas-empty" id="empty-state">
+        <svg viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+          <rect x="6" y="6" width="36" height="36" rx="8"/>
+          <path d="M18 24h12M24 18v12"/>
+        </svg>
+        <div class="canvas-empty-title">Your illustration appears here</div>
+        <div class="canvas-empty-sub">Type a prompt below and press Generate</div>
+      </div>
+      <!-- Loading -->
+      <div class="canvas-loading" id="loading-state">
+        <div class="loading-ring-new"></div>
+        <div class="loading-text-new" id="loading-sub-text">Generating…</div>
+      </div>
+      <!-- SVG output -->
+      <div id="svg-output" style="display:none;width:100%;height:100%;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;"></div>
+      <!-- Image output -->
+      <img id="image-output" alt="Generated illustration" style="display:none;max-width:100%;max-height:100%;object-fit:contain;">
+      <!-- Batch grid -->
+      <div id="batch-grid" style="display:none;width:100%;height:100%;overflow-y:auto;padding:16px;box-sizing:border-box;display:none;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;align-content:start;"></div>
+      <!-- PPTX export panel -->
+      <div id="export-panel" style="display:none;position:absolute;top:12px;right:12px;z-index:10;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;min-width:220px;box-shadow:0 8px 32px rgba(0,0,0,0.3);"></div>
+      <!-- Icon grid overlay -->
+      <div class="icon-grid-overlay" id="icon-grid-overlay" style="display:none;"></div>
+    </div>
 
-  <!-- Hidden: var-btn for compatibility -->
+    <!-- Gallery strip -->
+    <div class="studio-gallery" id="gallery-strip">
+      <span class="gallery-label">History</span>
+      <div id="gallery-grid" style="display:flex;gap:8px;flex:1;overflow-x:auto;"></div>
+    </div>
+
+    <!-- ═══ CHAT BAR — full width at bottom ═══ -->
+    <div class="studio-chat">
+      <!-- Message history -->
+      <div class="chat-messages" id="chat-history"></div>
+      <!-- Input -->
+      <div class="chat-input-area">
+        <textarea
+          class="chat-textarea"
+          id="prompt-input"
+          placeholder="Describe an icon, scene, or illustration… or refine your last result"
+          rows="1"
+          oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px';"
+          onkeydown="if((event.metaKey||event.ctrlKey||(!event.shiftKey))&&event.key==='Enter'&&!event.shiftKey){event.preventDefault();generate();}"
+        ></textarea>
+        <div class="chat-input-right">
+          <div class="chat-count-pills" id="batch-count-pills">
+            <button class="chat-count-pill active" data-count="1" onclick="setBatchCount(this,1)">1</button>
+            <button class="chat-count-pill" data-count="3" onclick="setBatchCount(this,3)">3</button>
+            <button class="chat-count-pill" data-count="4" onclick="setBatchCount(this,4)">4</button>
+            <button class="chat-count-pill" data-count="5" onclick="setBatchCount(this,5)">5</button>
+          </div>
+          <button class="chat-send-btn" id="gen-btn" onclick="generate()" title="Generate (Enter)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="10" y1="17" x2="10" y2="3"/><polyline points="4,9 10,3 16,9"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="chat-hint">↵ Enter to generate &nbsp;·&nbsp; Shift+Enter new line &nbsp;·&nbsp; Describe changes to refine</div>
+    </div>
+
+  </div><!-- end studio-content -->
+
+  <!-- var-btn compat -->
   <button id="var-btn" style="display:none;" onclick="generateVariations()"></button>
 
-</div>
-</div>
+</div><!-- end studio-layout -->
+</div><!-- end page-dashboard -->
 <!-- END PAGE 2 -->
+
 
 
 <!-- OVERLAYS: outside both pages -->
@@ -2155,7 +2453,10 @@ function setOutputTypeMain(type) {
   const tabs = ['svg-icon','svg-scene','dalle','animated'];
   tabs.forEach(t => {
     const el = document.getElementById('otype-' + t);
-    if (el) el.classList.toggle('active', t === type);
+    if (el) {
+      el.classList.remove('active','active-anim');
+      if (t === type) el.classList.add(type === 'animated' ? 'active-anim' : 'active');
+    }
   });
 
   const isAnimated = type === 'animated';
@@ -2882,11 +3183,11 @@ let batchCount = 1;
 
 function setBatchCount(el, n) {
   batchCount = n;
-  document.querySelectorAll('.batch-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  // Update button label
-  const btn = document.getElementById('gen-btn');
-  if (btn) btn.textContent = n === 1 ? '✦ Generate' : `✦ Generate ${n}`;
+  // Sync all count pill sets
+  document.querySelectorAll('.batch-btn, .chat-count-pill').forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.count) === n);
+  });
+  // Update send button icon (keep as arrow icon, don't change)
 }
 
 async function generate() {
@@ -4371,6 +4672,32 @@ function viewHistory() {
 }
 
 // Kick off auth init
+
+// New sidebar helpers
+function setStyleFromPill(el, style) {
+  selectedStyle = style;
+  document.querySelectorAll('.style-pills .style-pill').forEach(p => {
+    if (p.closest('#style-section') || p.closest('[id="style-section"]')) p.classList.remove('active');
+  });
+  el.classList.add('active');
+  // Also sync old style-tabs for compat
+  document.querySelectorAll('#style-tabs .style-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.style === style);
+  });
+}
+
+function setPalette(el, palette) {
+  selectedPalette = palette;
+  document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function setImgStyle(el, style) {
+  selectedImgStyle = style;
+  document.querySelectorAll('#img-style-pills .style-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+}
+
 document.addEventListener('DOMContentLoaded', initAuth);
 
 // Ultimate fallback: intercept ALL clicks and check if near sign-in button
