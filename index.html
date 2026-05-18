@@ -6,7 +6,7 @@
 <title>IconAI — AI Icon & Illustration Generator</title>
 <style>
   /* PAGE CONTROL */
-  #page-landing { display:block; }
+  #page-landing { display:block; width:100%; overflow-x:hidden; }
   #page-dashboard { display:none; }
   :root {
     --bg:#0a0a0f;--bg2:#111118;--bg3:#18181f;--border:rgba(255,255,255,0.08);--border-hover:rgba(255,255,255,0.18);
@@ -498,7 +498,7 @@
 
   /* ═══════════════════════ LANDING PAGE ═══════════════════════ */
   /* Page visibility controlled by showPage() JS function */
-  #page-landing { display:block; }
+  #page-landing { display:block; width:100%; overflow-x:hidden; }
   #page-dashboard { display:none; height:calc(100vh - 61px); overflow:hidden; }
   /* Ensure header sits above ALL page content for pointer events */
   header { position:sticky; top:0; z-index:10000; pointer-events:all; isolation:isolate; }
@@ -512,6 +512,7 @@
     display:flex; flex-direction:column;
     align-items:center; justify-content:flex-start; text-align:center;
     padding:40px 24px 0; position:relative; overflow:hidden;
+    width:100%; max-width:100%;
   }
   .lp-glow {
     position:absolute; top:-200px; left:50%; transform:translateX(-50%);
@@ -522,6 +523,7 @@
   /* ── SAMPLE MOSAIC SCROLLER ── */
   .lp-mosaic-wrap {
     width:100%;
+    height:180px;
     background:var(--bg);
     border-bottom:1px solid var(--border);
     overflow:hidden;
@@ -546,6 +548,8 @@
     width:max-content;
     will-change:transform;
     isolation:isolate;
+    height:160px;
+    align-items:center;
   }
   .lp-mosaic:hover { animation-play-state:paused; }
   .lp-mosaic-cell {
@@ -2444,8 +2448,10 @@ if (complexityEl) complexityEl.addEventListener('input', e => {
 
 function pickShowcaseStyle(style) {
   document.querySelectorAll('.showcase-pill').forEach(p => p.classList.remove('active'));
-  event.target.closest('.showcase-pill').classList.add('active');
-  // ═══════════════════════════════════════════════════════════
+  if (event.target.closest('.showcase-pill')) event.target.closest('.showcase-pill').classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════════
 // MODE SWITCHING — SVG vs Image
 // ═══════════════════════════════════════════════════════════
 function setOutputTypeMain(type) {
@@ -2467,25 +2473,28 @@ function setOutputTypeMain(type) {
   // Switch internal mode
   currentMode = isDalle ? 'image' : 'svg';
 
-  // Show/hide sections
-  document.getElementById('style-section').style.display = isSVG ? '' : 'none';
-  document.getElementById('color-section').style.display = (isSVG || isAnimated) ? '' : 'none';
-  document.getElementById('dalle-options-section').style.display = isDalle ? '' : 'none';
-  const animSection = document.getElementById('anim-style-section');
-  if (animSection) animSection.style.display = isAnimated ? '' : 'none';
+  // Show/hide sections (with null checks)
+  const styleSection = document.getElementById('style-section');
+  const colorSection = document.getElementById('color-section');
+  const dalleSection = document.getElementById('dalle-options-section');
+  const animSection  = document.getElementById('anim-style-section');
+  if (styleSection) styleSection.style.display = isSVG ? '' : 'none';
+  if (colorSection) colorSection.style.display = (isSVG || isAnimated) ? '' : 'none';
+  if (dalleSection) dalleSection.style.display = isDalle ? '' : 'none';
+  if (animSection)  animSection.style.display  = isAnimated ? '' : 'none';
 
-  // For scenes, show flat-illustration style tab and auto-select it
+  // For scenes, auto-select flat-illustration style
   const flatTab = document.getElementById('tab-flat-illus');
   if (flatTab) {
-    if (!isIcon) {
-      flatTab.style.display = '';
-      if (type === 'svg-scene') {
-        document.querySelectorAll('#style-tabs .style-tab').forEach(t2 => t2.classList.remove('active'));
-        flatTab.classList.add('active');
-        selectedStyle = 'flat-illustration';
-      }
-    } else {
-      flatTab.style.display = 'none';
+    flatTab.style.display = isIcon ? 'none' : '';
+    if (type === 'svg-scene') {
+      document.querySelectorAll('#style-tabs .style-tab').forEach(t2 => t2.classList.remove('active'));
+      flatTab.classList.add('active');
+      selectedStyle = 'flat-illustration';
+    }
+  } else {
+    // flatTab not in DOM, handle via style-pills instead
+    if (type !== 'svg-scene' && selectedStyle === 'flat-illustration') {
       if (selectedStyle === 'flat-illustration') {
         selectedStyle = 'minimal';
         document.querySelectorAll('#style-tabs .style-tab').forEach(t2 => {
@@ -2497,25 +2506,30 @@ function setOutputTypeMain(type) {
 
   // Update prompt placeholder
   const ta = document.getElementById('prompt-input');
-  if (type === 'svg-icon') ta.placeholder = 'e.g. settings gear, wifi, shopping cart, security shield…';
-  else if (type === 'svg-scene') ta.placeholder = 'e.g. A woman and child receiving blankets from a volunteer…';
-  else if (type === 'animated') ta.placeholder = 'e.g. robotic arm, server, network, heartbeat, rocket launch…';
-  else ta.placeholder = 'e.g. team collaboration, donation scene, office workers…';
+  if (ta) {
+    if (type === 'svg-icon') ta.placeholder = 'e.g. settings gear, wifi, shopping cart, security shield…';
+    else if (type === 'svg-scene') ta.placeholder = 'e.g. A woman and child receiving blankets from a volunteer…';
+    else if (type === 'animated') ta.placeholder = 'e.g. robotic arm, server, network, heartbeat, rocket launch…';
+    else ta.placeholder = 'e.g. team collaboration, donation scene, office workers…';
+  }
 
   // Update generate button color
   const btn = document.getElementById('gen-btn');
   if (btn) {
     if (isDalle) btn.style.background = 'linear-gradient(135deg,#22d3a0,#4fb8f7)';
     else if (isAnimated) btn.style.background = 'linear-gradient(135deg,#ff6b6b,#ff4444)';
-    else btn.style.background = 'linear-gradient(135deg,var(--accent),var(--pink))';
-    btn.textContent = isAnimated ? '⚡ Generate Animated' : (batchCount > 1 ? `✦ Generate ${batchCount}` : '✦ Generate');
+    else btn.style.background = '';
   }
 
   // Reset canvas
-  document.getElementById('svg-output').style.display = 'none';
-  document.getElementById('image-output').style.display = 'none';
-  document.getElementById('empty-state').style.display = 'flex';
-  document.getElementById('bg-row').style.display = 'none';
+  const svgOut = document.getElementById('svg-output');
+  const imgOut = document.getElementById('image-output');
+  const emptyState = document.getElementById('empty-state');
+  const bgRow = document.getElementById('bg-row');
+  if (svgOut) svgOut.style.display = 'none';
+  if (imgOut) imgOut.style.display = 'none';
+  if (emptyState) emptyState.style.display = 'flex';
+  if (bgRow) bgRow.style.display = 'none';
   setStatus('Ready to generate', false);
 }
 
@@ -2598,11 +2612,6 @@ function setImgSize(el, size) {
   selectedImgSize = size;
 }
 
-document.querySelectorAll('#style-tabs .style-tab').forEach(t => {
-    t.classList.toggle('active', t.dataset.style === style);
-  });
-  selectedStyle = style;
-}
 
 function syncShowcase(style) {
   document.querySelectorAll('.showcase-pill').forEach(p => {
