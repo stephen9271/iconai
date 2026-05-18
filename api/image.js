@@ -1,4 +1,4 @@
-// api/image.js — DALL-E 3 image generation
+// api/image.js — Image generation with model auto-detection
 export const config = { maxDuration: 60 };
 
 export default async function handler(req, res) {
@@ -11,53 +11,65 @@ export default async function handler(req, res) {
 
   try {
     const { prompt, size = '1024x1024', quality = 'standard' } = req.body;
-
     if (!prompt) return res.status(400).json({ error: 'Missing prompt' });
+    if (!process.env.OPENAI_API_KEY) return res.status(503).json({ error: 'OPENAI_API_KEY not configured' });
 
-    if (!process.env.OPENAI_API_KEY) {
-      return res.status(503).json({ error: 'OPENAI_API_KEY not configured' });
-    }
-
-    // DALL-E 3 valid sizes: 1024x1024, 1792x1024, 1024x1792
-    const validSizes = ['1024x1024', '1792x1024', '1024x1792'];
-    const mappedSize = validSizes.includes(size) ? size : '1024x1024';
-
-    // DALL-E 3 quality: 'standard' or 'hd'
-    const mappedQuality = quality === 'hd' ? 'hd' : 'standard';
-
-    const r = await fetch('https://api.openai.com/v1/images/generations', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+    // Try models in order of preference
+    const models = [
+      {
+        name: 'dall-e-3',
+        body: {
+          model: 'dall-e-3',
+          prompt,
+          n: 1,
+          size: ['1024x1024','1792x1024','1024x1792'].includes(size) ? size : '1024x1024',
+          quality: quality === 'hd' ? 'hd' : 'standard'
+        }
       },
-      body: JSON.stringify({
-        model: 'dall-e-3',
-        prompt,
-        n: 1,
-        size: mappedSize,
-        quality: mappedQuality
-        // No response_format — defaults to url which is what we want
-      })
-    });
+      {
+        name: 'dall-e-2',
+        body: {
+          model: 'dall-e-2',
+          prompt: prompt.slice(0, 1000), // DALL-E 2 has shorter prompt limit
+          n: 1,
+          size: ['256x256','512x512','1024x1024'].includes(size) ? size : '1024x1024'
+        }
+      }
+    ];
 
-    if (!r.ok) {
+    for (const model of models) {
+      const r = await fetch('https://api.openai.com/v1/images/generations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+        },
+        body: JSON.stringify(model.body)
+      });
+
+      if (r.ok) {
+        const d = await r.json();
+        const url = d.data?.[0]?.url;
+        if (url) {
+          return res.status(200).json({ url, provider: model.name });
+        }
+      }
+
       const e = await r.json().catch(() => ({}));
-      const msg = e?.error?.message || `HTTP ${r.status}`;
-      console.error('DALL-E 3 error:', r.status, msg);
-      return res.status(r.status).json({ error: msg });
+      const msg = e?.error?.message || '';
+      console.warn(`${model.name} failed (${r.status}): ${msg}`);
+
+      // If it's not a "model doesn't exist" error, don't try next model
+      if (r.status !== 404 && !msg.includes('does not exist') && !msg.includes('model')) {
+        return res.status(r.status).json({ error: msg || `HTTP ${r.status}` });
+      }
+      // Otherwise try next model
     }
 
-    const d = await r.json();
-    const url = d.data?.[0]?.url;
-    const revised = d.data?.[0]?.revised_prompt;
-
-    if (!url) return res.status(500).json({ error: 'No image URL in response' });
-
-    return res.status(200).json({ url, provider: 'dall-e-3', revised_prompt: revised });
+    return res.status(503).json({ error: 'No image model available on this account. Check OpenAI plan supports image generation.' });
 
   } catch (err) {
-    console.error('Image generation error:', err.message);
+    console.error('Image error:', err.message);
     return res.status(500).json({ error: err.message });
   }
 }
