@@ -14,9 +14,9 @@
     --green:#22d3a0;--pink:#f06dba;--amber:#f5a623;--radius:14px;--radius-sm:8px;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+  html,body{height:100%;margin:0;padding:0;}body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
 
-  header{display:flex;align-items:center;justify-content:space-between;padding:20px 40px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10000;background:rgba(10,10,15,0.96);backdrop-filter:blur(20px);isolation:isolate;}
+  header{display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:61px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10000;background:rgba(10,10,15,0.96);backdrop-filter:blur(20px);isolation:isolate;flex-shrink:0;}
   .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.5px;display:flex;align-items:center;gap:8px;}
   .logo-mark{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--pink));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;}
   nav{display:flex;gap:8px;align-items:center;}
@@ -845,17 +845,24 @@
   ═══════════════════════════════════════════════════ */
   #page-dashboard {
     display: none;
-    height: calc(100vh - 61px);
+    position: fixed;
+    top: 61px;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: var(--bg);
-    position: relative;
+    overflow: hidden;
   }
 
   /* Main layout: sidebar left, content right */
   .studio-layout {
     display: grid;
     grid-template-columns: 260px 1fr;
+    width: 100%;
     height: 100%;
     overflow: hidden;
+    position: absolute;
+    inset: 0;
   }
 
   /* ── LEFT SIDEBAR ── */
@@ -2100,7 +2107,23 @@
 
 <div class="toast" id="toast"></div>
 
-<script>
+<script>// Safe element getter — returns a proxy that ignores calls if element not found
+function safeEl(id) {
+  const el = document.getElementById(id);
+  if (el) return el;
+  // Return a no-op proxy for style, classList, etc.
+  return new Proxy({}, {
+    get: (_, prop) => {
+      if (prop === 'style') return new Proxy({}, { set: () => true, get: () => '' });
+      if (prop === 'classList') return { add: ()=>{}, remove: ()=>{}, toggle: ()=>{}, contains: ()=>false };
+      if (typeof prop === 'string') return () => {};
+      return undefined;
+    },
+    set: () => true
+  });
+}
+
+
 // ═══════════════════════════════════════════════════════════
 // GLOBAL ERROR HANDLER
 // ═══════════════════════════════════════════════════════════
@@ -2525,7 +2548,7 @@ function setOutputTypeMain(type) {
   const svgOut = document.getElementById('svg-output');
   const imgOut = document.getElementById('image-output');
   const emptyState = document.getElementById('empty-state');
-  const bgRow = document.getElementById('bg-row');
+  const bgRow = safeEl('bg-row');
   if (svgOut) svgOut.style.display = 'none';
   if (imgOut) imgOut.style.display = 'none';
   if (emptyState) emptyState.style.display = 'flex';
@@ -2594,9 +2617,9 @@ function setMode(mode) {
   document.getElementById('svg-output').style.display = 'none';
   document.getElementById('image-output').style.display = 'none';
   document.getElementById('empty-state').style.display = 'flex';
-  document.getElementById('bg-row').style.display = 'none';
+  safeEl('bg-row').style.display = 'none';
   document.getElementById('svg-info-bar').className = 'svg-info-bar';
-  document.getElementById('quality-badge').className = 'quality-badge';
+  safeEl('quality-badge').className = 'quality-badge';
   setStatus('Ready to generate', false);
 }
 
@@ -3747,7 +3770,7 @@ function showResultSVG(svg, prompt, style, skipGallery) {
   out.style.display = 'block';
   document.getElementById('loading-state').style.display='none';
   document.getElementById('gen-btn').disabled=false;
-  document.getElementById('bg-row').style.display='flex';
+  safeEl('bg-row').style.display='flex';
   document.getElementById('btn-svg').disabled=false;
   document.getElementById('btn-svg').style.display='';
   document.getElementById('btn-png').disabled=false;
@@ -3760,14 +3783,14 @@ function showResultSVG(svg, prompt, style, skipGallery) {
   document.getElementById('icon-download-note').style.display='none';
 
   const q=scoreSVG(svg);
-  const badge=document.getElementById('quality-badge');
+  const badge=safeEl('quality-badge');
   badge.textContent=q==='high'?'✦ High quality':'· Good';
   badge.className=`quality-badge show ${q}`;
 
   const kb = Math.round(svg.length/1024*10)/10;
   const elCount = (svg.match(/<(path|rect|circle|ellipse|polygon|line|polyline)/g)||[]).length;
-  document.getElementById('svg-info-text').textContent = `${elCount} elements · ${kb}kb`;
-  document.getElementById('svg-info-type').textContent = 'SVG · Scalable to any size';
+  safeEl('svg-info-text').textContent = `${elCount} elements · ${kb}kb`;
+  safeEl('svg-info-type').textContent = 'SVG · Scalable to any size';
   document.getElementById('svg-info-bar').className='svg-info-bar show';
 
   setStatus(`${BLUEPRINTS[style]?.name||style} ready`, true);
@@ -3799,20 +3822,20 @@ function showResultImage(url, prompt, skipGallery) {
     document.getElementById('loading-state').style.display = 'none';
     img.style.display = 'block';
     document.getElementById('gen-btn').disabled = false;
-    document.getElementById('bg-row').style.display = 'flex';
+    safeEl('bg-row').style.display = 'flex';
     document.getElementById('btn-png').disabled = false;
     document.getElementById('btn-svg').disabled = true;
     document.getElementById('btn-svg').style.display = 'none';
     document.getElementById('btn-copy').disabled = false;
     document.getElementById('btn-copy').textContent = '⎘ Copy URL';
 
-    const badge = document.getElementById('quality-badge');
+    const badge = safeEl('quality-badge');
     badge.textContent = '✦ DALL-E 3';
     badge.className = 'quality-badge show high';
 
     const sizeLabel = url === img.src ? selectedImgSize : '1024×1024';
-    document.getElementById('svg-info-text').textContent = 'PNG · ' + sizeLabel;
-    document.getElementById('svg-info-type').textContent = 'Raster image · DALL-E 3';
+    safeEl('svg-info-text').textContent = 'PNG · ' + sizeLabel;
+    safeEl('svg-info-type').textContent = 'Raster image · DALL-E 3';
     document.getElementById('svg-info-bar').className = 'svg-info-bar show';
 
     setStatus('Image ready', true);
@@ -4294,7 +4317,7 @@ function useChip(el, prompt) {
 
 // Override setStatus for new layout
 function setStatus(text, ok) {
-  const dot = document.getElementById('status-dot');
+  const dot = safeEl('status-dot');
   const txt = document.getElementById('status-text');
   if (dot) {
     dot.className = 'status-dot ' + (ok ? 'ready' : text.includes('fail') || text.includes('Error') ? 'error' : 'loading');
