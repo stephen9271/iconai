@@ -1379,7 +1379,7 @@
       <div>
         <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(34,211,160,.1);border:1px solid rgba(34,211,160,.25);border-radius:999px;padding:4px 14px;font-size:11px;color:#22d3a0;margin-bottom:14px;font-weight:600;">Step 3</div>
         <h3 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:10px;letter-spacing:-.5px;">AI generates in seconds</h3>
-        <p style="font-size:14px;color:var(--text3);line-height:1.7;">Claude AI writes precision SVG code for icons and scenes. GPT Image 1.5 generates photorealistic illustrations. Results appear instantly in your canvas.</p>
+        <p style="font-size:14px;color:var(--text3);line-height:1.7;">Claude AI writes precision SVG code for icons and scenes. DALL-E 3 generates photorealistic illustrations. Results appear instantly in your canvas.</p>
       </div>
       <!-- 4 icon variants -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
@@ -1531,7 +1531,7 @@
         <div class="otype-btn" id="otype-dalle" onclick="setOutputTypeMain('dalle')">
           <div class="otype-icon">✦</div>
           <div class="otype-name">AI Image</div>
-          <div class="otype-sub">GPT Image</div>
+          <div class="otype-sub">DALL-E 3</div>
         </div>
         <div class="otype-btn" id="otype-animated" onclick="setOutputTypeMain('animated')">
           <div class="otype-icon">⚡</div>
@@ -2687,7 +2687,7 @@ function updateFailoverChain() {
 }
 
 function showAIBadge(provider) {
-  const names = { claude: '✦ Claude', gemini: '◆ Gemini', openai: '● GPT Image 1.5', fal: '◈ Recraft V4' };
+  const names = { claude: '✦ Claude', gemini: '◆ Gemini', openai: '● DALL-E 3', fal: '◈ Recraft V4' };
   const badge = document.getElementById('ai-used-badge');
   if (!badge) return;
   badge.textContent = names[provider] || provider;
@@ -3523,7 +3523,7 @@ const ICON_GRID_LAYOUTS = {
   16: { cols: 4, rows: 4, size: '1024x1024' }
 };
 
-// ── GPT Image 1.5 (successor to DALL-E 3 — better prompt adherence) ──────────
+// ── DALL-E 3 (successor to DALL-E 3 — better prompt adherence) ──────────
 // ── Image generation — routed through secure backend ─────────────────────────
 async function callGPTImage(fullPrompt, size, hd) {
   const r = await fetch('/api/image', {
@@ -3601,7 +3601,7 @@ async function generateImage(prompt) {
   setLoading(true, 'image');
   try {
     let result;
-    setLoadingSub('GPT Image 1.5…');
+    setLoadingSub('DALL-E 3…');
     result = await callGPTImage(fullPrompt, size, hd);
 
     // Handle SVG result from Recraft
@@ -3651,8 +3651,8 @@ async function generateIconSet(prompt) {
   setLoading(true, 'image');
   try {
     let imageUrl;
-    // Use GPT Image 1.5 for icon sets (reliable, no fal.ai dependency)
-    setLoadingSub('GPT Image 1.5 · Generating icon set…');
+    // Use DALL-E 3 for icon sets (reliable, no fal.ai dependency)
+    setLoadingSub('DALL-E 3 · Generating icon set…');
     const result = await callGPTImage(fullPrompt, layout.size, hd);
     imageUrl = result.url || result;
     showResultImage(imageUrl, prompt);
