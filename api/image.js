@@ -83,11 +83,12 @@ export default async function handler(req, res) {
           'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
         },
         body: JSON.stringify({
-          model: 'gpt-image-1',
+          model: 'dall-e-3',
           prompt,
           n: 1,
           size: mappedSize,
-          quality: mappedQuality
+          quality: mappedQuality,
+          response_format: 'url'
         })
       });
 
