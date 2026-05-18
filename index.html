@@ -2582,8 +2582,10 @@ function setMode(mode) {
   const isSVG = mode === 'svg';
 
   // Mode buttons
-  document.getElementById('mode-svg').className   = 'mode-btn' + (isSVG ? ' active' : '');
-  document.getElementById('mode-image').className = 'mode-btn' + (!isSVG ? ' active-image' : '');
+  const modeSvgEl = document.getElementById('mode-svg');
+  const modeImgEl = document.getElementById('mode-image');
+  if (modeSvgEl) modeSvgEl.className   = 'mode-btn' + (isSVG ? ' active' : '');
+  if (modeImgEl) modeImgEl.className = 'mode-btn' + (!isSVG ? ' active-image' : '');
 
   // Show/hide SVG-only panels
   document.querySelectorAll('.svg-only').forEach(el => {
@@ -2618,7 +2620,7 @@ function setMode(mode) {
   document.getElementById('image-output').style.display = 'none';
   document.getElementById('empty-state').style.display = 'flex';
   safeEl('bg-row').style.display = 'none';
-  document.getElementById('svg-info-bar').className = 'svg-info-bar';
+  const sib0=document.getElementById('svg-info-bar'); if(sib0) sib0.className = 'svg-info-bar';
   safeEl('quality-badge').className = 'quality-badge';
   setStatus('Ready to generate', false);
 }
@@ -2680,7 +2682,7 @@ function updateFailoverChain() {
   providers.forEach(p => {
     const el = document.getElementById('chain-' + p);
     if (!el) return;
-    el.className = 'chain-item' + (keys[p] ? ' active' : ' no-key');
+    if(el) el.className = 'chain-item' + (keys[p] ? ' active' : ' no-key');
   });
   // fal.ai status badge
   updateProviderStatus('fal', falKey ? 'saved' : 'na');
@@ -2691,7 +2693,7 @@ function showAIBadge(provider) {
   const badge = document.getElementById('ai-used-badge');
   if (!badge) return;
   badge.textContent = names[provider] || provider;
-  badge.className = 'ai-used-badge ' + provider;
+  if(badge) badge.className = 'ai-used-badge ' + provider;
   badge.style.display = 'inline-flex';
 }
 
@@ -3780,13 +3782,13 @@ function showResultSVG(svg, prompt, style, skipGallery) {
   const q=scoreSVG(svg);
   const badge=safeEl('quality-badge');
   badge.textContent=q==='high'?'✦ High quality':'· Good';
-  badge.className=`quality-badge show ${q}`;
+  if(badge) badge.className=`quality-badge show ${q}`;
 
   const kb = Math.round(svg.length/1024*10)/10;
   const elCount = (svg.match(/<(path|rect|circle|ellipse|polygon|line|polyline)/g)||[]).length;
   safeEl('svg-info-text').textContent = `${elCount} elements · ${kb}kb`;
   safeEl('svg-info-type').textContent = 'SVG · Scalable to any size';
-  document.getElementById('svg-info-bar').className='svg-info-bar show';
+  const sib1=document.getElementById('svg-info-bar'); if(sib1) sib1.className='svg-info-bar show';
 
   setStatus(`${BLUEPRINTS[style]?.name||style} ready`, true);
   showAIBadge(lastUsedProvider || 'claude');
@@ -3826,12 +3828,12 @@ function showResultImage(url, prompt, skipGallery) {
 
     const badge = safeEl('quality-badge');
     badge.textContent = '✦ DALL-E 3';
-    badge.className = 'quality-badge show high';
+    if(badge) badge.className = 'quality-badge show high';
 
     const sizeLabel = url === img.src ? selectedImgSize : '1024×1024';
     safeEl('svg-info-text').textContent = 'PNG · ' + sizeLabel;
     safeEl('svg-info-type').textContent = 'Raster image · DALL-E 3';
-    document.getElementById('svg-info-bar').className = 'svg-info-bar show';
+    const sib2=document.getElementById('svg-info-bar'); if(sib2) sib2.className = 'svg-info-bar show';
 
     setStatus('Image ready', true);
     showAIBadge('openai');
