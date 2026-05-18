@@ -3529,18 +3529,13 @@ async function callGPTImage(fullPrompt, size, hd) {
   const r = await fetch('/api/image', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt: fullPrompt, size, quality: hd ? 'hd' : 'standard', provider: 'openai', outputFormat: 'png' })
+    body: JSON.stringify({ prompt: fullPrompt, size: size || '1024x1024', quality: hd ? 'hd' : 'standard' })
   });
-  if (!r.ok) {
-    const e = await r.json().catch(() => ({}));
-    throw new Error(e?.error || ('Image API error ' + r.status));
-  }
-  const d = await r.json();
-  if (d.b64) {
-    const blob = await fetch('data:image/png;base64,' + d.b64).then(r => r.blob());
-    return { url: URL.createObjectURL(blob), type: 'blob' };
-  }
-  return { url: d.url, type: 'url' };
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(d?.error || ('Image API error ' + r.status));
+  if (d.b64) return { url: 'data:image/png;base64,' + d.b64, type: 'b64' };
+  if (d.url) return { url: d.url, type: 'url' };
+  throw new Error('No image data in response');
 }
 
 async function callDallE(fullPrompt, size, hd) {
